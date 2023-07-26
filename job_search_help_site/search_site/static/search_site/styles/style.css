@@ -1,0 +1,165 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f0f0f0;
+    color: #333;
+}
+.nav-panel-applicant-employer {
+    background-color: #00000;
+    padding: 15px;
+}
+
+.navigation-panel {
+  position: relative;
+}
+
+.left-div,
+.right-div {
+    margin: 0 10px;
+}
+
+.left-div {
+  display: inline-block; /* Используем inline-block для левых div */
+}
+
+.right-div {
+  position: absolute; /* Абсолютное позиционирование для правого div */
+  top: 0;
+  right: 20px; /* Отступ справа */
+}
+
+.link-nav-bar-applicant-employer{
+    color: blue;
+    text-decoration: none;
+}
+
+.link-nav-bar-applicant-employer.current {
+    color: black;
+}
+
+a {
+    color: #007bff;
+}
+
+.link-nav-bar-applicant-employer:hover {
+    color: #ff0000;
+}
+
+/* тут стили для навигационной панели */
+
+div.main-navbar {
+    background-color: #333;
+    padding: 10px 0;
+}
+
+div.main-navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px 20px;
+}
+
+div.main-navbar li {
+    margin: 0 20px;
+}
+
+div.main-navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 10px;
+}
+
+div.main-navbar a.hover-eff:hover {
+    background-color: #555;
+}
+
+.right-elements {
+    margin-left: flex;
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li.right {float: right;}
+
+/*стиль для картинки в панели*/
+img.navbar-image {
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+}
+
+div.img-main {
+    display: flex; /* Добавляем flex для управления расположением дочерних элементов */
+    justify-content: flex-start; /* Выравниваем элементы слева */
+    margin-left: 20px;
+}
+
+div.img-main img.navbar-image {
+    width: 40px;
+    height: 30px;
+}
+
+
+/*стиль для кнопки войти и регистранции*/
+
+div.register-btn {
+  display: inline-block;
+  background-color: #3498db;
+  color: #ffffff;
+  border: 1px solid #3498db;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+div.register-btn:hover {
+  background-color: #2980b9;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+div.register-btn:active {
+  background-color: #1f618d;
+  transform: scale(0.95);
+}
+
+div.login-btn{
+  display: inline-block;
+  background-color: #ffffff
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 8px; /* Закругленные углы */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+div.login-btn:hover{
+  background-color: #05821a15;
+  color: #fff;
+  transform: scale(1.05); /* Увеличение размера при наведении */
+}
+
+div.login-btn:active {
+  transform: scale(0.95);
+}
+
+
+
