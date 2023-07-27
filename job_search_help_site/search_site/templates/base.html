@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" href="{% static 'search_site/styles/style.css' %}" rel="stylesheet"/>
-    <link type="text/css" href="{% static 'search_site/styles/search.css' %}" rel="stylesheet"/>
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -50,37 +49,16 @@
 </div>
 
 <div id="wrapper">
-    <div class="main-content">
-        <div class="search-container">
-            <h3 class="search-header">Найди свою идеальную вакансию у нас!</h3>
-            <form action="" method="GET">
-                <input type="text" name="query" placeholder="Введите название професии, должности или компании">
-                <button type="submit">Поиск</button>
-            </form>
-                <div class="clickable-strings">
-                    <span>Например:</span>
-                    <span class="clickable-string">Инженер-геолог</span>
-                    <span class="clickable-string">Водитель-кондуктор</span>
-                    <span class="clickable-string">Менеджер по продажам</span>
-                 </div>
-            <script src="{% static  'search_site/js/click_search_handle.js' %}"></script>
-        </div>
+    {% block content %}
+    {% endblock %}
 
-        <div class="container-search-people">
-            <div class="content-count-vacancy">
-                <span>10000</span>
-                <p>Вакансий</p>
-            </div>
-            <div class="content-count-company">
-                <span>10000</span>
-                <p>Компаний</p>
-            </div>
-        </div>
-    </div>
-
+    <br>
     <div id="footer">
         <p>Футер</p>
     </div>
 </div>
+
 </body>
+{% block js %}
+{% endblock %}
 </html>
