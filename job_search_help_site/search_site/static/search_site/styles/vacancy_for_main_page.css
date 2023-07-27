@@ -1,0 +1,74 @@
+
+
+/* Стили для рядов */
+.row {
+    display: flex;
+}
+
+.item {
+    flex: 1;
+    margin-right: 20px;
+    margin-left: 20px;
+    padding: 5px;
+    /* Добавляем стили для прямоугольной формы с тенью */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s; /* Добавляем плавный эффект при наведении */
+}
+
+/* Удалить правый margin у последнего элемента в ряду, чтобы они не выходили за границы */
+.row .item:last-child {
+    margin-right: 0;
+}
+
+/* Стили для выделения при наведении на элемент */
+.item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.item-company {
+    flex: 0.3;
+    margin-right: 30px;
+    margin-left: 30px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.header {
+    display: flex; /* Добавлено */
+    justify-content: space-between; /* Добавлено */
+    align-items: center; /* Добавлено */
+}
+
+.elegant-header {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+     margin-left: 20px;
+}
+
+.link-button {
+    background-color: #7c7d79; /* Задний фон: серо-белый */
+    border-radius: 5px; /* Закругленные концы */
+    padding: 8px 50px;; /* Отступы внутри ссылки для улучшения визуального оформления */
+    text-decoration: none; /* Убираем стандартное подчеркивание ссылки */
+    color: white; /* Цвет текста */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.link-button:hover {
+    background-color: #007bff; /* Синий цвет при наведении */
+    color: #fff; /* Белый цвет текста при наведении */
+}
+
+.link-button:active {
+    background-color: #0056b3; /* Темно-синий цвет при нажатии */
+    color: #fff;
+}
