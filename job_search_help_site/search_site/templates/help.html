@@ -13,7 +13,8 @@
     <p class="text-par">Первый параграф с текстом.</p>
     <p class="text-par">Второй параграф с текстом.</p>
 
-<form action="/feedback" method="post">
+<form action="" method="post">
+    {% csrf_token %}
     <div class="main-container">
         <label for="topic" class="label-container">Тема:</label>
         <select id="topic" onchange="checkOtherOption()">
@@ -63,6 +64,6 @@
             otherTopicInput.removeAttribute("required");
         }
     }
-    </script>
+</script>
 
 {% endblock %}
