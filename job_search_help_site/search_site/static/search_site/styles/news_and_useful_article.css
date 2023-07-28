@@ -1,0 +1,39 @@
+.container-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column-block {
+  flex: 1;
+  padding: 10px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+}
+
+.header-block {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.column-text {
+  line-height: 1.6;
+  color: black;
+}
+
+.container-block a {
+  color: black;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.container-block a:hover {
+  color: #0595fc;
+}
+
+hr {
+  border: none;
+  height: 2px;
+  background-color: #ddd;
+  margin: 20px 0;
+}
