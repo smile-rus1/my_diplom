@@ -7,6 +7,7 @@
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/search.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
@@ -67,7 +68,7 @@
             <h6 class="elegant-header">Работа в компаниях</h6>
             <a class="link-button" href="#">Каталог компаний</a>
         </div>
-            <div class="row">
+        <div class="row">
                 <div class="item-company">
                     <p>asdasd</p>
                 </div>
@@ -84,7 +85,29 @@
                     <p>asdasd</p>
                 </div>
             </div>
+        <hr>
+        <div class="container-block">
+            <div class="column-block">
+                  <h2 class="header-block">Статьи</h2>
+                  <a href="#">Тут ссылка или текст</a>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+            </div>
+             <div class="column-block">
+                  <h2 class="header-block">Новости</h2>
+                  <p class="column-text">Строка 1</p>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+            </div>
+             <div class="column-block">
+                 <h2 class="header-block">Полезное</h2>
+                 <p class="column-text">Строка 1</p>
+                 <p class="column-text">Строка 2</p>
+                 <p class="column-text">Строка 3</p>
+            </div>
+        </div>
     </div>
+
 </div>
 
 {% endblock %}
