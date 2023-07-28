@@ -1,0 +1,68 @@
+
+
+        .header {
+            color: black;
+            margin: 20px; /* Внешний отступ для всей страницы */
+        }
+
+        .text-par {
+            line-height: 1.6;
+            margin: 20px; /* Внешний отступ для всей страницы */
+        }
+
+        .main-container {
+            margin-bottom: 30px;
+            margin: 20px; /* Внешний отступ для всей страницы */
+        }
+
+        .label-container {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        select {
+            width: 52%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+
+
+        .other-topic-container {
+            display: none;
+        }
+
+        .btn-sub {
+            padding: 10px 20px;
+            background-color: #4287f5;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .btn-sub:hover {
+            background-color: #007bff;
+        }

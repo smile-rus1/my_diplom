@@ -1,10 +1,68 @@
 {% extends 'base.html' %}
 
-
+{% load static %}
 {% block title %} Помощь посетителям {% endblock %}
 {% block help %} current {% endblock %}
 
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/help.css' %}" rel="stylesheet"/>
+{% endblock %}
 
 {% block content %}
-<div></div>
+<h2 class="header">Заголовок уровня 3</h2>
+    <p class="text-par">Первый параграф с текстом.</p>
+    <p class="text-par">Второй параграф с текстом.</p>
+
+<form action="/feedback" method="post">
+    <div class="main-container">
+        <label for="topic" class="label-container">Тема:</label>
+        <select id="topic" onchange="checkOtherOption()">
+            <option value="тема1">Тема 1</option>
+            <option value="тема2">Тема 2</option>
+            <option value="тема3">Тема 3</option>
+            <option value="другое">Другое</option>
+        </select>
+
+        <div id="otherTopicContainer" style="display: none;">
+            <label for="otherTopic" class="label-container">Другое:</label>
+            <input type="text" id="otherTopic" name="otherTopic">
+        </div>
+    </div>
+
+    <div class="main-container">
+        <label for="content">Содержание:</label>
+        <textarea id="content" name="content" class="label-container" required></textarea>
+    </div>
+    <div class="main-container">
+        <label for="name" class="label-container">Имя:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="main-container">
+        <label for="email" class="label-container">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <button type="submit" class="btn-sub">Отправить</button>
+</form>
+{% endblock %}
+
+{% block js %}
+
+<script>
+        function checkOtherOption() {
+        const select = document.getElementById("topic");
+        const otherTopicContainer = document.getElementById("otherTopicContainer");
+        const otherTopicInput = document.getElementById("otherTopic");
+
+        if (select.value === "другое") {
+            otherTopicContainer.style.display = "block";
+            otherTopicInput.setAttribute("required", "required");
+        } else {
+            otherTopicContainer.style.display = "none";
+            otherTopicInput.removeAttribute("required");
+        }
+    }
+    </script>
+
 {% endblock %}
