@@ -7,3 +7,7 @@ def index(request):
 
 def help_for_people(request):
     return render(request, "help.html")
+
+
+def login_applicant(request):
+    return render(request, "login_applicant.html")
