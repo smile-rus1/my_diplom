@@ -57,7 +57,7 @@ button {
   margin-top: 10px;
 }
 
-.forgot-password:hover {
+.forgot-password: hover {
   text-decoration: underline;
 }
 

@@ -11,3 +11,7 @@ def help_for_people(request):
 
 def login_applicant(request):
     return render(request, "login_applicant.html")
+
+
+def register_applicant(request):
+    return render(request, "register_applicant.html")
