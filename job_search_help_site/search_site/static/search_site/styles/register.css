@@ -1,0 +1,46 @@
+.container {
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+.link-redirect-on-login {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #007bff;
+  margin-top: 10px;
+}
+
+.link-redirect-on-login: hover {
+  text-decoration: underline;
+}
