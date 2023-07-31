@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" href="{% static 'search_site/styles/style.css' %}" rel="stylesheet"/>
+
+    <title>{% block title %}{% endblock %}</title>
+
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+<div class="nav-panel-applicant-employer">
+        <div class="navigation-panel">
+            <div class="left-div">
+                <a class="link-nav-bar-applicant-employer {% block index %} {% endblock %}" href="{% url 'index' %}">
+                    Кандидатам
+                </a>
+            </div>
+            <div class="left-div">
+                <a class="link-nav-bar-applicant-employer {% block employer %} {% endblock %}" href="{% url 'employer' %}">
+                    Подбор персонала
+                </a>
+            </div>
+            <div class="right-div">
+                <a class="link-nav-bar-applicant-employer {% block help %} {% endblock %}" href="{% url 'help' %}">
+                    Помощь
+                </a>
+            </div>
+        </div>
+    </div>
+<div class="navbar-wrapper">
+    <div class="main-navbar">
+        <ul class="topnav">
+            <li>
+                <div class="img-main">
+                     <span>
+                        <a href="{% url 'employer' %}"> <img src="{% static 'photo/icon.png'%}" class="navbar-image" title="На главную"></a>
+                    </span>
+                </div>
+            </li>
+            <li><a class="additional-info" href="#">Дополнительная информация</a></li>
+            <li class="right"><div class="login-btn"><a href="#">Войти</a></div></li>
+            <li class="right"><div class="register-btn"><a href="#">Зарегистрироваться</a></div></li>
+        </ul>
+    </div>
+</div>
+
+<div id="wrapper">
+    {% block content %}
+    {% endblock %}
+
+    <br>
+    <div id="footer">
+        <p>Футер</p>
+    </div>
+</div>
+
+</body>
+{% block js %}
+{% endblock %}
+</html>

@@ -1,0 +1,74 @@
+{% extends 'base_employer.html' %}
+
+{% load static %}
+{% block employer %} current {% endblock %}
+{% block title %}3 {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/base_employer.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_employer.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/search.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div class="container">
+        <h1 class="title">Разместите ваши вакансии у нас</h1>
+        <p>и мы поможем вам найти лучших кандидатов для вашей работы</p>
+        <div class="image-container">
+            <img src="{% static 'photo/employment.png' %}" class="img-photo">
+        </div>
+        <a class="link-vacancy" href="#">Разместить вакансию</a>
+    </div>
+    <div class="spacing-div"></div>
+    <div class="search-container">
+        <h3 class="search-header">Найдите кандидатов у нас!</h3>
+        <form action="" method="GET">
+            <input type="text" name="query" placeholder="Поиск по резюме">
+            <button type="submit">Поиск</button>
+        </form>
+        <div class="clickable-strings">
+            <span>Работодатели часто ищут:</span>
+            <span class="clickable-string">Менеджер</span>
+            <span class="clickable-string">Бухгалтер</span>
+            <span class="clickable-string">Кассир</span>
+        </div>
+    </div>
+
+    <div class="vacancy-industry-content">
+        <div class="header">
+            <h6 class="elegant-header">Резюме по отраслям</h6>
+            <a class="link-button" href="#">Каталог резюме</a>
+        </div>
+        <div class="row">
+            <div class="item">
+                <p>Контент 5</p>
+                <p>Контент 5</p>
+                <p>Контент 5</p>
+            </div>
+            <div class="item">
+                <p>Контент 6</p>
+                <p>Контент 6</p>
+                <p>Контент 6</p>
+            </div>
+            <div class="item">
+                <p>Контент 7</p>
+                <p>Контент 7</p>
+                <p>Контент 7</p>
+            </div>
+            <div class="item">
+                <p>Контент 8</p>
+                <p>Контент 8</p>
+                <p>Контент 8</p>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static  'search_site/js/click_search_handle.js' %}"></script>
+{% endblock %}

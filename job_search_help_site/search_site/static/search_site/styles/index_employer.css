@@ -1,0 +1,56 @@
+.title {
+    font-size: 36px;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+.container {
+  width: 50%; /* Задаем ширину контейнера (можно настроить подходящее значение) */
+  margin: 0 auto; /* Выравниваем контейнер по центру страницы */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 24px; /* Размер шрифта заголовка */
+  margin-bottom: 10px; /* Отступ снизу для заголовка */
+}
+
+p {
+font-size: 18px; /* Размер шрифта заголовка */
+}
+
+.img-photo {
+  max-width: 50%; /* Устанавливаем максимальную ширину картинки равной ширине контейнера */
+  height: auto; /* Автоматический расчет высоты картинки для сохранения пропорций */
+  display: block; /* Устанавливаем картинку в блочный элемент */
+}
+
+.image-container {
+  display: flex;
+  justify-content: center; /* Выравниваем картинку по горизонтали */
+}
+
+.link-vacancy {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 25px;
+}
+
+.link-vacancy:hover {
+    background-color: #0056b3;
+}
+
+.link-vacancy:active {
+    background-color: #003366;
+}
+
+.spacing-div {
+    margin: 100px;
+}

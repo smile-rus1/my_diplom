@@ -1,0 +1,13 @@
+.additional-info {
+    color: black; /* цвет текста ссылки */
+    text-decoration: none;
+}
+
+.additional-info: hover {
+    color: red; /* цвет текста при наведении */
+    text-decoration: underline;
+}
+
+.vacancy-industry-content {
+
+}

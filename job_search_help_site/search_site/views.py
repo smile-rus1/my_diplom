@@ -15,3 +15,7 @@ def login_applicant(request):
 
 def register_applicant(request):
     return render(request, "register_applicant.html")
+
+
+def index_employer(request):
+    return render(request, "index_employer.html")
