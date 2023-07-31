@@ -10,4 +10,5 @@ urlpatterns = [
 
     # url для employer
     path("employer/", views.index_employer, name="employer"),
+    path("login_employer/", views.login_employer, name="login_employer"),
 ]
