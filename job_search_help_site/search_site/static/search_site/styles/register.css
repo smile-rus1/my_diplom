@@ -28,6 +28,7 @@
             background-color: #4CAF50;
             color: #ffffff;
             cursor: pointer;
+            margin: 10px;
         }
 
         .form-group input[type="submit"]:hover {
