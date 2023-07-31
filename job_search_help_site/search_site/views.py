@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def index(request):
@@ -14,6 +14,10 @@ def login_applicant(request):
 
 
 def register_applicant(request):
+    if request.method == "POST":
+        print("POST METHOD")
+        return redirect("login_applicant")
+
     return render(request, "register_applicant.html")
 
 
