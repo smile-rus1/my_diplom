@@ -27,3 +27,7 @@ def index_employer(request):
 
 def login_employer(request):
     return render(request, "login_employer.html")
+
+
+def register_employer(request):
+    return render(request, "register_employer.html")
