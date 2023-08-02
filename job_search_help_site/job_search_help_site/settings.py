@@ -23,6 +23,9 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
+# DB
+AUTH_USER_MODEL = 'search_site.MyUser'  # ВОТ ТУТ ВОТ ЕСЛИ ЧТО ИЗМЕНИТЬ!!!!!!!!!
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -87,6 +90,19 @@ DATABASES = {
     }
 }
 
+# для отправки сообщений
+
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = os.getenv("YANDEX_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("YANDEX_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("YANDEX_HOST_USER")
+
+
+#
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
