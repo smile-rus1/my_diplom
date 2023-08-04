@@ -11,10 +11,11 @@ def register_applicant(request, email: str, password1: str, password2: str):
     if not _is_valid_password(password1):
         return messages.error(request, "Пароль должен состоять из 8 символов и в нем должны быть буквы!")
 
-    if not _is_not_exists_email(email):
+    user, created = CustomUser.objects.get_or_create(email=email)
+
+    if not created:
         return messages.error(request, "Такой email уже зарегистрирован!")
 
-    user = CustomUser(email=email)
     user.set_password(password1)
     user.save()
 
@@ -45,10 +46,4 @@ def _is_valid_password(password1: str):
     if not any(char.isdigit() for char in password1):
         return False
 
-    return True
-
-
-def _is_not_exists_email(email: str):
-    if CustomUser.objects.filter(email=email).exists():
-        return False
     return True
