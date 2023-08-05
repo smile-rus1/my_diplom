@@ -10,6 +10,8 @@ django==4.2.3
     # via -r requirements.in
 mysqlclient==2.2.0
     # via -r requirements.in
+pillow==10.0.0
+    # via -r requirements.in
 python-dotenv==1.0.0
     # via -r requirements.in
 python-multipart==0.0.6
