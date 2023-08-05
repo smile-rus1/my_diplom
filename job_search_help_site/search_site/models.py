@@ -54,6 +54,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         related_query_name='customuser'
     )
 
+    class Meta:
+        verbose_name_plural = "Пользователи"
+
 
 class Specialization(models.Model):
     name_specialization = models.TextField()
