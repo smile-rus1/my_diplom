@@ -39,7 +39,7 @@ def register_applicant(request):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
-        if not auth.register_applicant(request, email, password1, password2):
+        if not auth.register_user(request, email, password1, password2, "applicant"):
             return redirect("register_applicant")
         else:
             return redirect("index")
