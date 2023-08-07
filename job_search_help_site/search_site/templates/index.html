@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block content %}
+
+{% if not request.user.is_authenticated %}
 <div class="main-content">
     <div class="search-container">
         <h3 class="search-header">Найди свою идеальную вакансию у нас!</h3>
@@ -109,6 +111,11 @@
     </div>
 
 </div>
+{% else %}
+<script>
+    window.location.href = "{% url 'main_applicant' %}";
+  </script>
+{% endif %}
 
 {% endblock %}
 
