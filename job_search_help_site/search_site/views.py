@@ -24,7 +24,7 @@ def login_applicant(request):
             error_message = "Неправильный email или пароль!"
             return render(request, 'login_applicant.html', {'error_message': error_message})
         else:
-            return redirect("index")
+            return redirect("main_applicant")
 
     return render(request, "login_applicant.html")
 
@@ -42,7 +42,7 @@ def register_applicant(request):
         if not auth.register_user(request, email, password1, password2, "applicant"):
             return redirect("register_applicant")
         else:
-            return redirect("index")
+            return redirect("main_applicant")
 
     return render(request, "register_applicant.html")
 
@@ -62,3 +62,7 @@ def register_employer(request):
 def logout_user(request):
     logout(request)
     return redirect("index")
+
+
+def main_applicant(request):
+    return render(request, "index_applicant.html")
