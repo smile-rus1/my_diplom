@@ -1,0 +1,38 @@
+{% extends 'base_applicant.html' %}
+
+{% load static %}
+{% block title %} Вакансии {% endblock %}
+<!-- ПЕРЕНЕСТИ ПОТОМ ВСЕ ЭТО!!!-->
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+  <div class="content-container">
+    <h1>Ваши резюме</h1>
+    <div class="buttons">
+      <button class="button-primary"><a>Заказать резюме</a></button>
+      <button class="button-secondary"><a>Создать резюме</a></button>
+    </div>
+
+    <div class="summary-container">
+      <!--вот тут цилом for выводить все резюме-->
+      <div class="resume-container">
+        <h2 class="resume-title">Название резюме</h2>
+        <div class="resume-actions">
+          <button class="resume-button modify">Дополнить резюме</button>
+          <button class="resume-button delete">Удалить резюме</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="ad-container">
+   <p>Тут могла быть ваша реклама</p>
+  </div>
+</div>
+
+{% endblock %}
