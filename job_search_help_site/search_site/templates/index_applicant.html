@@ -1,38 +1,110 @@
 {% extends 'base_applicant.html' %}
 
 {% load static %}
-{% block title %} Вакансии {% endblock %}
-<!-- ПЕРЕНЕСТИ ПОТОМ ВСЕ ЭТО!!!-->
+{% block title %} Работа для вас {% endblock %}
+
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-<div class="main-container">
-  <div class="content-container">
-    <h1>Ваши резюме</h1>
-    <div class="buttons">
-      <button class="button-primary"><a>Заказать резюме</a></button>
-      <button class="button-secondary"><a>Создать резюме</a></button>
-    </div>
-
-    <div class="summary-container">
-      <!--вот тут цилом for выводить все резюме-->
-      <div class="resume-container">
-        <h2 class="resume-title">Название резюме</h2>
-        <div class="resume-actions">
-          <button class="resume-button modify">Дополнить резюме</button>
-          <button class="resume-button delete">Удалить резюме</button>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="ad-container">
-   <p>Тут могла быть ваша реклама</p>
-  </div>
+<div class="header-search">
+     <form action="/search/vacancy" method="get" class="search-form">
+        <input type="text" class="search-input" placeholder="Введите профессию, должность, компанию" name="vacancy">
+        <button class="search-button">Поиск</button>
+     </form>
 </div>
+<div class="main-content">
+<!--    ТУТ ВЫВОДИТЬ ВАКАНСИИ ЦИКЛОМ, НЕСКОЛЬКО ШТУК (СПО ФИЛЬТРУ РЕЗЮМЕ ИЛИ ПОПУЛЯРНОСТИ!)-->
+        <div class="vacancy-container">
+            <div class="vacancy-card">
+                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
+                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
+                <p class="vacancy-location">Местоположение: Москва, Россия</p>
+                <button class="apply-button">Откликнуться</button>
+            </div>
+        </div>
+        <div class="vacancy-container">
+            <div class="vacancy-card">
+                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
+                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
+                <p class="vacancy-location">Местоположение: Москва, Россия</p>
+                <button class="apply-button">Откликнуться</button>
+            </div>
+        </div>
+        <div class="vacancy-container">
+            <div class="vacancy-card">
+                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
+                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
+                <p class="vacancy-location">Местоположение: Москва, Россия</p>
+                <button class="apply-button">Откликнуться</button>
+            </div>
+        </div>
+        <div class="vacancy-container">
+            <div class="vacancy-card">
+                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
+                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
+                <p class="vacancy-location">Местоположение: Москва, Россия</p>
+                <button class="apply-button">Откликнуться</button>
+            </div>
+        </div>
+        <div class="vacancy-container">
+            <div class="vacancy-card">
+                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
+                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
+                <p class="vacancy-location">Местоположение: Москва, Россия</p>
+                <button class="apply-button">Откликнуться</button>
+            </div>
+        </div>
+
+
+</div>
+<div class="ad-container">
+            <div>
+                <p>тут могла быть ваша реклама</p>
+            </div>
+        </div>
+
+ <div class="container-content">
+        <div class="header">
+            <h6 class="elegant-header">Работа в компаниях</h6>
+            <a class="link-button" href="#">Каталог компаний</a>
+        </div>
+        <div class="row">
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+            </div>
+        <hr>
+        <div class="container-block">
+            <div class="column-block">
+                  <h2 class="header-block">Статьи</h2>
+                  <a href="#">Тут ссылка или текст</a>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+            </div>
+             <div class="column-block">
+                  <h2 class="header-block">Новости</h2>
+                  <p class="column-text">Строка 1</p>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
