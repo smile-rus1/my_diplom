@@ -66,3 +66,7 @@ def logout_user(request):
 
 def main_applicant(request):
     return render(request, "index_applicant.html")
+
+
+def resumes_applicant(request):
+    return render(request, "applicant_resumes.html")
