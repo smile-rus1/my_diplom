@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends type|yesno:'base_applicant.html,base.html' %}
 
 {% load static %}
 {% block title %} Помощь посетителям {% endblock %}
