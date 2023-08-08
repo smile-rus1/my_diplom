@@ -85,6 +85,8 @@ class Applicant(models.Model):
     """
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(default=False)
+    phone = models.CharField(max_length=16, validators=[phoneNumberRegex], unique=True, null=True)
+    image = models.ImageField(upload_to="", null=True)
 
     class Meta:
         verbose_name_plural = "Кандитаты"
