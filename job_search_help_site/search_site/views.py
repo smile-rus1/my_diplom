@@ -83,3 +83,7 @@ def main_applicant(request):
 
 def resumes_applicant(request):
     return render(request, "applicant_resumes.html")
+
+
+def applicant_home_page(request):
+    return render(request, "home_page_applicant.html")
