@@ -5,16 +5,26 @@ from search_site.services import auth
 
 
 def index(request):
+    """
+    начальная страница на сайте.
+    """
     return render(request, "index.html")
 
 
 def help_for_people(request):
+    if request.user.is_authenticated:
+        user = auth.check_user(request)
+        if user == "applicant":
+            return render(request, "help.html", {"type": "applicant"})
+        elif user == "company":
+            return
+
     return render(request, "help.html")
 
 
 def login_applicant(request):
     """
-    авторизация кандидата по url login/applicant
+    авторизация кандидата по url login/applicant.
     """
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -65,6 +75,9 @@ def logout_user(request):
 
 
 def main_applicant(request):
+    """
+    главная страница для кандидатов
+    """
     return render(request, "index_applicant.html")
 
 
