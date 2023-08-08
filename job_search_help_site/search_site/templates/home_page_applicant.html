@@ -1,0 +1,51 @@
+{% extends 'base_applicant.html' %}
+
+{% load static %}
+{% block title %} Домашняя страница {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="left-container">
+      <form method="post">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <td>Имя</td>
+            <td><input type="text" name="name"></td>
+          </tr>
+          <tr>
+            <td>Фамилия</td>
+            <td><input type="text" name="second_name"></td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td><input type="email" name="email"></td>
+          </tr>
+          <tr>
+            <td>Мобильный телефон</td>
+            <td><input type="text" name="phone"></td>
+          </tr>
+          <tr>
+            <td>Фото профиля</td>
+            <td><input type="file" name="image"></td>
+          </tr>
+           <tr>
+            <td>Пароль</td>
+            <td><a href="#" class="link-password">Изменить пароль</a></td>
+          </tr>
+        </table>
+        <button type="submit">Сохранить</button>
+      </form>
+      <div class="delete-me">
+        <a href="#" class="link-delete-me">Удаление аккаунта</a>
+      </div>
+    </div>
+      <div class="right-container">
+        <img src="#" alt="Картинка">
+      </div>
+  </div>
+{% endblock %}
