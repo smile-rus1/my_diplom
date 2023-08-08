@@ -39,6 +39,18 @@ def login_user(request, user: dict) -> bool:
     return True
 
 
+def check_user(request):
+    if request.user.is_authenticated:
+        user = request.user
+
+        if hasattr(user, 'applicant'):
+            return "applicant"
+
+        elif hasattr(user, 'company'):
+            return "company"
+    return
+
+
 def _register_applicant(user: models.CustomUser) -> None:
     applicant, created = models.Applicant.objects.get_or_create(user=user)
 
