@@ -1,7 +1,17 @@
 {% extends type|yesno:'base_applicant.html,base.html' %}
 
 {% load static %}
-{% block title %} Помощь посетителям {% endblock %}
+
+{% block title %}
+    {% if type == "applicant" %}
+        Помощь кандидатам
+    {% elif type == "company" %}
+        Помощь соискателям
+    {% else %}
+        Помощь посетителям
+    {% endif %}
+
+{% endblock %}
 {% block help %} current {% endblock %}
 
 {% block css %}
