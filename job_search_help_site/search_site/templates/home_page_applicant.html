@@ -6,29 +6,51 @@
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="left-container">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+          {% if error_message %}
+        <div class="error-message">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
         <table>
           <tr>
             <td>Имя</td>
-            <td><input type="text" name="name"></td>
+              {% if applicant.first_name %}
+            <td><input type="text" name="first_name" value="{{ applicant.first_name }}"></td>
+              {% else %}
+              <td><input type="text" name="first_name" value=""></td>
+              {% endif %}
           </tr>
           <tr>
             <td>Фамилия</td>
-            <td><input type="text" name="second_name"></td>
+              {% if applicant.second_name %}
+            <td><input type="text" name="second_name" value="{{ applicant.second_name }}"></td>
+              {% else %}
+            <td><input type="text" name="second_name" value=""></td>
+              {% endif %}
           </tr>
           <tr>
             <td>Email</td>
-            <td><input type="email" name="email"></td>
+              {% if applicant.user.email %}
+            <td><input type="email" name="email" value="{{ applicant.user.email }}"></td>
+              {% else %}
+               <td><input type="email" name="email" value=""></td>
+              {% endif %}
           </tr>
           <tr>
             <td>Мобильный телефон</td>
-            <td><input type="text" name="phone"></td>
+            {% if applicant.phone %}
+            <td><input type="text" name="phone" value="{{ applicant.phone }}"></td>
+            {% else %}
+            <td><input type="text" name="phone" value="Нет телефона"></td>
+            {% endif %}
           </tr>
           <tr>
             <td>Фото профиля</td>
@@ -45,8 +67,21 @@
         <a href="#" class="link-delete-me">Удаление аккаунта</a>
       </div>
     </div>
-      <div class="right-container">
-        <img src="#" alt="Картинка">
+      <div class="right-container" style="background-color: #f1f1f1;">
+    {% if applicant.image %}
+        <img src="{{ applicant.image.url }}" alt="" width="70%">
+    {% else %}
+        <img src="{% static 'photo/user_no_photo.png' %}" alt="">
+    {% endif %}
       </div>
   </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    {% if alert %}
+    alert("Профиль изменен")
+    window.location = "{% url 'main_applicant' %}home_page"
+    {% endif %}
+</script>
 {% endblock %}
