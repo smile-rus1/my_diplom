@@ -11,7 +11,11 @@
 .right-container {
   flex: 1;
   padding: 20px;
-  background-color: #e0e0e0;
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 form {
@@ -60,17 +64,7 @@ button:hover {
     color: blue;
 }
 
-.right-container {
-  flex: 1;
-  padding: 20px;
-  background-color: #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Стили для картинки */
+ Стили для картинки
 .right-container img {
   max-width: 100%;
   height: auto;
