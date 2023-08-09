@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
 from search_site.services import auth
+from search_site.services import home_page
 
 
 def index(request):
@@ -86,4 +87,17 @@ def resumes_applicant(request):
 
 
 def applicant_home_page(request):
-    return render(request, "home_page_applicant.html")
+    if request.method == "POST":
+        if home_page.change_info_about_applicant(
+            request.user,
+            {
+                "email": request.POST.get('email'),
+                "first_name": request.POST.get("first_name"),
+                "second_name": request.POST.get("second_name"),
+                "phone": request.POST.get("phone"),
+                "photo": request.FILES['image']
+            }
+        ):
+            return render(request, "home_page_applicant.html", {"alert": True})
+
+    return render(request, "home_page_applicant.html", {"applicant": home_page.get_applicant(request.user)})
