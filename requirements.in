@@ -3,3 +3,4 @@ mysqlclient
 python-dotenv
 python-multipart
 pillow
+django-debug-toolbar

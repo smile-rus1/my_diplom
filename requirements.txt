@@ -7,6 +7,10 @@
 asgiref==3.7.2
     # via django
 django==4.2.3
+    # via
+    #   -r requirements.in
+    #   django-debug-toolbar
+django-debug-toolbar==4.1.0
     # via -r requirements.in
 mysqlclient==2.2.0
     # via -r requirements.in
@@ -17,6 +21,8 @@ python-dotenv==1.0.0
 python-multipart==0.0.6
     # via -r requirements.in
 sqlparse==0.4.4
-    # via django
+    # via
+    #   django
+    #   django-debug-toolbar
 tzdata==2023.3
     # via django
