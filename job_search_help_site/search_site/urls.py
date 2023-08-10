@@ -14,6 +14,7 @@ urlpatterns = [
     path("applicant/", views.main_applicant, name="main_applicant"),
     path("applicant/resumes", views.resumes_applicant, name="rezume_applicant"),
     path("applicant/home_page", views.applicant_home_page, name="applicant_home_page"),
+    path("applicant/home_page/change_password", views.change_password, name="change_password_applicant"),
 
     # url для employer
     path("employer/", views.index_employer, name="employer"),
