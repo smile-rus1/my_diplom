@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.core.exceptions import ObjectDoesNotExist
 
 from search_site import models
@@ -31,3 +32,19 @@ def get_applicant(user) -> models.Applicant:
 
     return applicant
 
+
+def get_company(user):
+    company = models.Company.objects.get(user=user)
+    return company
+
+
+def user_change_password(request, user: models.CustomUser, user_data: dict):
+    if user.check_password(user_data["current_password"]):
+        user.set_password(user_data["new_password"])
+        user.save()
+
+        login(request, user)
+    else:
+        return
+
+    return True
