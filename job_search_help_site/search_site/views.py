@@ -87,17 +87,47 @@ def resumes_applicant(request):
 
 
 def applicant_home_page(request):
+    """
+    домашняя страница applicant.
+    P.S. Доработать request.FILES['image'] (чтобы файлы принимались по другому т.к. если
+    частично обновлять, то keyerror будет!!!!)
+    """
     if request.method == "POST":
         if home_page.change_info_about_applicant(
-            request.user,
-            {
-                "email": request.POST.get('email'),
-                "first_name": request.POST.get("first_name"),
-                "second_name": request.POST.get("second_name"),
-                "phone": request.POST.get("phone"),
-                "photo": request.FILES['image']
-            }
+                request.user,
+                {
+                    "email": request.POST.get('email'),
+                    "first_name": request.POST.get("first_name"),
+                    "second_name": request.POST.get("second_name"),
+                    "phone": request.POST.get("phone"),
+                    "photo": request.FILES['image']
+                }
         ):
             return render(request, "home_page_applicant.html", {"alert": True})
 
     return render(request, "home_page_applicant.html", {"applicant": home_page.get_applicant(request.user)})
+
+
+def change_password(request):
+    """
+    страница на которой пользователь
+    изменяет свой пароль.
+    """
+    if request.method == "POST":
+        if request.POST.get("password1") == request.POST.get("password2"):
+            if not home_page.user_change_password(
+                request,
+                request.user,
+                {
+                    "current_password": request.POST.get("password"),
+                    "new_password": request.POST.get("password1")
+                }
+            ):
+                return render(request, "change_password.html", {'error_message': "Не правильно введен пароль!"})
+            else:
+                return render(request, "change_password.html", {'successful_message': "Пароль изменен!"})
+
+        else:
+            return render(request, 'change_password.html', {'error_message': "Пароли не совпадают!"})
+
+    return render(request, "change_password.html")
