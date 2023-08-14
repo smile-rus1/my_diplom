@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
@@ -92,6 +93,7 @@ class Resume(models.Model):
     Резюме, которое будет подаваться компании кандидатом
     """
     # ТУТ СДЕЛАТЬ ТОЖЕ ЧТОБЫ МОЖНО БЫЛО ПОДНИМАТЬ РЕЗЮМЕ КАК В МОДЕЛИ Vacancy!!!!
+    name_of_resume = models.CharField(max_length=50, verbose_name="Название резюме", null=False)
     gender = models.CharField(max_length=10, verbose_name="Пол", null=False)
     education = models.CharField(max_length=30, null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
