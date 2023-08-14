@@ -100,7 +100,7 @@ def applicant_home_page(request):
                     "first_name": request.POST.get("first_name"),
                     "second_name": request.POST.get("second_name"),
                     "phone": request.POST.get("phone"),
-                    "photo": request.FILES['image']
+                    "photo": request.FILES.get('image')
                 }
         ):
             return render(request, "home_page_applicant.html", {"alert": True})
@@ -131,3 +131,14 @@ def change_password(request):
             return render(request, 'change_password.html', {'error_message': "Пароли не совпадают!"})
 
     return render(request, "change_password.html")
+
+
+def create_resume(request):
+    """
+    создание резюме кандидата
+    """
+    if request.method == "POST":
+        ...
+        # print(request.POST.get("profession"))
+        # print(request.POST.get("skills").split())
+    return render(request, "create_resume.html")
