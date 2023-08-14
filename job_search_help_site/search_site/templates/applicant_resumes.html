@@ -11,19 +11,37 @@
   <div class="content-container">
     <h1>Ваши резюме</h1>
     <div class="buttons">
-      <button class="button-primary"><a href="#">Заказать резюме</a></button>
-      <button class="button-secondary"><a href="{% url 'create_resume' %}">Создать резюме</a></button>
+      <button class="button-primary" onclick="return window.location.href='#'">Заказать резюме</button>
+      <button class="button-secondary" onclick="return window.location.href='{% url 'create_resume' %}'">Создать резюме</button>
     </div>
 
     <div class="summary-container">
-      <!--вот тут цилом for выводить все резюме-->
+      {% for resume in resumes %}
       <div class="resume-container">
-        <h2 class="resume-title">Название резюме</h2>
+        <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
+        <div>
+          <h4>Описание:</h4>
+          <p>{{ resume.about_applicant|slice:"50" }}{% if resume.about_applicant|length > 50 %}...{%endif%}</p>
+          <h4>Навыки:</h4>
+          <p>{{ resume.key_skills }}</p>
+          <h4>Образование:</h4>
+          <p>{{ resume.education }}</p>
+          <h4>Опыт в данной специальности:</h4>
+          <p>{% if resume.experience %}{{ resume.experience }}{% else %}Нет опыта{% endif %}</p>
+        </div>
+         <br>
         <div class="resume-actions">
-          <button class="resume-button modify">Дополнить резюме</button>
-          <button class="resume-button delete">Удалить резюме</button>
+            <button class="resume-button modify">Дополнить резюме</button>
+          <form method="post" action="{% url 'delete_resume' resume.id %}">
+            {% csrf_token %}
+            <button class="resume-button delete" onclick="return confirm('Вы действительно хотите удалить ваше резюме?')">
+              Удалить резюме
+            </button>
+          </form>
+
         </div>
       </div>
+      {% endfor %}
 
     </div>
 
