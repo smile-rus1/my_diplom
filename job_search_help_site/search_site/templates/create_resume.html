@@ -1,0 +1,109 @@
+{% extends 'base_applicant.html' %}
+
+{% load static %}
+{% block title %} Создание резюме {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/crt_resume.css' %}" rel="stylesheet"/>
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="profession">Профессия</label>
+        <select id="profession" name="profession">
+          <option>Нет профессии</option>
+          <option>Разработчик</option>
+          <option>Дизайнер</option>
+          <option>Менеджер</option>
+          <option>Охраник</option>
+          <option>Курьер</option>
+          <option>Водитель</option>
+          <option>Администратор</option>
+          <option>Секретарь</option>
+          <option>Повар</option>
+          <option>Электрик</option>
+          <option>Разнорабочий</option>
+          <option>Кладовщик</option>
+          <option>Помощник</option>
+          <option>Уборщик</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Пол</label>
+        <select id="gender" name="gender">
+          <option value="male">Мужской</option>
+          <option value="female">Женский</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="education">Образование</label>
+        <select id="education" name="education">
+          <option>Нет образования</option>
+          <option>Среднее</option>
+          <option>Среднее специальное</option>
+          <option>Неоконченное высшее</option>
+          <option>Высшее</option>
+          <option>Бакалавр</option>
+          <option>Магистр</option>
+          <option>Кандидат наук</option>
+          <option>Доктор наук</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="workplace">Место работы</label>
+        <input type="text" id="workplace" name="workplace">
+        <span class="tooltip">
+          <span class="tooltip-text">Если в данный момент работаете то напишите где, иначе не пишите</span>
+          <sup>?</sup>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="experience">Опыт работы</label>
+        <input type="text" id="experience" name="experience">
+        <span class="tooltip">
+          <span class="tooltip-text">Напишите, сколько у вас опыта в выбранной профессии</span>
+          <sup>?</sup>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="skills">Ключевые навыки</label>
+        <input type="text" id="skills" name="skills" required>
+        <span class="tooltip">
+          <span class="tooltip-text">Добавьте ключевые навыки, разделяя запятыми</span>
+          <sup>?</sup>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="candidateInfo">О вас</label>
+        <textarea id="candidateInfo" name="candidateInfo" rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="salary">Зарплата</label>
+        <input type="number" id="salary" name="salary" class="salary-input">
+        <select class="small-select" name="small-currency">
+          <option value="byn">Br</option>
+          <option value="rub">&#8381;</option>
+          <option value="usd">$</option>
+        </select>
+      </div>
+
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+{% endblock %}
