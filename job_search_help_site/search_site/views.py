@@ -12,8 +12,11 @@ def index(request):
 
 
 def help_for_people(request):
+    """
+    Страница help для user
+    """
     if request.user.is_authenticated:
-        user = auth.check_user(request)
+        user = auth.check_user_role(request)
         if user == "applicant":
             return render(request, "help.html", {"type": "applicant"})
         elif user == "company":
@@ -82,7 +85,7 @@ def main_applicant(request):
 
 
 def resumes_applicant(request):
-    return render(request, "applicant_resumes.html")
+    return render(request, "applicant_resumes.html", {"resumes": resume.get_resume(request.user)})
 
 
 def applicant_home_page(request):
@@ -134,7 +137,7 @@ def change_password(request):
 
 def create_resume(request):
     """
-    создание резюме кандидата
+    Создание резюме кандидата.
     """
     if request.method == "POST":
         if not resume.create_resume_applicant(
@@ -156,3 +159,13 @@ def create_resume(request):
         return redirect("rezume_applicant")
 
     return render(request, "create_resume.html")
+
+
+def delete_resume(request, resume_id: int):
+    """
+    Удаляет резюме кандидата.
+
+    """
+    if request.method == "POST":
+        resume.delete_resume(request.user, resume_id)
+    return redirect("rezume_applicant")
