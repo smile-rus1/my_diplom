@@ -1,8 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
-from search_site.services import auth
-from search_site.services import home_page
+from .services import auth, home_page, resume
 
 
 def index(request):
@@ -116,12 +115,12 @@ def change_password(request):
     if request.method == "POST":
         if request.POST.get("password1") == request.POST.get("password2"):
             if not home_page.user_change_password(
-                request,
-                request.user,
-                {
-                    "current_password": request.POST.get("password"),
-                    "new_password": request.POST.get("password1")
-                }
+                    request,
+                    request.user,
+                    {
+                        "current_password": request.POST.get("password"),
+                        "new_password": request.POST.get("password1")
+                    }
             ):
                 return render(request, "change_password.html", {'error_message': "Не правильно введен пароль!"})
             else:
@@ -138,7 +137,22 @@ def create_resume(request):
     создание резюме кандидата
     """
     if request.method == "POST":
-        ...
-        # print(request.POST.get("profession"))
-        # print(request.POST.get("skills").split())
+        if not resume.create_resume_applicant(
+                request.user,
+                {
+                    "gender": request.POST.get("gender"),
+                    "name_of_resume": request.POST.get("name_resume"),
+                    "education": request.POST.get("education"),
+                    "about_applicant": request.POST.get("about_applicant"),
+                    "profession": request.POST.get("profession"),
+                    "key_skills": request.POST.get("skills"),
+                    "place_of_work": request.POST.get("workplace"),
+                    "experience": request.POST.get("experience"),
+                    "salary": request.POST.get("salary"),
+                    "currency": request.POST.get("currency")
+                }
+        ):
+            return render(request, "create_resume.html", {"error_message": "Некорректно введены данные!"})
+        return redirect("rezume_applicant")
+
     return render(request, "create_resume.html")
