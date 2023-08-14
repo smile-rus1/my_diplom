@@ -65,13 +65,6 @@ class Specialization(models.Model):
         verbose_name_plural = "Специализация"
 
 
-class Education(models.Model):
-    name_of_education = models.CharField(max_length=30, null=False)
-
-    class Meta:
-        verbose_name_plural = "Образование"
-
-
 class TypeEmployment(models.Model):
     name_type_of_employment = models.CharField(max_length=30, null=False)
 
@@ -99,18 +92,15 @@ class Resume(models.Model):
     Резюме, которое будет подаваться компании кандидатом
     """
     # ТУТ СДЕЛАТЬ ТОЖЕ ЧТОБЫ МОЖНО БЫЛО ПОДНИМАТЬ РЕЗЮМЕ КАК В МОДЕЛИ Vacancy!!!!
-    name = models.CharField(max_length=30, null=False)
-    second_name = models.CharField(max_length=30, null=False)
-    last_name = models.CharField(max_length=30, null=False)
-    gender = models.CharField(max_length=10, verbose_name="Пол")
-    education = models.ForeignKey(Education, on_delete=models.SET_NULL, null=True, verbose_name="Образование")
+    gender = models.CharField(max_length=10, verbose_name="Пол", null=False)
+    education = models.CharField(max_length=30, null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
-
-    phone = models.CharField(max_length=16, validators=[phoneNumberRegex], unique=True)
-    image = models.ImageField(upload_to="", null=True)
-    profession = models.TextField()
-
-    key_skills = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="Ключевые навыки")
+    about_applicant = models.CharField(blank=True, null=True, max_length=500)
+    profession = models.TextField(verbose_name="Профессия", null=False)
+    key_skills = models.TextField(verbose_name="Ключевые навыки", null=False)
+    place_of_work = models.CharField(max_length=30, null=True, verbose_name="Место работы")
+    experience = models.CharField(max_length=15, verbose_name="Опыт работы", null=True)
+    salary = models.CharField(max_length=30, null=True, verbose_name="Заработная плата")
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
 
