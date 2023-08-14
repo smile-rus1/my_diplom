@@ -6,6 +6,7 @@
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/crt_resume.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
 <style>
 
 </style>
@@ -14,8 +15,23 @@
 {% block content %}
 
 <div class="container">
+  {% if error_message %}
+        <div class="error-message">
+            <p>{{ error_message }}</p>
+        </div>
+  {% endif %}
+
     <form method="post">
       {% csrf_token %}
+      <div class="form-group">
+        <label for="name_resume">Название резюме</label>
+        <input type="text" id="name_resume" name="name_resume" required>
+        <span class="tooltip">
+          <span class="tooltip-text">Напишите название вашего резюме</span>
+          <sup>?</sup>
+        </span>
+      </div>
+
       <div class="form-group">
         <label for="profession">Профессия</label>
         <select id="profession" name="profession">
@@ -71,7 +87,7 @@
 
       <div class="form-group">
         <label for="experience">Опыт работы</label>
-        <input type="text" id="experience" name="experience">
+        <input type="number" id="experience" name="experience" min="0">
         <span class="tooltip">
           <span class="tooltip-text">Напишите, сколько у вас опыта в выбранной профессии</span>
           <sup>?</sup>
@@ -88,14 +104,14 @@
       </div>
 
       <div class="form-group">
-        <label for="candidateInfo">О вас</label>
-        <textarea id="candidateInfo" name="candidateInfo" rows="4"></textarea>
+        <label for="about_applicant">О вас</label>
+        <textarea id="candidateInfo" name="about_applicant" rows="4"></textarea>
       </div>
 
       <div class="form-group">
         <label for="salary">Зарплата</label>
-        <input type="number" id="salary" name="salary" class="salary-input">
-        <select class="small-select" name="small-currency">
+        <input type="number" id="salary" name="salary">
+        <select class="small-select" name="currency">
           <option value="byn">Br</option>
           <option value="rub">&#8381;</option>
           <option value="usd">$</option>
