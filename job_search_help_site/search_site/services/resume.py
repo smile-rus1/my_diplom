@@ -1,17 +1,21 @@
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 
 from search_site import models
 from .home_page import get_applicant
 
 
-def get_resume():
+def get_resume(user: models.CustomUser) -> list[models.Resume]:
     """
     Возвращает резюме кандидата.
     """
-    ...
+    applicant = get_applicant(user)
+    resumes = models.Resume.objects.filter(applicant=applicant.id)
+    return resumes
 
 
-def create_resume_applicant(user: models.CustomUser, resume_data: dict):
+def create_resume_applicant(user: models.CustomUser, resume_data: dict) -> bool:
     """
     Создается резюме кандидата по переданному user и resume_data.
     """
@@ -34,7 +38,24 @@ def create_resume_applicant(user: models.CustomUser, resume_data: dict):
         return False
 
 
+def update_resume():
+    ...
+
+
+def delete_resume(user: models.CustomUser, id_resume: int):
+    resume = get_object_or_404(models.Resume, id=id_resume)
+
+    if resume.applicant != get_applicant(user):
+        return HttpResponseForbidden("Упс, эта страница не доступна!")
+
+    resume.delete()
+    return True
+
+
 def _validate_salary(salary, currency):
+    """
+    Валидирует з/п applicanta.
+    """
     if salary == "":
         return None
 
@@ -42,6 +63,9 @@ def _validate_salary(salary, currency):
 
 
 def _validate_experience(experience: int) -> str | None:
+    """
+    Валидирует experience по годам и приставляет суффикс взависимости от кол-ва.
+    """
     if not experience:
         return
 
