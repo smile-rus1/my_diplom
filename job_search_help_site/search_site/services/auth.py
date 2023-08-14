@@ -5,6 +5,9 @@ from search_site import models
 
 
 def register_user(request, email: str, password1: str, password2: str, type_user: str) -> bool:
+    """
+    Регистрирует пользователя по emaul, password1, password2.
+    """
     if not _match_password(password1, password2):
         return messages.error(request, 'Пароли не совпадают')
 
@@ -30,6 +33,9 @@ def register_user(request, email: str, password1: str, password2: str, type_user
 
 
 def login_user(request, user: dict) -> bool:
+    """
+    Авторизирует пользователя по email и password.
+    """
     user = authenticate(request, email=user["email"], password=user["password"])
     if user is not None:
         login(request, user)
@@ -39,7 +45,10 @@ def login_user(request, user: dict) -> bool:
     return True
 
 
-def check_user(request):
+def check_user_role(request):
+    """
+    Проверяет роль пользователя.
+    """
     if request.user.is_authenticated:
         user = request.user
 
@@ -52,20 +61,32 @@ def check_user(request):
 
 
 def _register_applicant(user: models.CustomUser) -> None:
+    """
+    Регистрация роли applicant по user.
+    """
     applicant, created = models.Applicant.objects.get_or_create(user=user)
 
 
 def _register_company(user: models.CustomUser) -> None:
+    """
+    Регистрация роли applicant по company.
+    """
     company, created = models.Company.get_or_create()
 
 
 def _match_password(password1: str, password2: str) -> bool:
+    """
+    Проверка паролей на совпадение.
+    """
     if password1 != password2:
         return False
     return True
 
 
 def _is_valid_password(password1: str) -> bool:
+    """
+    Проверка пароля на валидацию.
+    """
     if len(password1) < 8:
         return False
 
