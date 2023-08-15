@@ -6,6 +6,14 @@ from search_site import models
 from .home_page import get_applicant
 
 
+def get_applicant_resume(resume_id: int):
+    """
+    Возвращает резюме applicant по его id и resume_id.
+    """
+    resume = models.Resume.objects.get(id=resume_id)
+    return resume
+
+
 def get_resume(user: models.CustomUser) -> list[models.Resume]:
     """
     Возвращает резюме кандидата.
@@ -38,17 +46,47 @@ def create_resume_applicant(user: models.CustomUser, resume_data: dict) -> bool:
         return False
 
 
-def update_resume():
-    ...
+def update_resume(user: models.CustomUser, id_resume: int, resume_data: dict):
+    """
+    Обновляет resume applicanta.
+    """
+    resume = get_object_or_404(models.Resume, id=id_resume)
+    if not _check_is_applicant(user, resume):
+        return HttpResponseForbidden("Упс, эта страница не доступна!")
+
+    models.Resume.objects.filter(id=id_resume).update(
+        name_of_resume=resume_data.get("name_of_resume"),
+        profession=resume_data.get("profession"),
+        gender=resume_data.get("gender"),
+        education=resume_data.get("education"),
+        place_of_work=resume_data.get("place_of_work"),
+        salary=_validate_salary(resume_data.get("salary"), resume_data.get("currency")),
+        experience=resume_data.get("experience"),
+        key_skills=resume_data.get("key_skills"),
+        about_applicant=resume_data.get("about_applicant")
+    )
+    return True
 
 
 def delete_resume(user: models.CustomUser, id_resume: int):
+    """
+    Удаляет resume applicantа.
+    """
     resume = get_object_or_404(models.Resume, id=id_resume)
 
-    if resume.applicant != get_applicant(user):
+    if not _check_is_applicant(user, resume):
         return HttpResponseForbidden("Упс, эта страница не доступна!")
 
     resume.delete()
+    return True
+
+
+def _check_is_applicant(user: models.CustomUser, resume: models.Resume) -> bool:
+    """
+    Проверка на то, является ли resume applicant тем ли applicant.
+    """
+    if resume.applicant != get_applicant(user):
+        return False
     return True
 
 
