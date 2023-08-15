@@ -20,8 +20,10 @@
       <div class="resume-container">
         <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
         <div>
+          {% if resume.about_applicant %}
           <h4>Описание:</h4>
           <p>{{ resume.about_applicant|slice:"50" }}{% if resume.about_applicant|length > 50 %}...{%endif%}</p>
+          {% endif %}
           <h4>Навыки:</h4>
           <p>{{ resume.key_skills }}</p>
           <h4>Образование:</h4>
@@ -31,7 +33,9 @@
         </div>
          <br>
         <div class="resume-actions">
+          <form action="{% url 'update_resume' resume.id %}">
             <button class="resume-button modify">Дополнить резюме</button>
+          </form>
           <form method="post" action="{% url 'delete_resume' resume.id %}">
             {% csrf_token %}
             <button class="resume-button delete" onclick="return confirm('Вы действительно хотите удалить ваше резюме?')">
