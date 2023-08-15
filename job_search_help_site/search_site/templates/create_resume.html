@@ -25,7 +25,7 @@
       {% csrf_token %}
       <div class="form-group">
         <label for="name_resume">Название резюме</label>
-        <input type="text" id="name_resume" name="name_resume" required>
+        <input type="text" id="name_resume" name="name_resume" required value="{{ resume.name_of_resume }}">
         <span class="tooltip">
           <span class="tooltip-text">Напишите название вашего резюме</span>
           <sup>?</sup>
@@ -35,21 +35,21 @@
       <div class="form-group">
         <label for="profession">Профессия</label>
         <select id="profession" name="profession">
-          <option>Нет профессии</option>
-          <option>Разработчик</option>
-          <option>Дизайнер</option>
-          <option>Менеджер</option>
-          <option>Охраник</option>
-          <option>Курьер</option>
-          <option>Водитель</option>
-          <option>Администратор</option>
-          <option>Секретарь</option>
-          <option>Повар</option>
-          <option>Электрик</option>
-          <option>Разнорабочий</option>
-          <option>Кладовщик</option>
-          <option>Помощник</option>
-          <option>Уборщик</option>
+          <option {% if resume.profession == "Нет профессии" %}selected{% endif %}>Нет профессии</option>
+          <option {% if resume.profession == "Разработчик"%}selected{%endif%}>Разработчик</option>
+          <option {% if resume.profession == "Дизайнер"%}selected{%endif%}>Дизайнер</option>
+          <option {% if resume.profession == "Менеджер"%}selected{%endif%}>Менеджер</option>
+          <option {% if resume.profession == "Охраник"%}selected{%endif%}>Охраник</option>
+          <option {% if resume.profession == "Курьер"%}selected{%endif%}>Курьер</option>
+          <option {% if resume.profession == "Водитель"%}selected{%endif%}>Водитель</option>
+          <option {% if resume.profession == "Администратор"%}selected{%endif%}>Администратор</option>
+          <option {% if resume.profession == "Секретарь"%}selected{%endif%}>Секретарь</option>
+          <option {% if resume.profession == "Повар"%}selected{%endif%}>Повар</option>
+          <option {% if resume.profession == "Электрик"%}selected{%endif%}>Электрик</option>
+          <option {% if resume.profession == "Разнорабочий"%}selected{%endif%}>Разнорабочий</option>
+          <option {% if resume.profession == "Кладовщий"%}selected{%endif%}>Кладовщик</option>
+          <option {% if resume.profession == "Помощник"%}selected{%endif%}>Помощник</option>
+          <option {% if resume.profession == "Уборщик"%}selected{%endif%}>Уборщик</option>
         </select>
       </div>
 
@@ -64,21 +64,21 @@
       <div class="form-group">
         <label for="education">Образование</label>
         <select id="education" name="education">
-          <option>Нет образования</option>
-          <option>Среднее</option>
-          <option>Среднее специальное</option>
-          <option>Неоконченное высшее</option>
-          <option>Высшее</option>
-          <option>Бакалавр</option>
-          <option>Магистр</option>
-          <option>Кандидат наук</option>
-          <option>Доктор наук</option>
+          <option {% if resume.education == "Нет образования" %}selected{% endif %}>Нет образования</option>
+          <option {% if resume.education == "Среднее" %}selected{% endif %}>Среднее</option>
+          <option {% if resume.education == "Среднее специальное" %}selected{% endif %}>Среднее специальное</option>
+          <option {% if resume.education == "Неоконченное высшее" %}selected{% endif %}>Неоконченное высшее</option>
+          <option {% if resume.education == "Высшее" %}selected{% endif %}>Высшее</option>
+          <option {% if resume.education == "Бакалавр" %}selected{% endif %}>Бакалавр</option>
+          <option {% if resume.education == "Магистр" %}selected{% endif %}>Магистр</option>
+          <option {% if resume.education == "Кандидат наук" %}selected{% endif %}>Кандидат наук</option>
+          <option {% if resume.education == "Доктор наук" %}selected{% endif %}>Доктор наук</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="workplace">Место работы</label>
-        <input type="text" id="workplace" name="workplace">
+        <input type="text" id="workplace" name="workplace" value="{{resume.place_of_work}}">
         <span class="tooltip">
           <span class="tooltip-text">Если в данный момент работаете то напишите где, иначе не пишите</span>
           <sup>?</sup>
@@ -87,7 +87,7 @@
 
       <div class="form-group">
         <label for="experience">Опыт работы</label>
-        <input type="number" id="experience" name="experience" min="0">
+        <input type="number" id="experience" name="experience" min="0" value="{{resume.experience}}">
         <span class="tooltip">
           <span class="tooltip-text">Напишите, сколько у вас опыта в выбранной профессии</span>
           <sup>?</sup>
@@ -96,7 +96,7 @@
 
       <div class="form-group">
         <label for="skills">Ключевые навыки</label>
-        <input type="text" id="skills" name="skills" required>
+        <input type="text" id="skills" name="skills" required value="{%if resume%}{{resume.key_skills}}{%endif%}">
         <span class="tooltip">
           <span class="tooltip-text">Добавьте ключевые навыки, разделяя запятыми</span>
           <sup>?</sup>
@@ -105,12 +105,12 @@
 
       <div class="form-group">
         <label for="about_applicant">О вас</label>
-        <textarea id="candidateInfo" name="about_applicant" rows="4"></textarea>
+        <textarea id="about_applicant" name="about_applicant" rows="4" required>{{resume.about_applicant}}</textarea>
       </div>
 
       <div class="form-group">
         <label for="salary">Зарплата</label>
-        <input type="number" id="salary" name="salary">
+        <input type="number" id="salary" name="salary" value="{{resume.salary|slice:'-4' }}">
         <select class="small-select" name="currency">
           <option value="byn">Br</option>
           <option value="rub">&#8381;</option>
