@@ -169,3 +169,26 @@ def delete_resume(request, resume_id: int):
     if request.method == "POST":
         resume.delete_resume(request.user, resume_id)
     return redirect("rezume_applicant")
+
+
+def update_resume(request, resume_id: int):
+    if request.method == "POST":
+        if resume.update_resume(
+            request.user,
+            resume_id,
+            {
+                "gender": request.POST.get("gender"),
+                "name_of_resume": request.POST.get("name_resume"),
+                "education": request.POST.get("education"),
+                "about_applicant": request.POST.get("about_applicant"),
+                "profession": request.POST.get("profession"),
+                "key_skills": request.POST.get("skills"),
+                "place_of_work": request.POST.get("workplace"),
+                "experience": request.POST.get("experience"),
+                "salary": request.POST.get("salary"),
+                "currency": request.POST.get("currency")
+            }
+        ):
+            return redirect("rezume_applicant")
+
+    return render(request, "create_resume.html", {"resume": resume.get_applicant_resume(resume_id)})
