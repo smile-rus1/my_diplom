@@ -25,7 +25,7 @@
               {% if applicant.first_name %}
             <td><input type="text" name="first_name" value="{{ applicant.first_name }}"></td>
               {% else %}
-              <td><input type="text" name="first_name" value=""></td>
+              <td><input type="text" name="first_name" value="" placeholder="Не задано"></td>
               {% endif %}
           </tr>
           <tr>
@@ -33,23 +33,19 @@
               {% if applicant.second_name %}
             <td><input type="text" name="second_name" value="{{ applicant.second_name }}"></td>
               {% else %}
-            <td><input type="text" name="second_name" value=""></td>
+            <td><input type="text" name="second_name" value="" placeholder="Не задано"></td>
               {% endif %}
           </tr>
           <tr>
             <td>Email</td>
-              {% if applicant.user.email %}
-            <td><input type="email" name="email" value="{{ applicant.user.email }}"></td>
-              {% else %}
-               <td><input type="email" name="email" value=""></td>
-              {% endif %}
+            <td><input type="email" name="email" value="{{ applicant.user.email }}" required></td>
           </tr>
           <tr>
             <td>Мобильный телефон</td>
             {% if applicant.phone %}
             <td><input type="text" name="phone" value="{{ applicant.phone }}"></td>
             {% else %}
-            <td><input type="text" name="phone" value="Нет телефона"></td>
+            <td><input type="text" name="phone" value="" placeholder="Не задано"></td>
             {% endif %}
           </tr>
           <tr>
