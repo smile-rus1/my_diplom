@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.core.mail import send_mail
 
 from search_site import models
 
@@ -29,6 +31,13 @@ def register_user(request, email: str, password1: str, password2: str, type_user
         ...
 
     login_user(request, {"email": email, "password": password1})
+    send_mail(
+        'Добро пожаловать!',
+        'Спасибо за регистрацию на нашем сайте. Добро пожаловать!',
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+    )
     return True
 
 
