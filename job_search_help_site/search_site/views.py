@@ -106,6 +106,10 @@ def applicant_home_page(request):
                 }
         ):
             return render(request, "home_page_applicant.html", {"alert": True})
+        else:
+            return render(request, "home_page_applicant.html",
+                          {"error_message": "Ошибка, такой телефон уже есть!"}
+                          )
 
     return render(request, "home_page_applicant.html", {"applicant": home_page.get_applicant(request.user)})
 
