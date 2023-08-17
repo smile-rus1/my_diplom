@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block content %}
+{% if request.user.applicant %}
 <div class="header-search">
      <form action="/search/vacancy" method="get" class="search-form">
         <input type="text" class="search-input" placeholder="Введите профессию, должность, компанию" name="vacancy">
@@ -76,7 +77,7 @@
             </div>
         </div>
 
- <div class="container-content">
+<div class="container-content">
         <div class="header">
             <h6 class="elegant-header">Работа в компаниях</h6>
             <a class="link-button" href="#">Каталог компаний</a>
@@ -111,8 +112,17 @@
                   <p class="column-text">Строка 1</p>
                   <p class="column-text">Строка 2</p>
                   <p class="column-text">Строка 3</p>
-            </div>
+             </div>
         </div>
-    </div>
+</div>
+{% elif request.user.company %}
+<script>
+    window.location.href = "{% url 'main_employer' %}";
+</script>
+{% else %}
+<script>
+    window.location.href = "{% url 'admin' %}";
+</script>
+{% endif %}
 
 {% endblock %}
