@@ -21,7 +21,13 @@
     </style>
 </head>
 <body>
-{% if request.user.is_authenticated %}
+{% if not request.user.is_authenticated %}
+<script>
+    window.location.href = "{% url 'login_applicant' %}";
+</script>
+{% endif %}
+
+{% if request.user.applicant %}
 <div class="navbar-wrapper">
     <div class="main-navbar">
         <ul class="topnav">
@@ -59,9 +65,13 @@
 {% block js %}
 {% endblock %}
 
+{% elif request.user.company %}
+<script>
+    window.location.href = "{% url 'main_employer' %}";
+</script>
 {% else %}
 <script>
-    window.location.href = "{% url 'login_applicant' %}";
+    window.location.href = "{% url 'admin' %}";
 </script>
 {% endif %}
 </html>

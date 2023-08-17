@@ -13,6 +13,18 @@
     {% endblock %}
 </head>
 <body>
+{% if request.user.is_authenticated %}
+    {% if request.user.applicant %}
+        <script>
+            window.location.href = "{% url 'main_applicant' %}"
+        </script>
+    {% elif request.user.company %}
+        <script>
+            window.location.href = "{% url 'main_employer' %}";
+        </script>
+    {% endif %}
+
+{% endif %}
 <div class="nav-panel-applicant-employer">
         <div class="navigation-panel">
             <div class="left-div">
