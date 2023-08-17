@@ -5,6 +5,7 @@
 
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/login.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
@@ -12,6 +13,11 @@
     {% csrf_token %}
     <div class="container">
         <h3>Вход в личный кабинет</h3>
+        {% if error_message %}
+        <div class="error-message">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
