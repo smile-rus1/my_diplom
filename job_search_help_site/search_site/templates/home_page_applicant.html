@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+{% if request.user.applicant %}
 <div class="container">
     <div class="left-container">
       <form method="post" enctype="multipart/form-data">
@@ -71,6 +72,13 @@
     {% endif %}
       </div>
   </div>
+
+{% elif request.user.company %}
+<script>
+    window.location.href = "{% url 'main_employer' %}";
+</script>
+{% endif %}
+
 {% endblock %}
 
 {% block js %}
