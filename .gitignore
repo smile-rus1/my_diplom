@@ -3,3 +3,4 @@ job_search_help_site/db.sqlite3
 venv
 job_search_help_site/search_site/media
 job_search_help_site/search_site/migrations
+requirements.in
