@@ -27,10 +27,13 @@ def change_info_about_applicant(user, user_data: dict) -> bool:
         return False
 
 
-def get_applicant(user) -> models.Applicant:
-    applicant = models.Applicant.objects.get(user=user)
+def get_applicant(user) -> models.Applicant | None:
+    try:
+        applicant = models.Applicant.objects.get(user=user)
+        return applicant
 
-    return applicant
+    except:
+        return get_company(user)
 
 
 def get_company(user):
