@@ -23,4 +23,8 @@ urlpatterns = [
     path("employer/", views.index_employer, name="employer"),
     path("login/employer", views.login_employer, name="login_employer"),
     path("register/employer", views.register_employer, name="register_employer"),
+    path("employer/main", views.main_employer, name="main_employer"),
+
+    # url для admin
+    path('admin_redirect/', views.admin_redirect, name='admin')
 ]
