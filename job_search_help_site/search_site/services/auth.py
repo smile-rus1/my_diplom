@@ -26,7 +26,7 @@ def register_user(request, email: str, password1: str, password2: str, type_user
         _register_applicant(user)
 
     if type_user == "company":
-        ...
+        _register_company(user)
 
     login_user(request, {"email": email, "password": password1})
     return True
@@ -71,7 +71,7 @@ def _register_company(user: models.CustomUser) -> None:
     """
     Регистрация роли applicant по company.
     """
-    company, created = models.Company.get_or_create()
+    company, created = models.Company.objects.get_or_create(user=user)
 
 
 def _match_password(password1: str, password2: str) -> bool:
