@@ -7,14 +7,82 @@
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
-<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_company.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
 <div class="header-search">
      <form action="/search/vacancy" method="get" class="search-form">
-        <input type="text" class="search-input" placeholder="Поиск по резюме" name="vacancy">
+        <input type="text" class="search-input"
+               placeholder="Поиск по резюме, навыкам, опыту, названию специальности..." name="vacancy">
         <button class="search-button">Поиск</button>
      </form>
+</div>
+
+<div class="main-content">
+    <div class="container-resume">
+        <h2>Резюме кандидатов, которые могут вас заинтересовать</h2>
+        <!--ТУТ ТОЖЕ ВЫВОДИТЬ ПРОСТО РАНДОМНЫЕ РЕЗЮМЕ 5 или больше штук!!!-->
+        <div class="resume-card">
+            <h2 class="resume-title">Frontend Разработчик</h2>
+            <p class="resume-description">тут просто текст</p>
+            <p class="resume-location">Местоположение: Москва, Россия</p>
+            <button class="more-info-button">Подробнее</button>
+        </div>
+        <div class="resume-card">
+            <h2 class="resume-title">Frontend Разработчик</h2>
+            <p class="resume-description">тут просто текст</p>
+            <p class="resume-location">Местоположение: Москва, Россия</p>
+            <button class="more-info-button">Подробнее</button>
+        </div>
+        <div class="resume-card">
+            <h2 class="resume-title">Frontend Разработчик</h2>
+            <p class="resume-description">тут просто текст</p>
+            <p class="resume-location">Местоположение: Москва, Россия</p>
+            <button class="more-info-button">Подробнее</button>
+        </div>
+    </div>
+    <div class="ad-container">
+        <p>Тут могла быть ваша реклама</p>
+    </div>
+</div>
+
+<div class="container-content">
+        <div class="header">
+            <h6 class="elegant-header">Популярные компании</h6>
+            <a class="link-button" href="#">Каталог компаний</a>
+        </div>
+        <div class="row">
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+                <div class="item-company">
+                    <p>asdasd</p>
+                </div>
+            </div>
+        <hr>
+        <div class="container-block">
+            <div class="column-block">
+                  <h2 class="header-block">Статьи</h2>
+                  <a href="#">Тут ссылка или текст</a>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+            </div>
+             <div class="column-block">
+                  <h2 class="header-block">Новости</h2>
+                  <p class="column-text">Строка 1</p>
+                  <p class="column-text">Строка 2</p>
+                  <p class="column-text">Строка 3</p>
+             </div>
+        </div>
 </div>
 {% endblock %}
