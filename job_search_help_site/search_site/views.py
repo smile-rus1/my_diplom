@@ -1,5 +1,6 @@
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from .services import auth, home_page, resume
 
@@ -18,11 +19,13 @@ def help_for_people(request):
     if request.user.is_authenticated:
         user = auth.check_user_role(request)
         if user == "applicant":
-            return render(request, "help.html", {"type": "applicant"})
+            template_name = "base_applicant.html"
         elif user == "company":
-            return
+            template_name = "employer.html"
 
-    return render(request, "help.html")
+        return render(request, "help.html", {"template": template_name})
+    else:
+        return render(request, "help.html", {"template": "base.html"})
 
 
 def login_applicant(request):
@@ -30,12 +33,14 @@ def login_applicant(request):
     авторизация кандидата по url login/applicant.
     """
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        if not auth.login_user(request, {"email": email, "password": password}):
-            error_message = "Неправильный email или пароль!"
-            return render(request, 'login_applicant.html', {'error_message': error_message})
+        if not auth.login_user(
+                request,
+                {
+                    "email": request.POST.get('email'),
+                    "password": request.POST.get('password')
+                }
+        ):
+            return render(request, 'login_applicant.html', {'error_message': "Неправильный email или пароль!"})
         else:
             return redirect("main_applicant")
 
@@ -48,11 +53,13 @@ def register_applicant(request):
     еще будет меняться т.к. не настроил модельки еще!
     """
     if request.method == "POST":
-        email = request.POST.get("email")
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-
-        if not auth.register_user(request, email, password1, password2, "applicant"):
+        if not auth.register_user(
+                request,
+                request.POST.get("email"),
+                request.POST.get("password1"),
+                request.POST.get("password2"),
+                "applicant"
+        ):
             return redirect("register_applicant")
         else:
             return redirect("main_applicant")
@@ -65,16 +72,69 @@ def index_employer(request):
 
 
 def login_employer(request):
+    """
+    Авторизация employer по email и password.
+    В будующем думаю отрефакторить, сделать один обработчик, чтобы она авторизировала и applicant,
+    и company.
+    Примерно так =>
+    exists, type = auth.login_user(....) => auth.login_user будет возвращать
+    --- существует пользователь и тип, и от типа будет зависеть куда перенаправлять.
+     print(request.path_info)
+    if request.path_info == "/register/employer": --- можно через пути как-то сделать чтобы один обработчик
+    только был
+        print('!!!!!!!!')
+    """
+    if request.method == "POST":
+        if not auth.login_user(
+                request,
+                {
+                    "email": request.POST.get("email"),
+                    "password": request.POST.get("password")
+                }
+        ):
+            return render(request, "login_employer.html", {'error_message': "Неправильный email или пароль!"})
+        else:
+            return redirect("main_employer")
+
     return render(request, "login_employer.html")
 
 
 def register_employer(request):
+    """
+    Регистрация employer.
+    """
+    if request.method == "POST":
+
+        if not auth.register_user(
+                request, request.POST.get("email"),
+                request.POST.get("password1"),
+                request.POST.get("password2"),
+                "company"
+        ):
+            return redirect("register_employer")
+        else:
+            return redirect("main_employer")
+
     return render(request, "register_employer.html")
 
 
+def admin_redirect(request):
+    if request.user.is_superuser:
+        return redirect(reverse('admin:index'))
+
+
+def main_employer(request):
+    return render(request, "index_company.html")
+
+
 def logout_user(request):
-    logout(request)
-    return redirect("index")
+    try:
+        if request.user.company:
+            logout(request)
+            return redirect("employer")
+    except:
+        logout(request)
+        return redirect("index")
 
 
 def main_applicant(request):
