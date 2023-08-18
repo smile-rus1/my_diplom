@@ -59,20 +59,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Пользователи"
 
 
-class Specialization(models.Model):
-    name_specialization = models.TextField()
-
-    class Meta:
-        verbose_name_plural = "Специализация"
-
-
-class TypeEmployment(models.Model):
-    name_type_of_employment = models.CharField(max_length=30, null=False)
-
-    class Meta:
-        verbose_name_plural = "Тип занятости"
-
-
 class Applicant(models.Model):
     """
     Кандидат который будет подавать резюме компании
@@ -115,12 +101,13 @@ class Company(models.Model):
     """
     Компания, которая будет публиковать вакансии
     """
-    name_company = models.CharField(max_length=20, null=False, unique=True)
+    title_company = models.CharField(max_length=20, null=False, unique=True, verbose_name="Название компании")
     name_user = models.CharField(max_length=30, null=False)
     second_name_user = models.CharField(max_length=30, null=False)
     phone_company = models.CharField(max_length=16, validators=[phoneNumberRegex], unique=True, null=True)
+    description_company = models.CharField(max_length=500, null=True, verbose_name="Описание компании")
     image_company = models.ImageField(upload_to="", null=True)
-    is_confirmed = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False, verbose_name="Потверждена")
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
@@ -132,22 +119,22 @@ class Vacancy(models.Model):
     """
     Вакансии, которые будут подаваться компаниями
     """
-    name_vacancy = models.CharField(max_length=50, null=False)
-    town = models.CharField(max_length=30, null=False)
-    salary = models.CharField(max_length=30)
-    experience = models.CharField(max_length=30)
-    description = models.CharField(max_length=300, verbose_name="Описание вакансии")
-    created_at = models.DateTimeField(auto_now_add=True)
-    publication_time = models.DateTimeField(default=timezone.now)  # либо использовать default=timezone.now
-    location = models.CharField(max_length=100)
-
-    type_of_employment = models.ForeignKey(TypeEmployment, on_delete=models.SET_NULL, null=True)
-    specialization = models.ForeignKey(Specialization, on_delete=models.SET_NULL, null=True)
+    title_vacancy = models.CharField(max_length=50, null=False, verbose_name="Название вакансии")
+    location = models.CharField(max_length=100, verbose_name="Место положение", null=True)
+    salary = models.CharField(max_length=30, null=True, verbose_name="Заработная плата")
+    experience = models.CharField(max_length=30, null=True, verbose_name="Опыт работы")
+    description = models.CharField(max_length=500, verbose_name="Описание вакансии", null=False)
+    type_of_employment = models.CharField(max_length=30, verbose_name="Тип занятости", null=True)
+    specialization = models.CharField(max_length=30, verbose_name="Специализация", null=True)
+    key_skills = models.CharField(max_length=100, verbose_name="Ключевые навыки", null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    publication_time = models.DateTimeField(default=timezone.now, verbose_name="Обновление вакансии")
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Вакасии"
-        ordering = ["-publication_time"]
+        ordering = ["-publication_time", "-created_at"]
 
 
 class Application(models.Model):
