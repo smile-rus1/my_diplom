@@ -1,0 +1,59 @@
+{% extends 'employer.html' %}
+{% load static %}
+
+{% block title %} Ваши вакансии {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+  <div class="content-container">
+    <h1>Ваши вакансии</h1>
+    <div class="buttons">
+      <button class="button-primary" onclick="return window.location.href='#'">Создать вакансию</button>
+      <button class="button-secondary" onclick="return window.location.href='#'">Заказать создание вакансии</button>
+    </div>
+
+    <div class="summary-container">
+      {% for resume in resumes %}
+      <div class="resume-container">
+        <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
+        <div>
+          {% if resume.about_applicant %}
+          <h4>Описание:</h4>
+          <p>{{ resume.about_applicant|slice:"50" }}{% if resume.about_applicant|length > 50 %}...{%endif%}</p>
+          {% endif %}
+          <h4>Навыки:</h4>
+          <p>{{ resume.key_skills }}</p>
+          <h4>Образование:</h4>
+          <p>{{ resume.education }}</p>
+          <h4>Опыт в данной специальности:</h4>
+          <p>{% if resume.experience %}{{ resume.experience }}{% else %}Нет опыта{% endif %}</p>
+        </div>
+         <br>
+        <div class="resume-actions">
+          <form action="#">
+            <button class="resume-button modify">Дополнить вакансию</button>
+          </form>
+          <form method="post" action="#">
+            {% csrf_token %}
+            <button class="resume-button delete" onclick="return confirm('Вы действительно хотите удалить вашу вакансию?')">
+              Удалить вакансию
+            </button>
+          </form>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+  <div class="ad-container">
+   <p>Тут могла быть ваша реклама</p>
+  </div>
+</div>
+{% endblock %}
