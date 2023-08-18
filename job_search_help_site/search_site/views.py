@@ -256,3 +256,8 @@ def update_resume(request, resume_id: int):
             return redirect("rezume_applicant")
 
     return render(request, "create_resume.html", {"resume": resume.get_applicant_resume(resume_id)})
+
+
+def vacancy_company(request):
+
+    return render(request, "company_vacancy.html")
