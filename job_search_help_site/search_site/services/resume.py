@@ -51,8 +51,8 @@ def update_resume(user: models.CustomUser, id_resume: int, resume_data: dict):
     """
     Обновляет resume applicanta.
     """
-    resume = get_object_or_404(models.Resume, id=id_resume)
-    if not _check_is_applicant(user, resume):
+    resume = _check_and_get_resume(user, id_resume)
+    if resume is None:
         return HttpResponseForbidden("Упс, эта страница не доступна!")
 
     models.Resume.objects.filter(id=id_resume).update(
@@ -73,11 +73,9 @@ def delete_resume(user: models.CustomUser, id_resume: int):
     """
     Удаляет resume applicantа.
     """
-    resume = get_object_or_404(models.Resume, id=id_resume)
-
-    if not _check_is_applicant(user, resume):
+    resume = _check_and_get_resume(user, id_resume)
+    if resume is None:
         return HttpResponseForbidden("Упс, эта страница не доступна!")
-
     resume.delete()
     return True
 
@@ -89,3 +87,14 @@ def _check_is_applicant(user: models.CustomUser, resume: models.Resume) -> bool:
     if resume.applicant != get_applicant(user):
         return False
     return True
+
+
+def _check_and_get_resume(user: models.CustomUser, id_resume: int) -> models.Resume | None:
+    """
+    Проверяет и возвращает Resume.
+    """
+    resume = get_object_or_404(models.Resume, id=id_resume)
+    if not _check_is_applicant(user, resume):
+        return None
+    return resume
+
