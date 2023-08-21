@@ -7,15 +7,14 @@ from . import validators
 from .home_page import get_applicant
 
 
-def get_applicant_resume(resume_id: int):
+def get_resume(user: models.CustomUser, resume_id: int):
     """
     Возвращает резюме applicant по resume_id.
     """
-    resume = models.Resume.objects.get(id=resume_id)
-    return resume
+    return _check_and_get_resume(user, resume_id)
 
 
-def get_resume(user: models.CustomUser) -> list[models.Resume]:
+def get_all_resumes(user: models.CustomUser) -> list[models.Resume]:
     """
     Возвращает все резюме кандидата.
     """
@@ -49,7 +48,7 @@ def create_resume_applicant(user: models.CustomUser, resume_data: dict) -> bool:
 
 def update_resume(user: models.CustomUser, id_resume: int, resume_data: dict):
     """
-    Обновляет resume applicanta.
+    Обновляет resume applicanta по его id_resume.
     """
     resume = _check_and_get_resume(user, id_resume)
     if resume is None:
