@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .services import auth, home_page, resume
+from .services import auth, home_page, resume, vacancy
 
 
 def index(request):
@@ -145,6 +145,9 @@ def main_applicant(request):
 
 
 def resumes_applicant(request):
+    """
+    Страница для applicant, где создается и выводиться резюме.
+    """
     return render(request, "applicant_resumes.html", {"resumes": resume.get_resume(request.user)})
 
 
@@ -236,6 +239,9 @@ def delete_resume(request, resume_id: int):
 
 
 def update_resume(request, resume_id: int):
+    """
+    Обновление резюме кандидата.
+    """
     if request.method == "POST":
         if resume.update_resume(
             request.user,
@@ -259,5 +265,34 @@ def update_resume(request, resume_id: int):
 
 
 def vacancy_company(request):
+    """
+    Страница для company, где создается и выводится vacancy.
+    """
+    return render(request, "company_vacancy.html", {"vacancies": vacancy.get_all_vacancy_company(request.user)})
 
-    return render(request, "company_vacancy.html")
+
+def create_vacancy(request):
+    """
+    Страница для создания vacancy для company.
+    """
+    if request.method == "POST":
+        if not vacancy.create_vacancy_company(
+            request.user,
+                {
+                    "title_vacancy": request.POST.get("title_vacancy"),
+                    "location": request.POST.get("location"),
+                    "type_of_employment": request.POST.get("type_of_employment"),
+                    "specialization": request.POST.get("specialization"),
+                    "salary": request.POST.get("salary"),
+                    "currency": request.POST.get("currency"),
+                    "experience": request.POST.get("experience"),
+                    "key_skills": request.POST.get("key_skills"),
+                    "description": request.POST.get("descriptions"),
+                    "is_published": True if request.POST.get("is_published") else False
+                }
+        ):
+            return render(request, "create_vacancy.html", {"error_message": "Некорректно введены данные!"})
+
+        return redirect("vacancy_company")
+
+    return render(request, "create_vacancy.html")
