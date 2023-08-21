@@ -27,7 +27,17 @@ def _check_is_company(user: models.CustomUser, vacancy: models.Vacancy) -> bool:
 
 
 def get_all_vacancy_company(user: models.CustomUser) -> list[models.Vacancy]:
+    """
+    Возвращает все vacancy компании.
+    """
     return models.Vacancy.objects.filter(company=(get_company(user)).id)
+
+
+def get_vacancy(user: models.CustomUser, vacancy_id: int):
+    """
+    Возвращает vacancy по его id.
+    """
+    return _check_and_get_vacancy(user, vacancy_id)
 
 
 def create_vacancy_company(user: models.CustomUser, vacancy_data: dict) -> bool:
@@ -53,6 +63,28 @@ def create_vacancy_company(user: models.CustomUser, vacancy_data: dict) -> bool:
         return True
     except ValidationError:
         return False
+
+
+def update_vacancy(user: models.CustomUser, vacancy_id: int, vacancy_data: dict) -> bool | HttpResponseForbidden:
+    """
+    Обновляет vacancy компании по id_resume.
+    """
+    vacancy = _check_and_get_vacancy(user, vacancy_id)
+    if vacancy is None:
+        return HttpResponseForbidden("Упс, эта страница не доступна!")
+
+    models.Vacancy.objects.filter(id=vacancy_id).update(
+        title_vacancy=vacancy_data.get("title_vacancy"),
+        location=vacancy_data.get("location"),
+        salary=validators.validate_salary(vacancy_data.get("salary"), vacancy_data.get("currency")),
+        experience=validators.validate_experience(vacancy_data.get("experience")),
+        description=vacancy_data.get("description"),
+        type_of_employment=vacancy_data.get("type_of_employment"),
+        specialization=vacancy_data.get("specialization"),
+        key_skills=vacancy_data.get("key_skills"),
+        is_published=vacancy_data.get("is_published")
+    )
+    return True
 
 
 def change_published_vacancy(user: models.CustomUser, vacancy_id: int) -> HttpResponseForbidden | None:
