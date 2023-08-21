@@ -67,7 +67,7 @@ def create_vacancy_company(user: models.CustomUser, vacancy_data: dict) -> bool:
 
 def update_vacancy(user: models.CustomUser, vacancy_id: int, vacancy_data: dict) -> bool | HttpResponseForbidden:
     """
-    Обновляет vacancy компании по id_resume.
+    Обновляет vacancy компании по vacancy_id.
     """
     vacancy = _check_and_get_vacancy(user, vacancy_id)
     if vacancy is None:
