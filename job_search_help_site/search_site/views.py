@@ -277,7 +277,7 @@ def create_vacancy(request):
     """
     if request.method == "POST":
         if not vacancy.create_vacancy_company(
-            request.user,
+                request.user,
                 {
                     "title_vacancy": request.POST.get("title_vacancy"),
                     "location": request.POST.get("location"),
@@ -298,12 +298,47 @@ def create_vacancy(request):
     return render(request, "create_vacancy.html")
 
 
+def update_vacancy(request, vacancy_id: int):
+    """
+    Обновляет vacancy компании по vacancy_id.
+    Позже сделать так, чтобы в заместо 404 ошибка, переводило на главную страницу.
+    """
+    if vacancy.get_vacancy(request.user, vacancy_id) is None:
+        return redirect("vacancy_company")
+
+    if request.method == "POST":
+        if not vacancy.update_vacancy(
+                request.user,
+                vacancy_id,
+                {
+                    "title_vacancy": request.POST.get("title_vacancy"),
+                    "location": request.POST.get("location"),
+                    "type_of_employment": request.POST.get("type_of_employment"),
+                    "specialization": request.POST.get("specialization"),
+                    "salary": request.POST.get("salary"),
+                    "currency": request.POST.get("currency"),
+                    "experience": request.POST.get("experience"),
+                    "key_skills": request.POST.get("key_skills"),
+                    "description": request.POST.get("descriptions"),
+                    "is_published": True if request.POST.get("is_published") else False
+                }
+        ):
+            return render(request, "create_vacancy.html", {
+                "vacancy": vacancy.get_vacancy(request.user, vacancy_id),
+                "error_message": "Не правильно введены данные, или что-то пошло не так!"
+            })
+        else:
+            return redirect("vacancy_company")
+
+    return render(request, "create_vacancy.html", {"vacancy": vacancy.get_vacancy(request.user, vacancy_id)})
+
+
 def change_published_vacancy(request, vacancy_id: int):
     """
     Изменяет видимость vacancy для applicant.
     """
     if request.method == "POST":
-        vacancy.change_published_vacancy( request.user, vacancy_id)
+        vacancy.change_published_vacancy(request.user, vacancy_id)
     return redirect("vacancy_company")
 
 
