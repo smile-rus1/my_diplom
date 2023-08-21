@@ -148,7 +148,7 @@ def resumes_applicant(request):
     """
     Страница для applicant, где создается и выводиться резюме.
     """
-    return render(request, "applicant_resumes.html", {"resumes": resume.get_resume(request.user)})
+    return render(request, "applicant_resumes.html", {"resumes": resume.get_all_resumes(request.user)})
 
 
 def applicant_home_page(request):
@@ -242,8 +242,11 @@ def update_resume(request, resume_id: int):
     """
     Обновление резюме кандидата.
     """
+    if resume.get_resume(request.user, resume_id) is None:
+        return redirect("rezume_applicant")
+
     if request.method == "POST":
-        if resume.update_resume(
+        if not resume.update_resume(
             request.user,
             resume_id,
             {
@@ -259,9 +262,14 @@ def update_resume(request, resume_id: int):
                 "currency": request.POST.get("currency")
             }
         ):
+            return render(request, "create_resume.html", {
+                "resume": resume.get_resume(request.user, resume_id),
+                "error_message": "Не правильно введены данные, или что-то пошло не так!"
+            })
+        else:
             return redirect("rezume_applicant")
 
-    return render(request, "create_resume.html", {"resume": resume.get_applicant_resume(resume_id)})
+    return render(request, "create_resume.html", {"resume": resume.get_resume(request.user, resume_id)})
 
 
 def vacancy_company(request):
