@@ -89,6 +89,7 @@ class Resume(models.Model):
     place_of_work = models.CharField(max_length=30, null=True, verbose_name="Место работы")
     experience = models.CharField(max_length=15, verbose_name="Опыт работы", null=True)
     salary = models.CharField(max_length=30, null=True, verbose_name="Заработная плата")
+    # is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
 
@@ -101,7 +102,7 @@ class Company(models.Model):
     """
     Компания, которая будет публиковать вакансии
     """
-    title_company = models.CharField(max_length=20, null=False, unique=True, verbose_name="Название компании")
+    title_company = models.CharField(max_length=20, null=False, verbose_name="Название компании")
     name_user = models.CharField(max_length=30, null=False)
     second_name_user = models.CharField(max_length=30, null=False)
     phone_company = models.CharField(max_length=16, validators=[phoneNumberRegex], unique=True, null=True)
