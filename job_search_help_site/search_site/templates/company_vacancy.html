@@ -41,22 +41,26 @@
             <p>{{ vacancy.description|slice:"150" }}{% if vacancy.description|length > 150 %}...{%endif%}</p>
           {% endif %}
           <br>
-          <p class="published">
-            В данный момент вакансия
-            {% if vacancy.is_published %}
-            <span style="color:green;">опубликована</span>{%else%} <span style="color:red;">не опубликована</span>
-            {%endif%}!
-            <span>
-              <button class="resume-button">{% if vacancy.is_published %}Отложить в архив{%else%}Опубликовать{%endif%}</button>
-            </span>
-          </p>
+          <form action="{% url 'change_published' vacancy.id %}" method="post">
+            {% csrf_token %}
+            <p class="published">
+              В данный момент вакансия
+              {% if vacancy.is_published %}
+              <span style="color:green;">опубликована</span>{%else%} <span style="color:red;">не опубликована</span>
+              {%endif%}!
+              <span>
+                <button class="resume-button"
+                        onclick="return confirm('Вы действительно хотите изменить видимость вакансии?')">{% if vacancy.is_published %}Отложить в архив{%else%}Опубликовать{%endif%}</button>
+              </span>
+            </p>
+          </form>
         </div>
          <br>
         <div class="resume-actions">
           <form action="#">
             <button class="resume-button modify">Дополнить вакансию</button>
           </form>
-          <form method="post" action="#">
+          <form method="post" action="{% url 'delete_vacancy' vacancy.id %}">
             {% csrf_token %}
             <button class="resume-button delete" onclick="return confirm('Вы действительно хотите удалить вашу вакансию?')">
               Удалить вакансию
