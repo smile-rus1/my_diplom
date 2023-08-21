@@ -57,7 +57,7 @@
         </div>
          <br>
         <div class="resume-actions">
-          <form action="#">
+          <form action="{% url 'update_vacancy' vacancy.id %}">
             <button class="resume-button modify">Дополнить вакансию</button>
           </form>
           <form method="post" action="{% url 'delete_vacancy' vacancy.id %}">
