@@ -130,6 +130,8 @@ class Vacancy(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
     publication_time = models.DateTimeField(default=timezone.now, verbose_name="Обновление вакансии")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
+    # is_confirmed = models.BooleanField(default=True, verbose_name="Проверено")  #мб еще поле сделать чтобы админ мог проверять и потверждать
+
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
