@@ -20,11 +20,11 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="title_vacancy">Название вакансии</label>
-            <input type="text" id="title_vacancy" name="title_vacancy" required value="">
+            <input type="text" id="title_vacancy" name="title_vacancy" required value="{{vacancy.title_vacancy}}">
         </div>
         <div class="form-group">
             <label for="location">Местоположение (офиса, места работы) если есть</label>
-            <input type="text" id="location" name="location" value="">
+            <input type="text" id="location" name="location" value="{{vacancy.location}}">
             <span class="tooltip">
                 <span class="tooltip-text">Напишите местоположение вашего места работы, т.е. где нужно будет трудиться.</span>
                 <sup>?</sup>
@@ -33,33 +33,33 @@
         <div class="form-group">
             <label for="type_of_employment">Тип занятости кандидатов</label>
             <select id="type_of_employment" name="type_of_employment">
-                <option></option>
-                <option>Подработка</option>
-                <option>Частичная занятость</option>
-                <option>Полный рабочий день</option>
-                <option>Стажировка</option>
-                <option>Удаленная работа</option>
-                <option>Вахтовый метод работы</option>
-                <option>Сезонная работа</option>
-                <option>Контрактная работа</option>
+                <option {% if vacancy.type_of_employment == "" %}selected{%endif%}></option>
+                <option {% if vacancy.type_of_employment == "Подработка" %}selected{%endif%}>Подработка</option>
+                <option {% if vacancy.type_of_employment == "Частичная занятость"%}selected{%endif%}>Частичная занятость</option>
+                <option {% if vacancy.type_of_employment == "Полный рабочий день" %}selected{%endif%}>Полный рабочий день</option>
+                <option {% if vacancy.type_of_employment == "Стажировка" %}selected{%endif%}>Стажировка</option>
+                <option {% if vacancy.type_of_employment == "Удаленная работа" %}selected{%endif%}>Удаленная работа</option>
+                <option {% if vacancy.type_of_employment == "Вахтовый метод работы" %}selected{%endif%}>Вахтовый метод работы</option>
+                <option {% if vacancy.type_of_employment == "Сезонная работа" %}selected{%endif%}>Сезонная работа</option>
+                <option {% if vacancy.type_of_employment == "Контрактная работа" %}selected{%endif%}>Контрактная работа</option>
             </select>
         </div>
         <div class="form-group">
             <label for="specialization">Специализация</label>
              <select id="specialization" name="specialization">
-                <option>Производство и изготовление</option>
-                <option>Финансы и инвестиции</option>
-                <option>Медицина и здравоохранение</option>
-                <option>Образование</option>
-                <option>Транспорт и логистика</option>
-                <option>Информационные технологии</option>
-                <option>Маркетинг и реклама</option>
-                <option>Розничная торговля</option>
+                <option {% if vacancy.specialization == "Производство и изготовление" %}selected{%endif%}>Производство и изготовление</option>
+                <option {% if vacancy.specialization == "Финансы и инвестиции" %}selected{%endif%}>Финансы и инвестиции</option>
+                <option {% if vacancy.specialization == "Медицина и здравоохранение" %}selected{%endif%} >Медицина и здравоохранение</option>
+                <option {% if vacancy.specialization == "Образование" %}selected{%endif%}>Образование</option>
+                <option {% if vacancy.specialization == "Транспорт и логистика" %}selected{%endif%}>Транспорт и логистика</option>
+                <option {% if vacancy.specialization == "Информационные технологии" %}selected{%endif%}>Информационные технологии</option>
+                <option {% if vacancy.specialization == "Маркетинг и реклама" %}selected{%endif%}>Маркетинг и реклама</option>
+                <option {% if vacancy.specialization == "Розничная торговля" %}selected{%endif%}>Розничная торговля</option>
             </select>
         </div>
         <div class="form-group">
             <label for="salary">Заработная плата кандидатов</label>
-            <input type="number" id="salary" name="salary" value="" min="0">
+            <input type="number" id="salary" name="salary" value="{{vacancy.salary|slice:'-4' }}" min="0">
             <select class="small-select" name="currency">
               <option value="byn">Br</option>
               <option value="rub">&#8381;</option>
@@ -68,7 +68,7 @@
         </div>
         <div class="form-group">
             <label for="experience">Опыт работы кандидатов</label>
-            <input type="number" id="experience" name="experience" min="0" value="">
+            <input type="number" id="experience" name="experience" min="0" value="{{vacancy.experience}}">
             <span class="tooltip">
               <span class="tooltip-text">Напишите, сколько должно быть опыта у кандидата в этой области.</span>
               <sup>?</sup>
@@ -76,18 +76,18 @@
         </div>
         <div class="form-group">
             <label for="key_skills">Ключевые навыки у кандидатов</label>
-            <input type="text" id="key_skills" name="key_skills" value="">
+            <input type="text" id="key_skills" name="key_skills" value="{{vacancy.key_skills}}">
         </div>
         <div class="form-group">
             <label for="descriptions">Описание вакансии</label>
-            <textarea id="descriptions" name="descriptions" rows="4" required></textarea>
+            <textarea id="descriptions" name="descriptions" rows="4" required>{{vacancy.description}}</textarea>
             <span class="tooltip">
               <span class="tooltip-text">Максимальный размер описания 500 символов!</span>
               <sup>?</sup>
             </span>
         </div>
         <label>
-            <input type="checkbox" name="is_published">Опубликовать сразу
+            <input type="checkbox" name="is_published" {% if vacancy.is_published %}checked{% endif %}>Опубликовать сразу
         </label>
         <button type="submit">Создать вакансию</button>
     </form>
