@@ -296,3 +296,22 @@ def create_vacancy(request):
         return redirect("vacancy_company")
 
     return render(request, "create_vacancy.html")
+
+
+def change_published_vacancy(request, vacancy_id: int):
+    """
+    Изменяет видимость vacancy для applicant.
+    """
+    if request.method == "POST":
+        vacancy.change_published_vacancy( request.user, vacancy_id)
+    return redirect("vacancy_company")
+
+
+def delete_vacancy(request, vacancy_id: int):
+    """
+    Удаляет вакансию company.
+    """
+    if request.method == "POST":
+        vacancy.delete_vacancy(request.user, vacancy_id)
+    return redirect("vacancy_company")
+
