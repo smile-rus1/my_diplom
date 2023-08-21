@@ -5,6 +5,12 @@
 
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<style>
+  .published {
+    font-style: italic;
+    color: #3b3d3b;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -17,20 +23,33 @@
     </div>
 
     <div class="summary-container">
-      {% for resume in resumes %}
+      {% for vacancy in vacancies %}
       <div class="resume-container">
-        <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
+        <h2 class="resume-title">{{ vacancy.title_vacancy }}</h2>
         <div>
-          {% if resume.about_applicant %}
-          <h4>Описание:</h4>
-          <p>{{ resume.about_applicant|slice:"50" }}{% if resume.about_applicant|length > 50 %}...{%endif%}</p>
-          {% endif %}
+          <p>Создано: <span>{{vacancy.created_at}}</span></p>
           <h4>Навыки:</h4>
-          <p>{{ resume.key_skills }}</p>
-          <h4>Образование:</h4>
-          <p>{{ resume.education }}</p>
-          <h4>Опыт в данной специальности:</h4>
-          <p>{% if resume.experience %}{{ resume.experience }}{% else %}Нет опыта{% endif %}</p>
+          <p>{{ vacancy.key_skills }}</p>
+          <h4>Опыт работы</h4>
+          <p>{% if vacancy.experience %}{{ vacancy.experience }}{% else %}Нет опыта{% endif %}</p>
+          <h4>Тип занятости</h4>
+          <p>{% if vacancy.type_of_employment %}{{ vacancy.type_of_employment }}{% else %}Не указано{% endif %}</p>
+          <h4>Специализация</h4>
+          <p>{{ vacancy.specialization }}</p>
+          {% if vacancy.description %}
+            <h4>Описание:</h4>
+            <p>{{ vacancy.description|slice:"150" }}{% if vacancy.description|length > 150 %}...{%endif%}</p>
+          {% endif %}
+          <br>
+          <p class="published">
+            В данный момент вакансия
+            {% if vacancy.is_published %}
+            <span style="color:green;">опубликована</span>{%else%} <span style="color:red;">не опубликована</span>
+            {%endif%}!
+            <span>
+              <button class="resume-button">{% if vacancy.is_published %}Отложить в архив{%else%}Опубликовать{%endif%}</button>
+            </span>
+          </p>
         </div>
          <br>
         <div class="resume-actions">
