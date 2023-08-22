@@ -80,3 +80,15 @@ def user_change_password(request, user: models.CustomUser, user_data: dict):
         return
 
     return True
+
+
+def delete_me(user: models.CustomUser, password: str) -> bool:
+    """
+    Удаляет аккаунт пользователя из системы.
+    Потом мб сделать так, чтобы пользователь просто становился inactive
+    и через определенное время только удалялся.
+    """
+    if not user.check_password(password):
+        return False
+    user.delete()
+    return True
