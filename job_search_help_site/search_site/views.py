@@ -153,9 +153,7 @@ def resumes_applicant(request):
 
 def applicant_home_page(request):
     """
-    домашняя страница applicant.
-    P.S. Доработать request.FILES['image'] (чтобы файлы принимались по другому т.к. если
-    частично обновлять, то keyerror будет!!!!)
+    Домашняя страница applicant, где можно изменить информацию об applicant.
     """
     if request.method == "POST":
         if home_page.change_info_about_applicant(
@@ -165,7 +163,7 @@ def applicant_home_page(request):
                     "first_name": request.POST.get("first_name"),
                     "second_name": request.POST.get("second_name"),
                     "phone": request.POST.get("phone"),
-                    "photo": request.FILES.get('image')
+                    "photo": request.FILES.get('image') if request.FILES.get("image") else None
                 }
         ):
             return render(request, "home_page_applicant.html", {"alert": True})
@@ -179,9 +177,14 @@ def applicant_home_page(request):
 
 def change_password(request):
     """
-    страница на которой пользователь
-    изменяет свой пароль.
+    Страница на которой пользователь изменяет свой пароль.
     """
+    user = auth.check_user_role(request)
+    if user == "applicant":
+        template = "base_applicant.html"
+    elif user == "company":
+        template = "employer.html"
+
     if request.method == "POST":
         if request.POST.get("password1") == request.POST.get("password2"):
             if not home_page.user_change_password(
@@ -192,14 +195,17 @@ def change_password(request):
                         "new_password": request.POST.get("password1")
                     }
             ):
-                return render(request, "change_password.html", {'error_message': "Не правильно введен пароль!"})
+                return render(request, "change_password.html", {'error_message': "Не правильно введен пароль!",
+                                                                "template": template})
             else:
-                return render(request, "change_password.html", {'successful_message': "Пароль изменен!"})
+                return render(request, "change_password.html", {'successful_message': "Пароль изменен!",
+                                                                "template": template})
 
         else:
-            return render(request, 'change_password.html', {'error_message': "Пароли не совпадают!"})
+            return render(request, 'change_password.html', {'error_message': "Пароли не совпадают!",
+                                                            "template": template})
 
-    return render(request, "change_password.html")
+    return render(request, "change_password.html", {"template": template})
 
 
 def create_resume(request):
@@ -358,3 +364,28 @@ def delete_vacancy(request, vacancy_id: int):
         vacancy.delete_vacancy(request.user, vacancy_id)
     return redirect("vacancy_company")
 
+
+def home_page_company(request):
+    """
+    Домашняя страница компании, где можно поменять информацию о комнпании.
+    """
+    if request.method == "POST":
+        if home_page.change_info_about_company(
+                request.user,
+                {
+                    "email": request.POST.get("email"),
+                    "name_user": request.POST.get("name_user"),
+                    "second_name_user": request.POST.get("second_name_user"),
+                    "title_company": request.POST.get("title_company"),
+                    "phone_company": request.POST.get("phone_company"),
+                    "description_company": request.POST.get("description_company"),
+                    "image_company": request.FILES.get("image_company") if request.FILES.get("image_company") else None
+                }
+        ):
+            return render(request, "home_page_company.html", {"alert": True})
+        else:
+            return render(request, "home_page_company.html",
+                          {"error_message": "Ошибка, такой телефон уже есть!"}
+                          )
+
+    return render(request, "home_page_company.html", {"company": home_page.get_company(request.user)})
