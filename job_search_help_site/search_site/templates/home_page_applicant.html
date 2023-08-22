@@ -10,7 +10,6 @@
 {% endblock %}
 
 {% block content %}
-{% if request.user.applicant %}
 <div class="container">
     <div class="left-container">
       <form method="post" enctype="multipart/form-data">
@@ -71,13 +70,8 @@
         <img src="{% static 'photo/user_no_photo.png' %}" alt="">
     {% endif %}
       </div>
-  </div>
+</div>
 
-{% elif request.user.company %}
-<script>
-    window.location.href = "{% url 'main_employer' %}";
-</script>
-{% endif %}
 
 {% endblock %}
 
