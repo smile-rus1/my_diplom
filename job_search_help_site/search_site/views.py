@@ -389,3 +389,20 @@ def home_page_company(request):
                           )
 
     return render(request, "home_page_company.html", {"company": home_page.get_company(request.user)})
+
+
+def delete_me(request):
+    user = auth.check_user_role(request)
+    if user == "applicant":
+        template = "base_applicant.html"
+    elif user == "company":
+        template = "employer.html"
+
+    if request.method == "POST":
+        if not home_page.delete_me(request.user, request.POST.get("password")):
+            return render(request, "delete_me.html", {"error_message": "Не правильный пароль",
+                                                      "template": template})
+        else:
+            return redirect("index")
+
+    return render(request, "delete_me.html", {"template": template})
