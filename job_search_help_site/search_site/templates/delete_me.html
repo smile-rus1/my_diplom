@@ -1,0 +1,33 @@
+{% extends template %}
+
+
+{% load static %}
+{% block title %} Удаление аккаунта {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="left-container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if error_message %}
+          <div class="error-message">
+              <p>{{ error_message }}</p>
+          </div>
+        {% endif %}
+        <table>
+          <tr>
+            <td>Введите свой пароль для удаления аккаунта</td>
+            <td><input type="password" name="password" required></td>
+        </table>
+        <button type="submit" onclick="return confirm('Вы действительно хотите удалить ваш профиль?')">Удалить аккаунт</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
