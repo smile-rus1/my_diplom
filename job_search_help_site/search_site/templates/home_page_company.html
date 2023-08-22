@@ -1,6 +1,94 @@
 {% extends 'employer.html' %}
 
+{% load static %}
+{% block title %}Страница компании{% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+{% endblock %}
 
 {% block content %}
+<div class="container">
+    {% if company.is_confirmed %}
+    <span><img src="{% static 'photo/confirmed.png' %}" title="Эта компания потверждена"></span>
+    {% else %}
+    <span><img src="{% static 'photo/reject.png' %}" title="Эта компания еще не потверждена"></span>
+    {%endif%}
 
+    <div class="right-container" style="background-color: #f1f1f1;">
+    {% if company.image_company %}
+        <img src="{{ company.image_company.url }}" alt="" width="70%">
+    {% else %}
+        <img src="{% static 'photo/user_no_photo.png' %}" alt="">
+    {% endif %}
+      </div>
+    <div class="left-container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+          {% if error_message %}
+        <div class="error-message">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+        <table>
+          <tr>
+            <td>Email</td>
+            <td><input type="email" name="email" value="{{ company.user.email }}" required></td>
+          </tr>
+          <tr>
+                <td>Название компании</td>
+                <td><input type="text" name="title_company" value="{{company.title_company}}" required></td>
+          </tr>
+          <tr>
+                <td>Имя</td>
+                <td><input type="text" name="name_user" placeholder="{% if not company.name_user %}Не задано{%endif%}"
+                           value="{{ company.name_user }}"></td>
+          </tr>
+            <tr>
+                <td>Отчество</td>
+                <td><input type="text" name="second_name_user" placeholder="{% if not company.second_name_user %}Не задано{%endif%}"
+                           value="{{company.second_name_user}}"></td>
+            </tr>
+          <tr>
+            <td>Мобильный телефон</td>
+            <td><input type="text" name="phone_company" placeholder="{% if not company.phone_company %}Не задано{%endif%}"
+                       value="{{company.phone_company}}"></td>
+          </tr>
+          <tr>
+            <td>Фото компании</td>
+            <td><input type="file" name="image_company"></td>
+          </tr>
+            <tr>
+            <td>Описание компании</td>
+            <td>
+                <textarea style="resize: vertical; font-family: Arial, sans-serif; font-size: 14px;
+                line-height: 1.5; width: 83%;" name="description_company">{{company.description_company}}</textarea>
+            </td>
+          </tr>
+           <tr>
+            <td>Пароль</td>
+            <td><a href="{% url 'change_password_employer' %}" class="link-password">Изменить пароль</a></td>
+          </tr>
+        </table>
+        <button type="submit">Сохранить</button>
+      </form>
+      <div class="delete-me">
+        <a href="#" class="link-delete-me">Удаление профиля</a>
+      </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+    {% if alert %}
+    alert("Профиль изменен")
+    window.location = "{% url 'employer' %}home_page"
+    {% endif %}
+</script>
 {% endblock %}
