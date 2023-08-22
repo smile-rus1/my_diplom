@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("logout/", views.logout_user, name="logout_user"),
     path("help/", views.help_for_people, name="help"),
+    path("delete_me/", views.delete_me, name="delete_me"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),
