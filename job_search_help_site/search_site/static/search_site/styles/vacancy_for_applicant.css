@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  margin: 20px auto; /* Центрирование контейнера и отступы от краев */
+  max-width: 1200px; /* Ограничение максимальной ширины контейнера */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+  background-color: d1cdcd; /* Фоновый цвет контейнера */
+}
+
+.content-container {
+  flex: 2; /* Занимает две трети ширины главного контейнера */
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ffffff; /* Фоновый цвет контента */
+}
+
+.ad-container {
+  flex: 1; /* Занимает одну треть ширины главного контейнера */
+  margin-left: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ffffff; /* Фоновый цвет контента */
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.title-link-company {
+    text-decoration: none;
+    color: black;
+}
+
+.buttons {
+  margin-bottom: 20px;
+}
+
+.create-vacancy {
+    color: #828582;
+    margin-bottom: 40px;
+}
+
+.button-primary,
+.button-secondary {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+  color: #333; /* Черный цвет надписи */
+  background-color: white; /* Белый фон */
+  border: 1px solid #ccc;
+}
+
+.button-primary {
+  margin-right: 10px;
+}
+
+.summary-container {
+  margin-top: 20px;
+}
+
+/* Медиа-запрос для адаптивного дизайна */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ad-container {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+}
+
+.response-vacancy-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff; /* Фоновый цвет контента */
+}
+
+.response-vacancy-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.response-vacancy-actions {
+  display: flex;
+  align-items: center;
+}
+
+.response-button {
+  font-size: 16px;
+  padding: 12px 48px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.response-button.vacancy-response {
+  background-color: #199e0d;
+  color: white;
+  margin-right: 10px;
+}
+
+
+.response-button:hover {
+  background-color: #155704;
+}
+
+.response-button:active {
+  transform: translateY(1px);
+}
+

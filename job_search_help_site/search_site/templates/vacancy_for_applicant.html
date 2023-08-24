@@ -1,0 +1,64 @@
+{% extends 'base_applicant.html' %}
+
+{% load static %}
+{% block title %} Вакансия {{vacancy.title_vacancy}} {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/vacancy_for_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+  <div class="content-container">
+    <div class="summary-container">
+      <div class="response-vacancy-container">
+        <h2 class="response-vacancy-title">{{vacancy.title_vacancy}}</h2>
+        <p>Заработная плата: {% if vacancy.salary %}{{vacancy.salary}}{% else %}не указана{%endif%}</p>
+        <p>Требуемый опыт работы: {% if vacancy.experience %}{{vacancy.experience}}{%else%}Не требуется{%endif%}</p>
+        <p>Тип занятости: {% if vacancy.type_of_employment%}{{vacancy.type_of_employment}}{%else%}не указано{%endif%}</p>
+        <p class="create-vacancy">
+          Опубликовано: {{vacancy.created_at}}
+        </p>
+        <div class="response-vacancy-actions">
+          <form action="#">
+            <button class="response-button vacancy-response">Откликнуться на вакансию</button>
+          </form>
+        </div>
+        <div>
+          <h4>Специализация компании</h4>
+          <p>{{vacancy.specialization}}</p>
+          <h4>Описание вакансии:</h4>
+          <p>{{vacancy.description}}</p>
+          <p></p>
+          <h4>Требуемые навыки:</h4>
+          <p>{{vacancy.key_skills}}</p>
+          {% if vacancy.location %}
+          <h4>Адрес компании:</h4>
+          <p>{{vacancy.location}}</p>
+          {%endif%}
+          {% if vacancy.company.phone_company%}
+          <h4>Телефон компании:</h4>
+          <p>{{vacancy.company.phone_company}}</p>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ad-container">
+    <div>
+      <h2>
+        <a href="#" class="title-link-company">{{vacancy.company.title_company}}</a>
+        {% if vacancy.company.is_confirmed %}
+          <span><img src="{% static 'photo/confirmed.png' %}" title="Эта компания потверждена" width="5%"></span>
+        {%else%}
+          <span><img src="{% static 'photo/reject.png' %}" title="Эта компания еще не потверждена нашим сайтом" width="5%"></span>
+        {%endif%}
+      </h2>
+
+    </div>
+   <p>Тут могла быть ваша реклама</p>
+  </div>
+</div>
+{% endblock %}
