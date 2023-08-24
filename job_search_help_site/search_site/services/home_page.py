@@ -5,6 +5,9 @@ from search_site import models
 
 
 def change_info_about_applicant(user: models.CustomUser, user_data: dict) -> bool:
+    """
+    Изменяет информацию об applicant, по user и передаваемому user_data.
+    """
     try:
         applicant = get_applicant(user)
 
@@ -30,7 +33,7 @@ def change_info_about_applicant(user: models.CustomUser, user_data: dict) -> boo
 
 def change_info_about_company(user: models.CustomUser, user_data: dict) -> bool:
     """
-    Изменяет иформацию компании.
+    Изменяет иформацию об company, по user и передаваемому user_data..
     """
     try:
         company = get_company(user)
@@ -57,20 +60,30 @@ def change_info_about_company(user: models.CustomUser, user_data: dict) -> bool:
         return False
 
 
-def get_applicant(user) -> models.Applicant | None:
+def get_applicant(user) -> models.Applicant | bool:
+    """
+    Возвращает applicant, по передаваемому user.
+    """
     try:
-        applicant = models.Applicant.objects.get(user=user)
-        return applicant
-
+        return models.Applicant.objects.get(user=user)
     except:
-        return get_company(user)
+        return False
 
 
-def get_company(user):
-    return models.Company.objects.get(user=user)
+def get_company(user) -> models.Company | bool:
+    """
+    Возвращает accompany, по передаваемому user.
+    """
+    try:
+        return models.Company.objects.get(user=user)
+    except:
+        return False
 
 
 def user_change_password(request, user: models.CustomUser, user_data: dict):
+    """
+    Меняет пароль пользователя.
+    """
     if user.check_password(user_data["current_password"]):
         user.set_password(user_data["new_password"])
         user.save()
