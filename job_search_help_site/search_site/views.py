@@ -282,6 +282,11 @@ def update_resume(request, resume_id: int):
     return render(request, "create_resume.html", {"resume": resume.get_resume(request.user, resume_id)})
 
 
+def vacancy_for_applicant(request, vacancy_id):
+
+    return render(request, "vacancy_for_applicant.html", {"vacancy": vacancy.get_vacancy_for_applicant(vacancy_id)})
+
+
 def vacancy_company(request):
     """
     Страница для company, где создается и выводится vacancy.
@@ -321,7 +326,7 @@ def update_vacancy(request, vacancy_id: int):
     Обновляет vacancy компании по vacancy_id.
     Позже сделать так, чтобы в заместо 404 ошибка, переводило на главную страницу.
     """
-    if vacancy.get_vacancy(request.user, vacancy_id) is None:
+    if vacancy.get_vacancy_for_company(request.user, vacancy_id) is None:
         return redirect("vacancy_company")
 
     if request.method == "POST":
@@ -342,13 +347,13 @@ def update_vacancy(request, vacancy_id: int):
                 }
         ):
             return render(request, "create_vacancy.html", {
-                "vacancy": vacancy.get_vacancy(request.user, vacancy_id),
+                "vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id),
                 "error_message": "Не правильно введены данные, или что-то пошло не так!"
             })
         else:
             return redirect("vacancy_company")
 
-    return render(request, "create_vacancy.html", {"vacancy": vacancy.get_vacancy(request.user, vacancy_id)})
+    return render(request, "create_vacancy.html", {"vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id)})
 
 
 def change_published_vacancy(request, vacancy_id: int):
