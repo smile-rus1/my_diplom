@@ -8,6 +8,13 @@
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<style>
+    .vacancy-company {
+        font-size: 14px;
+        color: #777;
+        margin: 0 0 10px;
+     }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -19,56 +26,17 @@
 </div>
 <div class="main-content">
 <!--    ТУТ ВЫВОДИТЬ ВАКАНСИИ ЦИКЛОМ, НЕСКОЛЬКО ШТУК (СПО ФИЛЬТРУ РЕЗЮМЕ ИЛИ ПОПУЛЯРНОСТИ!)-->
-        <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
-        </div>
-        <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
-        </div>
-        <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
-        </div>
-        <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
-        </div>
-        <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
-        </div>
+    {% for vacancy in vacancies %}
     <div class="vacancy-container">
-            <div class="vacancy-card">
-                <a href="#" class="card-link"><h2 class="vacancy-title">Frontend Разработчик</h2></a>
-                <p class="vacancy-description">Мы ищем опытного Frontend разработчика для создания удивительных пользовательских интерфейсов.</p>
-                <p class="vacancy-location">Местоположение: Москва, Россия</p>
-                <button class="apply-button">Откликнуться</button>
-            </div>
+        <div class="vacancy-card">
+            <a href="#" class="card-link"><h2 class="vacancy-title">{{ vacancy.title_vacancy }}</h2></a>
+            <p class="vacancy-company">Компания: {{vacancy.company.title_company}}</p>
+            <p class="vacancy-description">{{vacancy.description}}</p>
+            <p class="vacancy-location">Местоположение: {{vacancy.location}}</p>
+            <button class="apply-button">Откликнуться</button>
         </div>
-
-
+    </div>
+    {% endfor %}
 </div>
 <div class="ad-container">
     <div>
