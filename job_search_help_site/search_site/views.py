@@ -141,7 +141,11 @@ def main_applicant(request):
     """
     главная страница для кандидатов
     """
-    return render(request, "index_applicant.html")
+    if not home_page.get_applicant(request.user):
+        return redirect("main_employer")
+    return render(request, "index_applicant.html", {
+        "vacancies": vacancy.get_vacancy_by_algorithm_on_main_page(request.user)
+    })
 
 
 def resumes_applicant(request):
