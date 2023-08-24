@@ -7,6 +7,13 @@ from search_site import models
 from .home_page import get_company
 
 
+def get_vacancy_for_applicant(vacancy_id: int) -> models.Vacancy:
+    """
+    Возвращает vacancy для applicant.
+    """
+    return get_object_or_404(models.Vacancy, id=vacancy_id)
+
+
 def get_vacancy_by_algorithm_on_main_page(user: models.CustomUser) -> models.Vacancy:
     """
     Возвращает vacancy, компаний по алгоритму поиска, на главную страницу applicant.
@@ -18,6 +25,13 @@ def get_vacancy_by_algorithm_on_main_page(user: models.CustomUser) -> models.Vac
     else:
         vacancies = models.Vacancy.objects.filter(is_published=True).order_by("?")
     return vacancies[:6]
+
+
+def get_vacancy_for_company(user: models.CustomUser, vacancy_id: int):
+    """
+    Возвращает vacancy по его id для компании.
+    """
+    return _check_and_get_vacancy(user, vacancy_id)
 
 
 def _check_and_get_vacancy(user: models.CustomUser, vacancy_id: int) -> models.Vacancy | None:
@@ -44,13 +58,6 @@ def get_all_vacancy_company(user: models.CustomUser) -> list[models.Vacancy]:
     Возвращает все vacancy компании.
     """
     return models.Vacancy.objects.filter(company=(get_company(user)).id)
-
-
-def get_vacancy(user: models.CustomUser, vacancy_id: int):
-    """
-    Возвращает vacancy по его id.
-    """
-    return _check_and_get_vacancy(user, vacancy_id)
 
 
 def create_vacancy_company(user: models.CustomUser, vacancy_data: dict) -> bool:
