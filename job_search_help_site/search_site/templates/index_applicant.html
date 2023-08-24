@@ -29,7 +29,7 @@
     {% for vacancy in vacancies %}
     <div class="vacancy-container">
         <div class="vacancy-card">
-            <a href="#" class="card-link"><h2 class="vacancy-title">{{ vacancy.title_vacancy }}</h2></a>
+            <a href="{% url 'vacancy' vacancy.id %}" class="card-link"><h2 class="vacancy-title">{{ vacancy.title_vacancy }}</h2></a>
             <p class="vacancy-company">Компания: {{vacancy.company.title_company}}</p>
             <p class="vacancy-description">{{vacancy.description}}</p>
             <p class="vacancy-location">Местоположение: {{vacancy.location}}</p>
