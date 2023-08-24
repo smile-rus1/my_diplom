@@ -137,7 +137,7 @@ class Vacancy(models.Model):
 
     class Meta:
         verbose_name_plural = "Вакасии"
-        ordering = ["-publication_time", "-created_at"]
+        ordering = ["-is_published", "-publication_time", "-created_at"]
 
 
 class Application(models.Model):
