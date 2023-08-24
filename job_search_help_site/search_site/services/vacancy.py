@@ -2,9 +2,22 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 
-from . import validators
+from . import validators, algorithm_by_vacancy
 from search_site import models
 from .home_page import get_company
+
+
+def get_vacancy_by_algorithm_on_main_page(user: models.CustomUser) -> models.Vacancy:
+    """
+    Возвращает vacancy, компаний по алгоритму поиска, на главную страницу applicant.
+    """
+    resume = models.Resume.objects.filter(applicant=get_object_or_404(models.Applicant, user=user))\
+        .order_by("?").first()
+    if resume is not None:
+        vacancies = models.Vacancy.objects.filter(algorithm_by_vacancy.get_all_desired_vacancy(resume))
+    else:
+        vacancies = models.Vacancy.objects.filter(is_published=True).order_by("?")
+    return vacancies[:6]
 
 
 def _check_and_get_vacancy(user: models.CustomUser, vacancy_id: int) -> models.Vacancy | None:
