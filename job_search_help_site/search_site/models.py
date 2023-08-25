@@ -141,9 +141,11 @@ class Vacancy(models.Model):
 
 
 class Application(models.Model):
-    company = models.CharField(max_length=100, default="")
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
-    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    company = models.CharField(max_length=30, default="", verbose_name="Название компании")
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name="Вакансия")
+    application_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата отклика")
+    cover_letter = models.TextField(verbose_name="Сопроводительное письмо", null=True)
 
     class Meta:
         verbose_name_plural = "Отправка резюме"
