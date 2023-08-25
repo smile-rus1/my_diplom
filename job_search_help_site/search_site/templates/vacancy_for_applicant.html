@@ -7,31 +7,56 @@
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_applicant.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+<style>
+  textarea {
+  width: 500px; /* Ширина textarea */
+  height: 150px; /* Высота textarea */
+  resize: none; /* Запрет на изменение размера textarea пользователем */
+  font-family: Arial, sans-serif; /* Установка шрифта текста */
+  font-size: 16px; /* Размер шрифта текста */
+}
+.cover-letter {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.response {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    padding-left: 40px;
+    font-style: italic;
+}
+
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="main-container">
   <div class="content-container">
     <div class="summary-container">
+      {% if error_message %}
+          <div class="error-message">
+              <p>{{ error_message }}</p>
+          </div>
+        {% endif %}
       <div class="response-vacancy-container">
         <h2 class="response-vacancy-title">{{vacancy.title_vacancy}}</h2>
         <p>Заработная плата: {% if vacancy.salary %}{{vacancy.salary}}{% else %}не указана{%endif%}</p>
         <p>Требуемый опыт работы: {% if vacancy.experience %}{{vacancy.experience}}{%else%}Не требуется{%endif%}</p>
         <p>Тип занятости: {% if vacancy.type_of_employment%}{{vacancy.type_of_employment}}{%else%}не указано{%endif%}</p>
+          {% if not apply %}
         <p class="create-vacancy">
           Опубликовано: {{vacancy.created_at}}
         </p>
-        <div class="response-vacancy-actions">
-          <form action="#">
-            <button class="response-button vacancy-response">Откликнуться на вакансию</button>
-          </form>
-        </div>
+          {% else %}
+        <p class="response">Вы уже откликались на эту вакансию</p>
+          {% endif %}
         <div>
           <h4>Специализация компании</h4>
           <p>{{vacancy.specialization}}</p>
           <h4>Описание вакансии:</h4>
           <p>{{vacancy.description}}</p>
-          <p></p>
           <h4>Требуемые навыки:</h4>
           <p>{{vacancy.key_skills}}</p>
           {% if vacancy.location %}
@@ -42,6 +67,19 @@
           <h4>Телефон компании:</h4>
           <p>{{vacancy.company.phone_company}}</p>
           {%endif%}
+
+          <div class="cover-letter">
+            {% if not apply %}
+              <form action="" method="post">
+                {% csrf_token %}
+                <h3>Сопроводительное письмо</h3>
+                <textarea id="covering_letter" name="covering_letter"></textarea>
+                <button class="response-button vacancy-response">Откликнуться на вакансию</button>
+              </form>
+            {% else %}
+              <button class="response-button vacancy-response">Смотреть отклик</button>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
