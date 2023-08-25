@@ -1,8 +1,9 @@
 from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .services import auth, home_page, resume, vacancy
+from .services import auth, home_page, resume, vacancy, response_for_applicant
 
 
 def index(request):
@@ -257,20 +258,20 @@ def update_resume(request, resume_id: int):
 
     if request.method == "POST":
         if not resume.update_resume(
-            request.user,
-            resume_id,
-            {
-                "gender": request.POST.get("gender"),
-                "name_of_resume": request.POST.get("name_resume"),
-                "education": request.POST.get("education"),
-                "about_applicant": request.POST.get("about_applicant"),
-                "profession": request.POST.get("profession"),
-                "key_skills": request.POST.get("skills"),
-                "place_of_work": request.POST.get("workplace"),
-                "experience": request.POST.get("experience"),
-                "salary": request.POST.get("salary"),
-                "currency": request.POST.get("currency")
-            }
+                request.user,
+                resume_id,
+                {
+                    "gender": request.POST.get("gender"),
+                    "name_of_resume": request.POST.get("name_resume"),
+                    "education": request.POST.get("education"),
+                    "about_applicant": request.POST.get("about_applicant"),
+                    "profession": request.POST.get("profession"),
+                    "key_skills": request.POST.get("skills"),
+                    "place_of_work": request.POST.get("workplace"),
+                    "experience": request.POST.get("experience"),
+                    "salary": request.POST.get("salary"),
+                    "currency": request.POST.get("currency")
+                }
         ):
             return render(request, "create_resume.html", {
                 "resume": resume.get_resume(request.user, resume_id),
@@ -283,8 +284,27 @@ def update_resume(request, resume_id: int):
 
 
 def vacancy_for_applicant(request, vacancy_id):
+    if request.method == "POST":
+        application = response_for_applicant.respond_on_vacancy(
+            request.user,
+            vacancy_id,
+            request.POST.get("covering_letter")
+        )
+        if application is None:
+            return render(request, "vacancy_for_applicant.html",
+                          {
+                              "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
+                              "error_message": "У вас нет ни одного резюме, создайте хотя-бы одно!"
+                          }
+                          )
+        return HttpResponseRedirect(request.path)
 
-    return render(request, "vacancy_for_applicant.html", {"vacancy": vacancy.get_vacancy_for_applicant(vacancy_id)})
+    return render(request, "vacancy_for_applicant.html",
+                  {
+                      "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
+                      "apply": response_for_applicant.is_has_applied_respond(request.user, vacancy_id),
+                  }
+                  )
 
 
 def vacancy_company(request):
@@ -353,7 +373,8 @@ def update_vacancy(request, vacancy_id: int):
         else:
             return redirect("vacancy_company")
 
-    return render(request, "create_vacancy.html", {"vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id)})
+    return render(request, "create_vacancy.html",
+                  {"vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id)})
 
 
 def change_published_vacancy(request, vacancy_id: int):
