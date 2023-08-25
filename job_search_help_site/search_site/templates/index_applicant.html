@@ -25,7 +25,6 @@
      </form>
 </div>
 <div class="main-content">
-<!--    ТУТ ВЫВОДИТЬ ВАКАНСИИ ЦИКЛОМ, НЕСКОЛЬКО ШТУК (СПО ФИЛЬТРУ РЕЗЮМЕ ИЛИ ПОПУЛЯРНОСТИ!)-->
     {% for vacancy in vacancies %}
     <div class="vacancy-container">
         <div class="vacancy-card">
@@ -33,7 +32,7 @@
             <p class="vacancy-company">Компания: {{vacancy.company.title_company}}</p>
             <p class="vacancy-description">{{vacancy.description}}</p>
             <p class="vacancy-location">Местоположение: {{vacancy.location}}</p>
-            <button class="apply-button">Откликнуться</button>
+            <button class="apply-button" onclick="return window.location.href='{% url 'vacancy' vacancy.id %}'">Откликнуться</button>
         </div>
     </div>
     {% endfor %}
