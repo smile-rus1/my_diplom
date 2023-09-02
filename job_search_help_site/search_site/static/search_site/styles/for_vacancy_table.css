@@ -1,0 +1,23 @@
+.header-for-respond {
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.container-table {
+     margin: 0 30px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+   padding: 15px;
+   text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+

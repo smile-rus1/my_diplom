@@ -43,3 +43,9 @@ class ResumeAdmin(admin.ModelAdmin):
 class VacancyAdmin(admin.ModelAdmin):
     # Добавьте поля, которые хотите отображать для модели Vacancy
     pass
+
+
+@admin.register(models.Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    # Добавьте поля, которые хотите отображать для модели Vacancy
+    pass

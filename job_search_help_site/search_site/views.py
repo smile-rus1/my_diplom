@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .services import auth, home_page, resume, vacancy, response_for_applicant
+from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy
 
 
 def index(request):
@@ -304,6 +304,22 @@ def vacancy_for_applicant(request, vacancy_id):
                       "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
                       "apply": response_for_applicant.is_has_applied_respond(request.user, vacancy_id),
                   }
+                  )
+
+
+def respond_on_vacancy(request):
+    user_responses = responses_on_vacancy.get_all_responses_on_vacancy(request.user)
+    status = request.GET.get('status', '')
+    if status:
+        status = request.GET.get('status')
+        user_responses = responses_on_vacancy.get_filter_responses(user_responses, status)
+    return render(
+        request,
+        "base_respond_on_vacancy.html",
+        {
+            "status": status,
+            "responses": user_responses
+        }
                   )
 
 

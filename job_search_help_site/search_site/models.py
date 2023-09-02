@@ -136,16 +136,30 @@ class Vacancy(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = "Вакасии"
+        verbose_name_plural = "Вакансии"
         ordering = ["-is_published", "-publication_time", "-created_at"]
 
 
 class Application(models.Model):
+    """
+    Отклики на вакансию.
+    """
     company = models.CharField(max_length=30, default="", verbose_name="Название компании")
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name="Вакансия")
     application_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата отклика")
     cover_letter = models.TextField(verbose_name="Сопроводительное письмо", null=True)
+    status = models.CharField(
+        max_length=10,
+        choices=(
+            ('reject', 'Reject'),
+            ('access', 'Access'),
+            ('pending', 'Pending'),
+        ),
+        null=False,
+        default="pending",
+        verbose_name="Статус отклика"
+    )
 
     class Meta:
         verbose_name_plural = "Отправка резюме"
