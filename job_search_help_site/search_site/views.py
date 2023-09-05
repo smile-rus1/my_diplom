@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy
+from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
+    show_responded_to_vacancy
 
 
 def index(request):
@@ -307,7 +308,7 @@ def vacancy_for_applicant(request, vacancy_id):
                   )
 
 
-def respond_on_vacancy(request):
+def respond_on_vacancy_applicant(request):
     user_responses = responses_on_vacancy.get_all_responses_on_vacancy(request.user)
     status = request.GET.get('status', '')
     if status:
@@ -315,7 +316,7 @@ def respond_on_vacancy(request):
         user_responses = responses_on_vacancy.get_filter_responses(user_responses, status)
     return render(
         request,
-        "base_respond_on_vacancy.html",
+        "respond_on_vacancy.html",
         {
             "status": status,
             "responses": user_responses
@@ -438,6 +439,9 @@ def home_page_company(request):
 
 
 def delete_me(request):
+    """
+    Удаляет аккаунт пользователя.
+    """
     user = auth.check_user_role(request)
     if user == "applicant":
         template = "base_applicant.html"
@@ -452,3 +456,12 @@ def delete_me(request):
             return redirect("index")
 
     return render(request, "delete_me.html", {"template": template})
+
+
+def responded_to_vacancy(request):
+    """
+    Показывает всех applicant, которые откликнулись на вакансии.
+    """
+    applications = show_responded_to_vacancy.get_all_responded_to_vacancy(request.user)
+    # resumes # потом сделать чтобы еще как-то резюме выводилось
+    return render(request, "responded_to_vacancy.html", {"applications": applications})
