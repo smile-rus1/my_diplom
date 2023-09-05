@@ -1,0 +1,53 @@
+{% extends 'employer.html' %}
+
+{% load static %}
+{% block title %} Отклики кандидатов {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/for_vacancy_table.css' %}" rel="stylesheet"/>
+<style>
+    .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-table">
+    <h1 class="header-for-respond">Отклики на Ваши вакансии</h1>
+    <table>
+        <tr>
+            <th>Имя кандидата</th>
+            <th>Название вакансии</th>
+            <th>Резюме</th>
+            <th>Сопроводительное письмо</th>
+            <th></th>
+        </tr>
+      {% for application in applications %}
+        <tr>
+            <td>{{application.applicant.second_name}} {{ application.applicant.first_name }}</td>
+            <td>{{application.vacancy.title_vacancy}}</td>
+            <td>{{application.applicant.resume.profession}}</td>
+            <td><button class="modal-button">Сопроводительное</button></td>
+            <td><button class="">Выбор с кандидатом</button></td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
