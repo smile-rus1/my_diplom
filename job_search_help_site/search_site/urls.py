@@ -20,7 +20,7 @@ urlpatterns = [
     path("applicant/delete_resume/<int:resume_id>", views.delete_resume, name="delete_resume"),
     path("applicant/update_resume/<int:resume_id>", views.update_resume, name="update_resume"),
     path("vacancy/<int:vacancy_id>", views.vacancy_for_applicant, name="vacancy"),
-    path("applicant/responses/", views.respond_on_vacancy, name="all_respond_on_vacancy"),
+    path("applicant/responses/", views.respond_on_vacancy_applicant, name="all_respond_on_vacancy"),
 
     # url для employer
     path("employer/", views.index_employer, name="employer"),
@@ -34,6 +34,7 @@ urlpatterns = [
     path("employer/delete_vacancy/<int:vacancy_id>", views.delete_vacancy, name="delete_vacancy"),
     path("employer/home_page", views.home_page_company, name="company_home_page"),
     path("employer/home_page/change_password", views.change_password, name="change_password_employer"),
+    path("employer/responses/", views.responded_to_vacancy, name="responded_to_vacancy"),
 
     # url для admin
     path('admin_redirect/', views.admin_redirect, name='admin')
