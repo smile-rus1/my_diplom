@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
-    show_responded_to_vacancy
+    responded_to_vacancy_of_applicant
 
 
 def index(request):
@@ -289,7 +289,8 @@ def vacancy_for_applicant(request, vacancy_id):
         application = response_for_applicant.respond_on_vacancy(
             request.user,
             vacancy_id,
-            request.POST.get("covering_letter")
+            request.POST.get("covering_letter"),
+            request.POST.get("resumes_of_applicant")
         )
         if application is None:
             return render(request, "vacancy_for_applicant.html",
@@ -303,6 +304,7 @@ def vacancy_for_applicant(request, vacancy_id):
     return render(request, "vacancy_for_applicant.html",
                   {
                       "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
+                      "resumes": resume.get_all_resumes(request.user),
                       "apply": response_for_applicant.is_has_applied_respond(request.user, vacancy_id),
                   }
                   )
@@ -321,7 +323,7 @@ def respond_on_vacancy_applicant(request):
             "status": status,
             "responses": user_responses
         }
-                  )
+    )
 
 
 def vacancy_company(request):
@@ -462,6 +464,33 @@ def responded_to_vacancy(request):
     """
     Показывает всех applicant, которые откликнулись на вакансии.
     """
-    applications = show_responded_to_vacancy.get_all_responded_to_vacancy(request.user)
-    # resumes # потом сделать чтобы еще как-то резюме выводилось
+    applications = responded_to_vacancy_of_applicant.get_all_responded_to_vacancy(request.user)
     return render(request, "responded_to_vacancy.html", {"applications": applications})
+
+
+def show_info_about_applicant_of_application(request, applicant_id: int, vacancy_id: int):
+    """
+    Показывает резюме кандидата, который откликнулся на вакансию.
+    """
+    return render(
+        request,
+        "show_info_about_applicant_of_application.html",
+        {
+            "info_application": responded_to_vacancy_of_applicant.show_all_info_about_applicant_of_application\
+            (
+                request.user,
+                applicant_id,
+                vacancy_id
+            )
+        }
+    )
+
+
+def change_state_application_of_applicant(request):
+    """
+    Меняет состояние у applicant (access/reject).
+    """
+    if request.method == "POST":
+        ...
+
+    return
