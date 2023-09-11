@@ -81,12 +81,19 @@ select:focus {
                 {%endif%}
             </td>
             <td>
-                <form method="post">
+                <form method="post" action="{% url 'change_state' application.id %}">
                     {% csrf_token %}
-                    <select>
-                        <option>Пригласить</option>
-                        <option>Отказать</option>
+                    {% if application.status == 'access' %}
+                    <select name="change-state">
+                        <option value="reject">Отказать</option>
+                        <option value="access">Пригласить</option>
                     </select>
+                    {% else %}
+                    <select name="change-state">
+                        <option value="reject">Пригласить</option>
+                        <option value="access">Отказать</option>
+                    </select>
+                    {% endif %}
                     <button class="btn">Потвердить</button>
                 </form>
             </td>
