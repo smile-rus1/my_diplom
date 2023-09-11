@@ -486,11 +486,13 @@ def show_info_about_applicant_of_application(request, applicant_id: int, vacancy
     )
 
 
-def change_state_application_of_applicant(request):
+def change_state_application_of_applicant(request, application_id: int):
     """
     Меняет состояние у applicant (access/reject).
     """
     if request.method == "POST":
-        ...
-
-    return
+        responded_to_vacancy_of_applicant.change_application_status_of_applicant(
+            status=request.POST.get("change-state"),
+            application_id=application_id
+        )
+    return redirect("responded_to_vacancy")
