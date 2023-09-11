@@ -30,8 +30,10 @@ def show_all_info_about_applicant_of_application(
         raise Http404("Не найдено")
 
 
-def change_application_state_of_applicant(user: models.CustomUser, id_vacancy: int):
+def change_application_status_of_applicant(**user_data: [int, str]) -> models.Application:
     """
-    Меняет состояние applicant по id вакансии.
+    Меняет status у applicant по id вакансии.
     """
-    return models.Application.objects
+    return models.Application.objects.filter(id=user_data.get("application_id"))\
+        .update(status=user_data.get("status"))
+
