@@ -1,7 +1,12 @@
 from search_site import models
 
 
-def respond_on_vacancy(user: models.CustomUser, vacancy_id: int, cover_letter: str) -> models.Application | None:
+def respond_on_vacancy(
+        user: models.CustomUser,
+        vacancy_id: int,
+        cover_letter: str,
+        resume: str
+) -> models.Application | None:
     """
     Applicant откликается на вакансию company.
     """
@@ -10,9 +15,11 @@ def respond_on_vacancy(user: models.CustomUser, vacancy_id: int, cover_letter: s
         return None
 
     vacancy = models.Vacancy.objects.get(pk=vacancy_id)
+    resume = models.Resume.objects.filter(name_of_resume=resume).first()
     application = models.Application.objects.create(
         applicant=applicant,
         vacancy=vacancy,
+        resume=resume,
         cover_letter=cover_letter,
         company=vacancy.company.title_company
     )
