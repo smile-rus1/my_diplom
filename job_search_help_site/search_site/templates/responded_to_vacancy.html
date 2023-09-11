@@ -17,7 +17,7 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .modal-button {
+        .btn {
             padding: 10px 20px;
             background-color: #007BFF;
             color: #fff;
@@ -25,6 +25,33 @@
             border-radius: 5px;
             cursor: pointer;
         }
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  width: 200px;
+}
+
+select:hover {
+  border-color: #aaa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 </style>
 {% endblock %}
 
@@ -33,19 +60,36 @@
     <h1 class="header-for-respond">Отклики на Ваши вакансии</h1>
     <table>
         <tr>
+            <th>№ вакансии</th>
             <th>Имя кандидата</th>
             <th>Название вакансии</th>
-            <th>Резюме</th>
-            <th>Сопроводительное письмо</th>
-            <th></th>
+            <th>Статус</th>
+            <th>Действие с кандидатом</th>
         </tr>
       {% for application in applications %}
         <tr>
-            <td>{{application.applicant.second_name}} {{ application.applicant.first_name }}</td>
+            <td>{{application.id}}</td>
+            <td> <a href="{% url 'show_info_of_applicant' application.applicant.id application.vacancy.id %}">{{application.applicant.second_name}} {{ application.applicant.first_name }}</a></td>
             <td>{{application.vacancy.title_vacancy}}</td>
-            <td>{{application.applicant.resume.profession}}</td>
-            <td><button class="modal-button">Сопроводительное</button></td>
-            <td><button class="">Выбор с кандидатом</button></td>
+            <td>
+                {% if application.status == 'access' %}
+                    <span style="color: green;">Приглашен</span>
+                {% elif application.status == 'reject' %}
+                     <span style="color: red;">Отклонен</span>
+                {% else %}
+                    Ожидает
+                {%endif%}
+            </td>
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <select>
+                        <option>Пригласить</option>
+                        <option>Отказать</option>
+                    </select>
+                    <button class="btn">Потвердить</button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </table>
