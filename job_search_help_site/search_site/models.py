@@ -147,6 +147,7 @@ class Application(models.Model):
     company = models.CharField(max_length=30, default="", verbose_name="Название компании")
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name="Вакансия")
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, verbose_name="Резюме кандидата")
     application_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата отклика")
     cover_letter = models.TextField(verbose_name="Сопроводительное письмо", null=True)
     status = models.CharField(
