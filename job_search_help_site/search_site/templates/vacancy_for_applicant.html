@@ -27,6 +27,33 @@
     padding-left: 40px;
     font-style: italic;
 }
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  width: 200px;
+}
+
+select:hover {
+  border-color: #aaa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
 </style>
 {% endblock %}
@@ -72,6 +99,12 @@
             {% if not apply %}
               <form action="" method="post">
                 {% csrf_token %}
+                <h3>Выберите резюме</h3>
+                <select name="resumes_of_applicant">
+                  {% for resume in resumes %}
+                  <option>{{resume.name_of_resume}}</option>
+                  {% endfor %}
+                </select>
                 <h3>Сопроводительное письмо</h3>
                 <textarea id="covering_letter" name="covering_letter"></textarea>
                 <button class="response-button vacancy-response">Откликнуться на вакансию</button>
