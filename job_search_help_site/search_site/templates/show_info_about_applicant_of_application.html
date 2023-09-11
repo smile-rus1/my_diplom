@@ -1,0 +1,59 @@
+{% extends 'employer.html' %}
+
+{% load static %}
+{% block title %} Информация о кандидате {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/for_vacancy_table.css' %}" rel="stylesheet"/>
+<style>
+textarea {
+  width: 500px;
+  height: 150px;
+  resize: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: none;
+}
+
+textarea:hover,
+textarea:focus {
+  outline: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="left-container">
+        <h3>Кандидат</h3>
+        <p style="font-size: 24px;">{{info_application.applicant.second_name}} {{info_application.applicant.first_name}}</p>
+        <h3>Способы связи</h3>
+        {% if info_application.applicant.phone %}
+        <p>Телефон: {{info_application.applicant.phone}}</p>
+        {% endif %}
+        <p>Email: {{info_application.applicant.user.email}}</p>
+        <h3>Ключевые навыки</h3>
+        <p>{{info_application.resume.key_skills}}</p>
+        <h3>Образование</h3>
+        <p>{{info_application.resume.education}}</p>
+        <h3>Опыт работы в данной сфере</h3>
+        {% if info_application.resume.place_of_work %}
+        <h3>Место работы</h3>
+        <p>{{info_application.resume.place_of_work}}</p>
+        {% endif %}
+        <p>{% if info_application.resume.experience %}{{info_application.resume.experience}}{% else %}Нет опыта{% endif %}</p>
+        <h3>О кандидате</h3>
+        <textarea readonly>{{info_application.resume.about_applicant}}</textarea>
+
+    </div>
+      <div class="right-container" style="background-color: #f1f1f1;">
+    {% if info_application.applicant.image %}
+        <img src="{{ info_application.applicant.image.url }}" alt="" width="70%">
+    {% else %}
+        <img src="{% static 'photo/user_no_photo.png' %}" alt="">
+    {% endif %}
+      </div>
+</div>
+{% endblock %}
