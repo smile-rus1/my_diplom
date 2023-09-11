@@ -35,6 +35,7 @@ urlpatterns = [
     path("employer/home_page", views.home_page_company, name="company_home_page"),
     path("employer/home_page/change_password", views.change_password, name="change_password_employer"),
     path("employer/responses/", views.responded_to_vacancy, name="responded_to_vacancy"),
+    path("employer/responses/<int:applicant_id>/<int:vacancy_id>", views.show_info_about_applicant_of_application, name="show_info_of_applicant"),
 
     # url для admin
     path('admin_redirect/', views.admin_redirect, name='admin')
