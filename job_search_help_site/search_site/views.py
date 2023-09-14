@@ -6,6 +6,9 @@ from django.urls import reverse
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
     responded_to_vacancy_of_applicant
 
+from .algorithms_for_searh import algorithm_for_search_vacancy
+from . import pagination_for_pages
+
 
 def index(request):
     """
@@ -148,6 +151,15 @@ def main_applicant(request):
     return render(request, "index_applicant.html", {
         "vacancies": vacancy.get_vacancy_by_algorithm_on_main_page(request.user)
     })
+
+
+def search_vacancy(request):
+    """
+    Ищет вакансии по введенному значению от кандидата.
+    """
+    vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
+    paginator = pagination_for_pages.create_pagination_for_applicant_search(vacancies)
+    return render(request, "list_vacancy_for_applicant.html", {"page": paginator.get_page(request.GET.get("page"))})
 
 
 def resumes_applicant(request):
