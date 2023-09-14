@@ -1,0 +1,30 @@
+.vacancy-container {
+    display: flex; /* Располагаем дочерние элементы внутри контейнера в ряд */
+}
+
+.search-sidebar {
+    flex: 1; /* Занимает 20% ширины контейнера (оставшиеся 80% займет основной контент) */
+    background-color: #f0f0f0; /* Цвет фона сайдбара */
+    padding: 20px; /* Отступы внутри сайдбара */
+}
+
+.vacancy-content {
+    flex: 4; /* Занимает 80% ширины контейнера */
+    padding: 20px; /* Отступы внутри основного контента */
+}
+
+.button-vacancy {
+    background-color: #007bff; /* Цвет кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Указатель при наведении на кнопку */
+}
+
+.button-vacancy:hover {
+    background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+
+.key-skills {
+    margin-top: 25px;
+}

@@ -1,0 +1,47 @@
+/* Стили для пагинации */
+
+/* Обертка пагинации */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Ссылки пагинации и текущая страница */
+.step-links a,
+.current-page {
+    padding: 5px 10px;
+    margin: 0 2px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+}
+
+/* Стиль для активной страницы */
+.current-page {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Стиль для стрелок "Первая" и "Предыдущая" */
+.step-links a:first-child,
+.step-links a:nth-child(2) {
+    margin-right: 10px;
+}
+
+/* Стиль для стрелок "Следующая" и "Последняя" */
+.step-links a:nth-last-child(2),
+.step-links a:last-child {
+    margin-left: 10px;
+}
+
+/* Стиль для стрелок "Первая" и "Последняя" при наведении курсора */
+.step-links a:first-child:hover,
+.step-links a:last-child:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: #fff;
+}
