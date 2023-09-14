@@ -19,8 +19,8 @@
 
 {% block content %}
 <div class="header-search">
-     <form action="/search/vacancy" method="get" class="search-form">
-        <input type="text" class="search-input" placeholder="Введите профессию, должность, компанию" name="vacancy">
+     <form action="{% url 'search_vacancy' %}" method="get" class="search-form">
+        <input type="text" class="search-input" placeholder="Введите профессию, должность, ключевые навыки" name="vacancy">
         <button class="search-button">Поиск</button>
      </form>
 </div>
