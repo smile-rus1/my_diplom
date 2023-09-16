@@ -9,6 +9,7 @@ def get_all_vacancy_by_criterion(criteria: str) -> models.Vacancy:
     были переданы.
     """
     return models.Vacancy.objects.filter(_get_vacancy_by_criteria(criteria), is_published=True)\
+        .prefetch_related("company")\
         .order_by("-publication_time", "-created_at")
 
 
