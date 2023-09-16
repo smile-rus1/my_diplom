@@ -9,6 +9,14 @@
 <link type="text/css" href="{% static 'search_site/styles/pagination.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/vacancy_styles.css' %}" rel="stylesheet"/>
 <style>
+    .container-img {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .company-image {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
 {% endblock %}
 
@@ -23,17 +31,25 @@
 <!--ТАКЖЕ СДЕЛАТЬ ЕСЛИ БУДЕТ ПЕРЕДАВАТЬСЯ ПУСТОЙ СПИСОК ИЗ VACANCY!!-->
     <div class="vacancy-container">
         <div class="search-sidebar">
-
+            {% if item.company.image_company %}
+            <div class="container-img">
+                <a href="#"><img src="{{ item.company.image_company.url }}" class="company-image"></a>
+            </div>
+            {% else %}
+            <div class="container-img">
+                <a href="#"><img src="{% static 'photo/employment.png' %}" alt="" style="width: 100%"></a>
+            </div>
+            {% endif %}
         </div>
         <div class="vacancy-content">
-            <h1>{{ item.title_vacancy }}</h1>
+            <a href="{% url 'vacancy' item.id %}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
             <h2>{{ item.company.title_company }}</h2>
             <p>{% if item.experience %}{{ item.experience }}{% else %}Можно без опыта{% endif %}</p>
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
             <p>{{ item.type_of_employment }}</p>
             <p>{% if item.description|length > 100 %} {{ item.description|slice:":100" }}...{% else %}{{item.description}}{% endif %}</p>
             <p class="key-skills">Ключевые навыки: {{ item.key_skills }}</p>
-            <button class="button-vacancy">Откликнуться</button>
+            <button class="button-vacancy" onclick="window.location.href='{% url 'vacancy' item.id %}'">Откликнуться</button>
         </div>
     </div>
 {% endfor %}
