@@ -89,7 +89,7 @@ class Resume(models.Model):
     place_of_work = models.CharField(max_length=30, null=True, verbose_name="Место работы")
     experience = models.CharField(max_length=15, verbose_name="Опыт работы", null=True)
     salary = models.CharField(max_length=30, null=True, verbose_name="Заработная плата")
-    # is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name="Кандидат")
 
