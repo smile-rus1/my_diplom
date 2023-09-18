@@ -8,11 +8,33 @@
 <link type="text/css" href="{% static 'search_site/styles/for_vacancy_table.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
 <style>
-.custom-select {
-  width: 150px;
-  padding 10px;
-  magrin 10px;
-  }
+  select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  width: 200px;
+}
+
+select:hover {
+  border-color: #aaa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 </style>
 {% endblock %}
 
@@ -51,7 +73,7 @@
         <tr>
             <th>Статус</th>
             <th>Название вакансии</th>
-            <th>Дата и время</th>
+            <th>Дата и время отклика</th>
         </tr>
       {% for response in responses %}
         <tr>
@@ -64,7 +86,7 @@
                     <span style="color: red;">Отказ</span>
                 {% endif %}
             </td>
-            <td>{{response.vacancy.title_vacancy}}</td>
+            <td><a href="{% url 'vacancy' response.vacancy.id %}" class="card-link">{{response.vacancy.title_vacancy}}</a</td>
             <td>{{response.application_date}}</td>
         </tr>
     {% endfor %}
