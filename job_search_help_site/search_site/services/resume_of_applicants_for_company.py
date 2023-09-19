@@ -9,8 +9,8 @@ def get_resume_for_company_by_algorithm_in_main_page(user: models.CustomUser):
     """
     Возвращает кандидатов на главную страницу компаний.
     """
-    vacancy = models.Vacancy.objects.\
-        filter(company=get_object_or_404(models.Company, user=user), is_published=True)\
+    vacancy = models.Vacancy.objects. \
+        filter(company=get_object_or_404(models.Company, user=user), is_published=True) \
         .order_by("?").first()
 
     if vacancy is None:
