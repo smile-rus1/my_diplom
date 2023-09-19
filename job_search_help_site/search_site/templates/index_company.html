@@ -8,6 +8,31 @@
 <link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/index_company.css' %}" rel="stylesheet"/>
+<style>
+.resume-key_skills {
+    font-size: 16px;
+    color: #555;
+    margin: 0 0 10px;
+}
+
+.resume-experience {
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 10px;
+}
+.resume-profession {
+    font-style: italic;
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 10px;
+}
+
+.resume-card img {
+    float: right; /* Установите картинку справа */
+    width: 20%; /* Установите ширину картинки по вашему усмотрению */
+    margin-left: 20px; /* Добавьте немного отступа между картинкой и текстом */
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -22,25 +47,31 @@
 <div class="main-content">
     <div class="container-resume">
         <h2>Резюме кандидатов, которые могут вас заинтересовать</h2>
-        <!--ТУТ ТОЖЕ ВЫВОДИТЬ ПРОСТО РАНДОМНЫЕ РЕЗЮМЕ 5 или больше штук!!!-->
+        {% for resume in resumes %}
         <div class="resume-card">
-            <h2 class="resume-title">Frontend Разработчик</h2>
-            <p class="resume-description">тут просто текст</p>
-            <p class="resume-location">Местоположение: Москва, Россия</p>
+            {% if resume.applicant.image %}
+            <img src="{{ resume.applicant.image.url }}">
+            {% else %}
+            <img src="{% static 'photo/user_no_photo.png' %}">
+            {% endif %}
+            <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
+            <p class="resume-experience">Опыт работы: {% if resume.experience %}{{ resume.key_skills }}{% else %}Нет опыта{% endif %}</p>
+            <p>{% if resume.salary %}{{resume.salary}}{% endif %}</p>
+            {% if resume.profession != "Нет профессии"  %}
+            <p class="resume-profession">Профессия: {{ resume.profession }}</p>
+            {% endif %}
+            <p class="resume-location"></p>
+            <p class="resume-key_skills" style="font-style: italic;">Навыки кандидата: {{ resume.key_skills }}</p>
+            <h5>Описание резюме:</h5>
+            <p class="resume-description">
+                {% if resume.about_applicant|length > 50 %}
+                {{resume.about_applicant|slice:":50"}}...
+                {% else %}{{resume.about_applicant}}
+                {% endif %}
+            </p>
             <button class="more-info-button">Подробнее</button>
         </div>
-        <div class="resume-card">
-            <h2 class="resume-title">Frontend Разработчик</h2>
-            <p class="resume-description">тут просто текст</p>
-            <p class="resume-location">Местоположение: Москва, Россия</p>
-            <button class="more-info-button">Подробнее</button>
-        </div>
-        <div class="resume-card">
-            <h2 class="resume-title">Frontend Разработчик</h2>
-            <p class="resume-description">тут просто текст</p>
-            <p class="resume-location">Местоположение: Москва, Россия</p>
-            <button class="more-info-button">Подробнее</button>
-        </div>
+        {% endfor %}
     </div>
     <div class="ad-container">
         <p>Тут могла быть ваша реклама</p>
