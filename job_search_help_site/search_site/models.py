@@ -81,6 +81,7 @@ class Resume(models.Model):
     # ТУТ СДЕЛАТЬ ТОЖЕ ЧТОБЫ МОЖНО БЫЛО ПОДНИМАТЬ РЕЗЮМЕ КАК В МОДЕЛИ Vacancy!!!!
     name_of_resume = models.CharField(max_length=50, verbose_name="Название резюме", null=False)
     gender = models.CharField(max_length=10, verbose_name="Пол", null=False)
+    # location = models.CharField(max_length=100, verbose_name="Местоположение, null=True)
     education = models.CharField(max_length=30, null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
     about_applicant = models.CharField(blank=True, null=True, max_length=500)
