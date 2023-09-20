@@ -17,6 +17,39 @@
         max-width: 100%;
         height: auto;
     }
+    .not-found {
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        text-align: center;
+        margin-bottom: 200px;
+    }
+    .container-text{
+        background-color: lightblue; /* Светло-синий фон */
+        text-align: center;
+        padding: 20px; /* Внутренний отступ */
+        justify-content: space-between;
+    }
+    .btn-msg {
+        background-color: #007bff; /* Синий цвет фона для кнопок */
+        color: white; /* Белый цвет текста */
+        padding: 10px 70px; /* Внутренний отступ кнопок */
+        border: none; /* Удаление границы кнопок */
+        cursor: pointer; /* Изменение курсора при наведении на кнопку */
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .btn-msg:hover {
+        background-color: #0056b3; /* Изменение цвета фона при наведении */
+        color: #fff; /* Изменение цвета текста при наведении */
+    }
+    .btn-msg:active {
+        background-color: #003f80; /* Изменение цвета фона при нажатии */
+        color: #fff; /* Изменение цвета текста при нажатии */
+    }
+
+    .btn-msg:first-child {
+        margin-right: 30px; /* Отступ справа от первой кнопки */
+    }
 </style>
 {% endblock %}
 
@@ -27,8 +60,18 @@
         <button class="search-button">Поиск</button>
      </form>
 </div>
+{% if not page %}
+<div class="not-found">
+    <h2>По запросу "{{ request.GET.vacancy }}" ничего не было найдено!</h2>
+    <div class="container-text">
+        <p>По вашему запросу ещё будут появляться новые вакансии. Присылать вам?</p>
+        <button class="btn-msg">На почту</button>
+        <button class="btn-msg">В месседжер</button>
+    </div>
+</div>
+{% endif %}
+
 {% for item in page %}
-<!--ТАКЖЕ СДЕЛАТЬ ЕСЛИ БУДЕТ ПЕРЕДАВАТЬСЯ ПУСТОЙ СПИСОК ИЗ VACANCY!!-->
     <div class="vacancy-container">
         <div class="search-sidebar">
             {% if item.company.image_company %}
