@@ -110,7 +110,7 @@ select:focus {
                 <button class="response-button vacancy-response">Откликнуться на вакансию</button>
               </form>
             {% else %}
-              <button class="response-button vacancy-response">Смотреть отклик</button>
+              <button class="response-button vacancy-response" onclick="window.location.href='{% url 'all_respond_on_vacancy' %}'">Смотреть отклик</button>
             {% endif %}
           </div>
         </div>
