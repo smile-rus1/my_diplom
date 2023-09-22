@@ -487,7 +487,18 @@ def responded_to_vacancy(request):
     Показывает всех applicant, которые откликнулись на вакансии.
     """
     applications = responded_to_vacancy_of_applicant.get_all_responded_to_vacancy(request.user)
-    return render(request, "responded_to_vacancy.html", {"applications": applications})
+    status = request.GET.get("status", "")
+    if status:
+        status = request.GET.get("status")
+        applications = responses_on_vacancy.get_filter_responses(applications, status)
+    return render(
+        request,
+        "responded_to_vacancy.html",
+        {
+            "applications": applications,
+            "status": status
+        }
+                )
 
 
 def show_info_about_applicant_of_application(request, applicant_id: int, vacancy_id: int):
