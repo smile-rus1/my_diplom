@@ -49,7 +49,7 @@
         <h2>Резюме кандидатов, которые могут вас заинтересовать</h2>
         {% for resume in resumes %}
         <div class="resume-card">
-            {% if resume.applicant.image %}
+            {% if resume.applicant.image and request.user.company.is_confirmed %}
             <img src="{{ resume.applicant.image.url }}">
             {% else %}
             <img src="{% static 'photo/user_no_photo.png' %}">
