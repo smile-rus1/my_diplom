@@ -60,6 +60,34 @@ select:focus {
     <h1 class="header-for-respond">Отклики на Ваши вакансии</h1>
     <table>
         <tr>
+            <th>
+                <div>
+                    <select class="custom-select" id="custom-select">
+                        <option value="" {% if status == "" %}selected{%endif%}>Все отклики</option>
+                        <option value="pending" {% if status == "pending" %}selected{%endif%}>В ожидании</option>
+                        <option value="invitation" {% if status == "access" %}selected{%endif%}>Приглашение</option>
+                        <option value="reject" {% if status == "reject" %}selected{%endif%}>Отказ</option>
+                    </select>
+                </div>
+            </th>
+        </tr>
+        <script>
+            document.getElementById('custom-select').addEventListener('change', function() {
+                var selectedValue = this.value;
+                if (selectedValue === 'pending') {
+                    window.location.href = '/employer/responses?status=pending';
+                } else if (selectedValue === 'invitation') {
+                    window.location.href = '/employer/responses?status=access';
+                } else if (selectedValue === 'reject') {
+                    window.location.href = '/employer/responses?status=reject';
+                } else {
+                    window.location.href = '/employer/responses/';
+                }
+            });
+        </script>
+    </table>
+    <table>
+        <tr>
             <th>№ вакансии</th>
             <th>Имя кандидата</th>
             <th>Название вакансии</th>
@@ -90,8 +118,8 @@ select:focus {
                     </select>
                     {% else %}
                     <select name="change-state">
-                        <option value="reject">Пригласить</option>
-                        <option value="access">Отказать</option>
+                        <option value="access">Пригласить</option>
+                        <option value="reject">Отказать</option>
                     </select>
                     {% endif %}
                     <button class="btn">Потвердить</button>
