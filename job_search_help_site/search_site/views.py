@@ -6,7 +6,7 @@ from django.urls import reverse
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company
 
-from .algorithms_for_searh import algorithm_for_search_vacancy
+from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages
 
 
@@ -159,7 +159,7 @@ def search_vacancy(request):
     Ищет вакансии по введенному значению от кандидата.
     """
     vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
-    paginator = pagination_for_pages.create_pagination_for_applicant_search(vacancies)
+    paginator = pagination_for_pages.create_pagination_for_search(vacancies)
     return render(request, "list_vacancy_for_applicant.html", {"page": paginator.get_page(request.GET.get("page"))})
 
 
@@ -509,3 +509,12 @@ def change_state_application_of_applicant(request, application_id: int):
             application_id=application_id
         )
     return redirect("responded_to_vacancy")
+
+
+def search_resume(request):
+    """
+    Ищет резюме по введенному значению
+    """
+    resumes = algorithm_for_search_resume.get_all_resume_by_criterion(request.GET.get("resume"))
+    paginator = pagination_for_pages.create_pagination_for_search(resumes)
+    return render(request, "list_resume_for_company.html", {"page": paginator.get_page(request.GET.get("page"))})
