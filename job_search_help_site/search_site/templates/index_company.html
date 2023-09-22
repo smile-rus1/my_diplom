@@ -37,9 +37,9 @@
 
 {% block content %}
 <div class="header-search">
-     <form action="/search/vacancy" method="get" class="search-form">
+     <form action="{% url 'search_resume' %}" method="get" class="search-form">
         <input type="text" class="search-input"
-               placeholder="Поиск по резюме, навыкам, опыту, названию специальности..." name="vacancy">
+               placeholder="Поиск по резюме, навыкам, опыту, названию специальности..." name="resume">
         <button class="search-button">Поиск</button>
      </form>
 </div>
