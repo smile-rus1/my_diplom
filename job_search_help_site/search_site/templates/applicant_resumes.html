@@ -4,6 +4,12 @@
 {% block title %} Вакансии {% endblock %}
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<style>
+  .published {
+    font-style: italic;
+    color: #3b3d3b;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -32,6 +38,19 @@
           <p>{% if resume.experience %}{{ resume.experience }}{% else %}Нет опыта{% endif %}</p>
         </div>
          <br>
+        <form action="{% url 'change_published_resume' resume.id %}" method="post">
+            {% csrf_token %}
+            <p class="published">
+              В данный момент резюме
+              {% if resume.is_published %}
+              <span style="color:green;">опубликовано</span>{%else%} <span style="color:red;">не опубликовано</span>
+              {%endif%}!
+              <span>
+                <button class="resume-button"
+                        onclick="return confirm('Вы действительно хотите изменить видимость вакансии?')">{% if resume.is_published %}Отложить в архив{%else%}Опубликовать{%endif%}</button>
+              </span>
+            </p>
+          </form>
         <div class="resume-actions">
           <form action="{% url 'update_resume' resume.id %}">
             <button class="resume-button modify">Дополнить резюме</button>
