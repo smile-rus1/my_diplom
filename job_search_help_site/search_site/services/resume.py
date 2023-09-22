@@ -19,8 +19,7 @@ def get_all_resumes(user: models.CustomUser) -> list[models.Resume]:
     Возвращает все резюме кандидата.
     """
     applicant = get_applicant(user)
-    resumes = models.Resume.objects.filter(applicant=applicant.id)
-    return resumes
+    return models.Resume.objects.filter(applicant=applicant.id).order_by("-is_published")
 
 
 def create_resume_applicant(user: models.CustomUser, resume_data: dict) -> bool:
@@ -29,7 +28,7 @@ def create_resume_applicant(user: models.CustomUser, resume_data: dict) -> bool:
     """
     applicant = get_applicant(user)
     try:
-        resume = models.Resume.objects.create(
+        models.Resume.objects.create(
             applicant=applicant,
             name_of_resume=resume_data.get("name_of_resume"),
             gender=resume_data.get("gender"),
@@ -77,6 +76,17 @@ def delete_resume(user: models.CustomUser, id_resume: int):
         return HttpResponseForbidden("Упс, эта страница не доступна!")
     resume.delete()
     return True
+
+
+def change_published_resume(user: models.CustomUser, resume_id: int) -> HttpResponseForbidden | None:
+    """
+    Изменяет published у резюме кандидата.
+    """
+    resume = _check_and_get_resume(user, resume_id)
+    if resume is None:
+        return HttpResponseForbidden("Упс, эта страница не доступна!")
+    resume.is_published = not resume.is_published
+    resume.save()
 
 
 def _check_is_applicant(user: models.CustomUser, resume: models.Resume) -> bool:
