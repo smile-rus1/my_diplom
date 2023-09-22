@@ -3,7 +3,7 @@ from django.http import Http404
 from search_site import models
 
 
-def get_all_responded_to_vacancy(user: models.CustomUser) -> models.Applicant:
+def get_all_responded_to_vacancy(user: models.CustomUser) -> models.Application:
     """
     Возвращает всех кандидатов, которые откликнулись на вакансии.
     """
