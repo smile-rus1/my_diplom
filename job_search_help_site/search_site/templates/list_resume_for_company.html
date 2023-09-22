@@ -1,0 +1,124 @@
+{% extends 'employer.html' %}
+
+{% load static %}
+{% block title %} Предложенные кандидиты {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_company.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/pagination.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_styles.css' %}" rel="stylesheet"/>
+<style>
+    .container-img {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .company-image {
+        max-width: 100%;
+        height: auto;
+    }
+    .not-found {
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        text-align: center;
+        margin-bottom: 200px;
+    }
+    .container-text{
+        background-color: lightblue; /* Светло-синий фон */
+        text-align: center;
+        padding: 20px; /* Внутренний отступ */
+        justify-content: space-between;
+    }
+    .btn-msg {
+        background-color: #007bff; /* Синий цвет фона для кнопок */
+        color: white; /* Белый цвет текста */
+        padding: 10px 70px; /* Внутренний отступ кнопок */
+        border: none; /* Удаление границы кнопок */
+        cursor: pointer; /* Изменение курсора при наведении на кнопку */
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .btn-msg:hover {
+        background-color: #0056b3; /* Изменение цвета фона при наведении */
+        color: #fff; /* Изменение цвета текста при наведении */
+    }
+    .btn-msg:active {
+        background-color: #003f80; /* Изменение цвета фона при нажатии */
+        color: #fff; /* Изменение цвета текста при нажатии */
+    }
+
+    .btn-msg:first-child {
+        margin-right: 30px; /* Отступ справа от первой кнопки */
+    }
+    .vacancy-update-time {
+      font-size: 14px; /* Размер шрифта */
+      color: #666; /* Цвет текста */
+      margin-top: 5px;
+      color: #2cc406;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="header-search">
+     <form action="{% url 'search_resume' %}" method="get" class="search-form">
+        <input type="text" class="search-input"
+               placeholder="Поиск по резюме, навыкам, опыту, названию специальности..." name="resume">
+        <button class="search-button">Поиск</button>
+     </form>
+</div>
+
+{% if not page %}
+<div class="not-found">
+    <h2>По запросу "{{ request.GET.vacancy }}" ничего не было найдено!</h2>
+    <div class="container-text">
+        <p>По вашему запросу ещё будут появляться новые вакансии. Присылать вам?</p>
+        <button class="btn-msg">На почту</button>
+        <button class="btn-msg">В месседжер</button>
+    </div>
+</div>
+{% endif %}
+
+{% for item in page %}
+    <div class="vacancy-container">
+        <div class="search-sidebar">
+            {% if item.applicant.image and request.user.company.is_confirmed %}
+            <div class="container-img">
+                <a href="#"><img src="{{ item.applicant.image.url }}" class="company-image"></a>
+            </div>
+            {% else %}
+            <div class="container-img">
+                <a href="#"><img src="{% static 'photo/user_no_photo.png' %}" alt="" style="width: 100%"></a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="vacancy-content">
+            <p class="vacancy-update-time">Обновлено: {{ item.updated_at }}</p>
+            <a href="#" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
+            <h4>Предполагаемая заработная плата: {{item.salary}}</h4>
+            <p>{% if item.experience %}{{ item.experience }}{% else %}Нет опыта{% endif %}</p>
+            <p>{% if item.place_of_work %}Последнее место работы: {{item.place_of_work}}{% endif %}</p>
+            <p>{% if item.location %}{{ item.location }}{% endif %}</p>
+            <p>Профессия: {{ item.profession }}</p>
+            <p class="key-skills">Ключевые навыки: {{ item.key_skills }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page.has_previous %}
+            <a href="?{{ request.GET.urlencode }}&page=1">&laquo; первая</a>
+            <a href="?{{ request.GET.urlencode }}&page={{ page.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current-page">{{ page.number }}</span>
+
+        {% if page.has_next %}
+            <a href="?{{ request.GET.urlencode }}&page={{ page.next_page_number }}">следующая</a>
+            <a href="?{{ request.GET.urlencode }}&page={{ page.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
