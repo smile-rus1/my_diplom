@@ -170,6 +170,15 @@ def resumes_applicant(request):
     return render(request, "applicant_resumes.html", {"resumes": resume.get_all_resumes(request.user)})
 
 
+def change_published_resume(request, resume_id: int):
+    """
+    Изменяет видимость резюме.
+    """
+    if request.method == "POST":
+        resume.change_published_resume(request.user, resume_id)
+    return redirect("rezume_applicant")
+
+
 def applicant_home_page(request):
     """
     Домашняя страница applicant, где можно изменить информацию об applicant.
