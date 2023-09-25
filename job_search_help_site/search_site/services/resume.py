@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from search_site import models
 from . import validators
@@ -87,6 +90,23 @@ def change_published_resume(user: models.CustomUser, resume_id: int) -> HttpResp
         return HttpResponseForbidden("Упс, эта страница не доступна!")
     resume.is_published = not resume.is_published
     resume.save()
+
+
+def change_raising_resume(resume_id: int):
+    """
+    Поднимает резюме кандидата в поиске.
+    """
+    update_interval = timedelta(hours=4)
+    resume = get_object_or_404(models.Resume, pk=resume_id)
+    current_time = timezone.now()
+    cutoff_time = current_time - update_interval
+
+    if resume.updated_at.tzinfo is None:
+        resume.updated_at = timezone.make_aware(resume.updated_at)
+
+    if resume.updated_at <= cutoff_time:
+        resume.updated_at = current_time
+        resume.save()
 
 
 def _check_is_applicant(user: models.CustomUser, resume: models.Resume) -> bool:
