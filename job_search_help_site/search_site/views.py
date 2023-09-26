@@ -547,3 +547,13 @@ def raising_resume(request, resume_id: int):
     if request.method == "POST":
         resume.change_raising_resume(resume_id)
     return redirect("rezume_applicant")
+
+
+def raising_vacancy(request, vacancy_id: int):
+    """
+    Поднимает вакансию компании в поиске.
+    """
+    if request.method == "POST":
+        vacancy.change_raising_vacancy(vacancy_id)
+    return redirect("vacancy_company")
+
