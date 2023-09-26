@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from . import validators, algorithm_for_vacancy
 from search_site import models
@@ -126,3 +129,20 @@ def delete_vacancy(user: models.CustomUser, vacancy_id: int) -> HttpResponseForb
     if vacancy is None:
         return HttpResponseForbidden("Упс, эта страница не доступна!")
     vacancy.delete()
+
+
+def change_raising_vacancy(vacancy_id: int) -> None:
+    """
+    Поднимает вакансию компании в поиске.
+    """
+    update_interval = timedelta(hours=4)
+    vacancy = get_object_or_404(models.Vacancy, pk=vacancy_id)
+    current_time = timezone.now()
+    cutoff_time = current_time - update_interval
+
+    if vacancy.publication_time.tzinfo is None:
+        vacancy.publication_time = timezone.make_aware(vacancy.publication_time)
+
+    if vacancy.publication_time <= cutoff_time:
+        vacancy.publication_time = current_time
+        vacancy.save()
