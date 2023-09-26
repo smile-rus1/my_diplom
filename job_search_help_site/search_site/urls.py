@@ -41,6 +41,7 @@ urlpatterns = [
     path("employer/responses/<int:applicant_id>/<int:vacancy_id>", views.show_info_about_applicant_of_application, name="show_info_of_applicant"),
     path("employer/change_state/<int:application_id>", views.change_state_application_of_applicant, name="change_state"),
     path("employer/search/", views.search_resume, name="search_resume"),
+    path("employer/raising/<int:vacancy_id>", views.raising_vacancy, name="raising_vacancy"),
 
     # url для admin
     path('admin_redirect/', views.admin_redirect, name='admin')
