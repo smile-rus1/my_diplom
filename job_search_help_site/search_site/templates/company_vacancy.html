@@ -10,6 +10,15 @@
     font-style: italic;
     color: #3b3d3b;
 }
+.button-raising {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #0074d9;
+    text-decoration: none;
+    cursor: pointer;
+}
 </style>
 {% endblock %}
 
@@ -26,6 +35,7 @@
       {% for vacancy in vacancies %}
       <div class="resume-container">
         <h2 class="resume-title">{{ vacancy.title_vacancy }}</h2>
+        <p>Вакансия была поднята в поиске: {{ vacancy.publication_time|time:"H:i" }}</p>
         <div>
           <p>Создано: <span>{{vacancy.created_at}}</span></p>
           <h4>Навыки:</h4>
@@ -66,8 +76,35 @@
               Удалить вакансию
             </button>
           </form>
-
         </div>
+        {% if vacancy.is_published %}
+        <br>
+          <form action="{% url 'raising_vacancy' vacancy.id %}" method="post">
+            {% csrf_token %}
+            <button class="button-raising" data-resume-id="{{vacancy.id}}" id="raisingBtn">Поднять вакансию</button>
+          </form>
+        {% endif %}
+          <script>
+          function checkAndUpdateButtons() {
+            var updateButtons = document.querySelectorAll('.button-raising');
+            updateButtons.forEach(function(button) {
+              var resumeId = button.getAttribute('data-resume-id');
+              var lastUpdate = new Date('{{ vacancy.publication_time|date:"c" }}');
+              var currentTime = new Date();
+              var updateInterval = 4 * 60 * 60 * 1000; // 4 часа в миллисекундах
+              if (currentTime - lastUpdate >= updateInterval) {
+                button.disabled = false;
+                button.textContent = 'Поднять вакансию';
+              } else {
+                button.disabled = true;
+                button.textContent = 'Вакансия уже поднята';
+              }
+            });
+          }
+          checkAndUpdateButtons();
+          setInterval(checkAndUpdateButtons, 5 * 60 * 1000); // каждые 5 минут
+        </script>
+
       </div>
       {% endfor %}
 
