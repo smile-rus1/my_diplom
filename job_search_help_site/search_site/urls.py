@@ -8,6 +8,7 @@ urlpatterns = [
     path("logout/", views.logout_user, name="logout_user"),
     path("help/", views.help_for_people, name="help"),
     path("delete_me/", views.delete_me, name="delete_me"),
+    path("delete_application/<int:application_id>", views.delete_application_on_list_of_active, name="hide_application"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),

@@ -35,6 +35,16 @@ select:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
+.responses-button {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+    cursor: pointer;
+    color: blue;
+    margin-top: 15px; /* Пример: отступ сверху */
+}
 </style>
 {% endblock %}
 
@@ -86,7 +96,18 @@ select:focus {
                     <span style="color: red;">Отказ</span>
                 {% endif %}
             </td>
-            <td><a href="{% url 'vacancy' response.vacancy.id %}" class="card-link">{{response.vacancy.title_vacancy}}</a</td>
+            <td>
+                <a href="{% url 'vacancy' response.vacancy.id %}" class="card-link">
+                    {{response.vacancy.title_vacancy}}
+                </a>
+                <br>
+                <form method="post" action="{% url 'hide_application' response.id %}">
+                    {% csrf_token %}
+                    <span>
+                        <button class="responses-button">Удалить отклик</button>
+                    </span>
+                </form>
+            </td>
             <td>{{response.application_date}}</td>
         </tr>
     {% endfor %}
