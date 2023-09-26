@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
-    responded_to_vacancy_of_applicant, resume_of_applicants_for_company
+    responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages
@@ -557,3 +557,11 @@ def raising_vacancy(request, vacancy_id: int):
         vacancy.change_raising_vacancy(vacancy_id)
     return redirect("vacancy_company")
 
+
+def delete_application_on_list_of_active(request, application_id: int):
+    """
+    Пользователь удаляет отклик.
+    """
+    if request.method == "POST":
+        applications.delete_application_on_user_of_list_active(application_id)
+    return redirect("all_respond_on_vacancy")
