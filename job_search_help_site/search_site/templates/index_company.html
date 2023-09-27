@@ -32,6 +32,14 @@
     width: 20%; /* Установите ширину картинки по вашему усмотрению */
     margin-left: 20px; /* Добавьте немного отступа между картинкой и текстом */
 }
+
+.card-link {
+    text-decoration: none;
+}
+
+.card-link:hover {
+    color: red;
+}
 </style>
 {% endblock %}
 
@@ -52,9 +60,11 @@
             {% if resume.applicant.image and request.user.company.is_confirmed %}
             <img src="{{ resume.applicant.image.url }}">
             {% else %}
-            <img src="{% static 'photo/user_no_photo.png' %}">
+            <img src="{% static 'photo/user_no_photo.png' %}" title="Потвердите достоверность компании, чтобы видеть фото кандидатов">
             {% endif %}
-            <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
+            <h2 class="resume-title">
+                <a href="{% url 'show_info_about_applicant_resume' resume.id  %}" class="card-link">{{ resume.name_of_resume }}</a>
+            </h2>
             <p class="resume-experience">Опыт работы: {% if resume.experience %}{{ resume.key_skills }}{% else %}Нет опыта{% endif %}</p>
             <p>{% if resume.salary %}{{resume.salary}}{% endif %}</p>
             {% if resume.profession != "Нет профессии"  %}
