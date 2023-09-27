@@ -30,6 +30,14 @@ def show_all_info_about_applicant_of_application(
         raise Http404("Не найдено")
 
 
+def show_all_info_about_applicant(resume_id: int) -> models.Application:
+    """
+    Показывает всю информацию о кандидате по переданному
+    """
+    return models.Application.objects.filter(applicant__isnull=False).select_related("applicant__user")\
+        .filter(resume=resume_id).first()
+
+
 def change_application_status_of_applicant(**user_data: [int, str]) -> models.Application:
     """
     Меняет status у applicant по id вакансии.
