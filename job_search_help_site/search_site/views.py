@@ -565,3 +565,17 @@ def delete_application_on_list_of_active(request, application_id: int):
     if request.method == "POST":
         applications.delete_application_on_user_of_list_active(application_id)
     return redirect("all_respond_on_vacancy")
+
+
+def show_info_about_applicant_resume(request, resume_id):
+    """
+    Компания просматривает резюме кандидата.
+    """
+
+    return render(
+        request,
+        "show_info_about_applicant_of_application.html",
+        {
+            "info_application": responded_to_vacancy_of_applicant.show_all_info_about_applicant(resume_id)
+        }
+    )
