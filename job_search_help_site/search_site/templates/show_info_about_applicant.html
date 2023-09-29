@@ -1,0 +1,101 @@
+{% extends 'employer.html' %}
+
+{% load static %}
+{% block title %} Просмотр резюме кандидата {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/for_vacancy_table.css' %}" rel="stylesheet"/>
+<style>
+textarea {
+  width: 500px;
+  height: 150px;
+  resize: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: none;
+}
+
+textarea:hover,
+textarea:focus {
+  outline: none;
+}
+
+.response {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    padding-left: 40px;
+    font-style: italic;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="left-container">
+<!--        {% if apply %}-->
+<!--          <p class="response">Вы уже прислали этому кандидату приглашение</p>-->
+<!--        {% endif %}-->
+        <h2>Кандидат {{info_applicant.applicant.second_name}} {{info_applicant.applicant.first_name}}</h2>
+        <br>
+
+        <h3>{{ info_applicant.profession }}</h3>
+
+        {% if info_applicant.salary %}
+        <p>Предполагаемая заработная плата {{ info_applicant.salary }}</p>
+        {% endif %}
+
+        <p style="color: grey;">Опыт работы в данной сфере</p>
+        <p>{% if info_applicant.experience %}{{info_applicant.experience}}{% else %}Нет опыта{% endif %}</p>
+
+        <p style="color: grey;">Способы связи</p>
+        {% if info_applicant.applicant.phone %}
+        <p>Телефон: {{info_applicant.applicant.phone}}</p>
+        {% endif %}
+        <p>Email: {{info_applicant.applicant.user.email}}</p>
+        <br>
+
+        <h3>Ключевые навыки</h3>
+        <p>{{info_applicant.key_skills}}</p>
+        <br>
+        <h3>Образование</h3>
+        <p>{{info_applicant.education}}</p>
+        <br>
+        {% if info_applicant.place_of_work %}
+        <h3>Предыдущие места работы</h3>
+        <p>{{info_applicant.place_of_work}}</p>
+        <br>
+        {% endif %}
+        <h3>О кандидате</h3>
+        <textarea readonly>{{info_applicant.about_applicant}}</textarea>
+        <br>
+        <br>
+
+        <form action="{% url 'send_invitation_from_the_company' info_applicant.id %}" method="post">
+            {% csrf_token %}
+            <select name="title_vacancy">
+                {% for vacancy in vacancies %}
+                    <!-- ТУТ НАДО ПОСМОТРЕТЬ ЧТОБЫ ЕСЛИ СПИСОК БЫЛ БЫ ПУСТОЙ ТО НЕ ВЫВОДИТЬ               -->
+                    {% if vacancy not in apply_list_respond %}
+                        <option>{{ vacancy.title_vacancy }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            {% if apply_list_respond %}
+                <button>Пригласить кандидата</button>
+            {% else %}
+                <button onclick="location.href='{% url 'vacancy_company' %}'">Вы уже пригласили кандидата</button>
+            {% endif %}
+        </form>
+
+    </div>
+      <div class="right-container" style="background-color: #f1f1f1;">
+    {% if info_applicant.applicant.image and request.user.company.is_confirmed %}
+        <img src="{{ info_applicant.applicant.image.url }}" width="70%">
+    {% else %}
+        <img src="{% static 'photo/user_no_photo.png' %}" title="Чтобы увидеть фото кандидата, потвердите подлинность вашей компании">
+    {% endif %}
+      </div>
+</div>
+{% endblock %}
