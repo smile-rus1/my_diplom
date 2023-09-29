@@ -9,7 +9,7 @@ def get_all_responded_to_vacancy(user: models.CustomUser) -> models.Application:
     """
     return models.Application.objects \
         .filter(applicant__isnull=False).select_related("applicant__user", "vacancy__company") \
-        .filter(vacancy__company=user.company)
+        .filter(vacancy__company=user.company).order_by("-application_date")
 
 
 def show_all_info_about_applicant_of_application(
@@ -30,12 +30,11 @@ def show_all_info_about_applicant_of_application(
         raise Http404("Не найдено")
 
 
-def show_all_info_about_applicant(resume_id: int) -> models.Application:
+def show_all_info_about_applicant(resume_id: int) -> models.Resume:
     """
     Показывает всю информацию о кандидате по переданному
     """
-    return models.Application.objects.filter(applicant__isnull=False).select_related("applicant__user")\
-        .filter(resume=resume_id).first()
+    return models.Resume.objects.filter(id=resume_id).select_related("applicant__user").first()
 
 
 def change_application_status_of_applicant(**user_data: [int, str]) -> models.Application:
@@ -45,3 +44,29 @@ def change_application_status_of_applicant(**user_data: [int, str]) -> models.Ap
     return models.Application.objects.filter(id=user_data.get("application_id"))\
         .update(status=user_data.get("status"))
 
+
+def send_invitation_from_the_company_to_applicant(user: models.CustomUser, resume_id: int, vacancy: str) -> None:
+    """
+    Присылает приглашение кандидату от компании.
+    """
+    resume = models.Resume.objects.filter(id=resume_id).select_related("applicant").first()
+    vacancy = models.Vacancy.objects.filter(title_vacancy=vacancy, company=user.company).first()
+
+    models.Application.objects.create(
+        applicant=resume.applicant,
+        vacancy=vacancy,
+        resume=resume,
+        cover_letter="",
+        company=vacancy.company.title_company,
+        status="access"
+    )
+
+
+def get_is_applied_respond_from_company(user: models.CustomUser) -> list[models.Vacancy]:
+    """
+    Проверяет сделала ли отклик уже компания кандидату.
+    """
+    lst_apply_respond = [
+        ls.vacancy for ls in models.Application.objects.filter(is_invited=True, vacancy__company__user=user)
+    ]
+    return lst_apply_respond
