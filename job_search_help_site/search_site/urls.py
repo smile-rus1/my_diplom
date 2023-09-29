@@ -44,6 +44,7 @@ urlpatterns = [
     path("employer/search/", views.search_resume, name="search_resume"),
     path("employer/raising/<int:vacancy_id>", views.raising_vacancy, name="raising_vacancy"),
     path("employer/info_applicant/<int:resume_id>", views.show_info_about_applicant_resume, name="show_info_about_applicant_resume"),
+    path("employer/send_invitation/<int:resume_id>", views.send_invitation_from_the_company, name="send_invitation_from_the_company"),
 
     # url для admin
     path('admin_redirect/', views.admin_redirect, name='admin')
