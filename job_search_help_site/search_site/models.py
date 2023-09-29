@@ -151,6 +151,8 @@ class Application(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, verbose_name="Резюме кандидата")
     application_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата отклика")
     cover_letter = models.TextField(verbose_name="Сопроводительное письмо", null=True)
+    is_invited = models.BooleanField(default=False, verbose_name="Приглашение отправлено")
+    hidden = models.BooleanField(default=False, verbose_name="Отклик спрятан")
     status = models.CharField(
         max_length=10,
         choices=(
