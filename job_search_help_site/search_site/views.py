@@ -571,11 +571,27 @@ def show_info_about_applicant_resume(request, resume_id):
     """
     Компания просматривает резюме кандидата.
     """
+    info_applicant = responded_to_vacancy_of_applicant.show_all_info_about_applicant(resume_id)
 
     return render(
         request,
-        "show_info_about_applicant_of_application.html",
+        "show_info_about_applicant.html",
         {
-            "info_application": responded_to_vacancy_of_applicant.show_all_info_about_applicant(resume_id)
+            "info_applicant": info_applicant,
+            "vacancies": vacancy.get_all_vacancy_company(request.user),
+            "apply_list_respond": responded_to_vacancy_of_applicant.get_is_applied_respond_from_company(request.user)
         }
     )
+
+
+def send_invitation_from_the_company(request, resume_id: int):
+    """
+    Присылает приглашение кандидату
+    """
+    if request.method == "POST":
+        responded_to_vacancy_of_applicant.send_invitation_from_the_company_to_applicant(
+            request.user,
+            resume_id,
+            request.POST.get("title_vacancy")
+        )
+    return redirect("responded_to_vacancy")
