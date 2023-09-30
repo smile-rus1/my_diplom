@@ -15,6 +15,7 @@ textarea {
   font-family: Arial, sans-serif;
   font-size: 16px;
   border: none;
+  background-color: #f0f0f0;
 }
 
 textarea:hover,
@@ -28,15 +29,39 @@ textarea:focus {
     padding-left: 40px;
     font-style: italic;
 }
+
+.select-vacancy {
+    width: 47%;
+    padding: 10px; /* Внутренний отступ */
+    margin-bottom: 15px;
+    font-size: 16px; /* Размер шрифта */
+    border: 2px solid #ccc; /* Граница */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #fff; /* Цвет фона */
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.select-vacancy option {
+    padding: 5px; /* Внутренний отступ */
+}
+
+
+.select-vacancy:hover {
+    border-color: #aaa; /* Изменение цвета границы при наведении курсора */
+}
+
+.button-apply {
+    width: 47%;
+
+}
+
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="left-container">
-<!--        {% if apply %}-->
-<!--          <p class="response">Вы уже прислали этому кандидату приглашение</p>-->
-<!--        {% endif %}-->
         <h2>Кандидат {{info_applicant.applicant.second_name}} {{info_applicant.applicant.first_name}}</h2>
         <br>
 
@@ -74,18 +99,19 @@ textarea:focus {
 
         <form action="{% url 'send_invitation_from_the_company' info_applicant.id %}" method="post">
             {% csrf_token %}
-            <select name="title_vacancy">
+            {% if vacancies|length == apply_list_respond|length %}
+                <h3 style="fon">Нет больше доступных вакансий</h3>
+            {% else %}
+            <label>Ваши вакансии, на которые вы можете пригласить</label>
+            <select name="title_vacancy" class="select-vacancy">
                 {% for vacancy in vacancies %}
-                    <!-- ТУТ НАДО ПОСМОТРЕТЬ ЧТОБЫ ЕСЛИ СПИСОК БЫЛ БЫ ПУСТОЙ ТО НЕ ВЫВОДИТЬ               -->
                     {% if vacancy not in apply_list_respond %}
                         <option>{{ vacancy.title_vacancy }}</option>
                     {% endif %}
                 {% endfor %}
+
             </select>
-            {% if apply_list_respond %}
-                <button>Пригласить кандидата</button>
-            {% else %}
-                <button onclick="location.href='{% url 'vacancy_company' %}'">Вы уже пригласили кандидата</button>
+            <button class="button-apply">Пригласить кандидата</button>
             {% endif %}
         </form>
 
