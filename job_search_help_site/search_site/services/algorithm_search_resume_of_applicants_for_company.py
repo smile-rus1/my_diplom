@@ -12,11 +12,12 @@ def get_all_desired_resume_of_applicants(vacancy: models.Vacancy) -> Q:
     queries |= _get_resume_by_key_skills(vacancy.key_skills, queries)
     queries |= _get_resume_by_description(vacancy.description, queries)
     queries |= _get_resume_by_name_of_resume(vacancy.title_vacancy, queries)
-    queries |= _get_resume_by_salary(
-        int(vacancy.salary[:-4]),
-        int(vacancy.salary[:-4]) // 4,
-        queries
-    )
+    if vacancy.salary:  # временно так, потому что кидает 500 если salary будет None
+        queries |= _get_resume_by_salary(
+            int(vacancy.salary[:-4]),
+            int(vacancy.salary[:-4]) // 4,
+            queries
+        )
     queries &= Q(is_published=True)
     return queries
 
