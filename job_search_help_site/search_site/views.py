@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
-    responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications
+    responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages
@@ -130,7 +130,17 @@ def admin_redirect(request):
 
 def main_employer(request):
     resumes = resume_of_applicants_for_company.get_resume_for_company_by_algorithm_in_main_page(request.user)
-    return render(request, "index_company.html", {"resumes": resumes})
+
+    return render(
+        request,
+        "index_company.html",
+        {
+            "resumes": resumes,
+            "popular_company": popular_company.get_lst_company_data(
+                popular_company.get_most_popular_company_on_total_vacancy()[:5]
+            )
+        }
+    )
 
 
 def logout_user(request):
