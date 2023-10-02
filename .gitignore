@@ -1,3 +1,4 @@
+.idea
 job_search_help_site/db.sqlite3
 .env
 venv
