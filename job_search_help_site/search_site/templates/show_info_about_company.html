@@ -1,0 +1,175 @@
+{% extends template %}
+
+{% load static %}
+
+{% block title %} Компания {{company.title_company}} {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_company.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/pagination.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_styles.css' %}" rel="stylesheet"/>
+<style>
+.company-contacts {
+    font-size: 14px;
+    color: #777;
+    margin: 0 0 10px;
+}
+
+textarea {
+  width: 500px;
+  height: 150px;
+  resize: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: none;
+  background-color: #f0f0f0;
+}
+
+textarea:hover,
+textarea:focus {
+  outline: none;
+}
+
+.response {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    padding-left: 40px;
+    font-style: italic;
+}
+
+.select-vacancy {
+    width: 47%;
+    padding: 10px; /* Внутренний отступ */
+    margin-bottom: 15px;
+    font-size: 16px; /* Размер шрифта */
+    border: 2px solid #ccc; /* Граница */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #fff; /* Цвет фона */
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.select-vacancy option {
+    padding: 5px; /* Внутренний отступ */
+}
+
+
+.select-vacancy:hover {
+    border-color: #aaa; /* Изменение цвета границы при наведении курсора */
+}
+
+.button-apply {
+    width: 47%;
+}
+
+.img-cont {
+    max-width: 80%;
+    margin: 0;
+    margin-left: 5%;
+    margin-top: 5%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.container {
+    display: flex;
+
+}
+
+.vacancy-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .vacancy-company {
+            flex-basis: calc(33.33% - 20px);
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .vacancy-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .vacancy-salary {
+            font-size: 16px;
+        }
+
+        .vacancy-location {
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .vacancy-date {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .vacancy-title a {
+            text-decoration: none;
+            color: #10a5e5
+        }
+
+        .vacancy-title a:hover {
+            color: #10698f;
+        }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="right-container" style="background-color: #f1f1f1;">
+        <div class="img-cont">
+            {% if company.image_company %}
+                <img src="{{ company.image_company.url }}">
+            {% else %}
+                <img src="{% static 'photo/employment.png' %}">
+            {% endif %}
+        </div>
+         <div class="other-content">
+            <p>Тут что-то будет </p>
+         </div>
+    </div>
+    <div class="left-container">
+        <h2>
+            {{ company.title_company }}
+            {% if company.is_confirmed %}
+                <span><img src="{% static 'photo/confirmed.png' %}" title="Эта компания потверждена" style="width: 5%"></span>
+            {% else %}
+                <span><img src="{% static 'photo/reject.png' %}" title="Эта компания еще не потверждена"  style="width: 5%"></span>
+            {%endif%}
+        </h2>
+
+        <br>
+        <textarea readonly>{{company.description_company}}</textarea>
+        <div class="container-header">
+            <h3>Вакансии компании</h3>
+        </div>
+        {% for vacancy in all_vacancies %}
+            <div class="vacancy-company">
+                                            <!-- ссылку потом добавить на новый созданый контроллер!               -->
+                <div class="vacancy-title"><a href="#">{{vacancy.title_vacancy}}</a></div>
+                <div class="vacancy-salary">З/П {% if vacancy.salary %}{{vacancy.salary}}{% else %}Не указана{% endif %}</div>
+                <div class="vacancy-location">{{vacancy.location}}</div>
+                <div class="vacancy-date">{{vacancy.created_at|date:"d F Y"}}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="ad-container">
+        <p>Тут могла быть ваша реклама</p>
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -7,7 +7,7 @@ from .services import auth, home_page, resume, vacancy, response_for_applicant, 
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
-from . import pagination_for_pages
+from . import pagination_for_pages, get_templates
 
 
 def index(request):
@@ -21,16 +21,8 @@ def help_for_people(request):
     """
     Страница help для user
     """
-    if request.user.is_authenticated:
-        user = auth.check_user_role(request)
-        if user == "applicant":
-            template_name = "base_applicant.html"
-        elif user == "company":
-            template_name = "employer.html"
-
-        return render(request, "help.html", {"template": template_name})
-    else:
-        return render(request, "help.html", {"template": "base.html"})
+    template = get_templates.get_base_template(request)
+    return render(request, "help.html", {"template": template})
 
 
 def login_applicant(request):
@@ -217,11 +209,7 @@ def change_password(request):
     """
     Страница на которой пользователь изменяет свой пароль.
     """
-    user = auth.check_user_role(request)
-    if user == "applicant":
-        template = "base_applicant.html"
-    elif user == "company":
-        template = "employer.html"
+    template = get_templates.get_base_template(request)
 
     if request.method == "POST":
         if request.POST.get("password1") == request.POST.get("password2"):
@@ -476,11 +464,7 @@ def delete_me(request):
     """
     Удаляет аккаунт пользователя.
     """
-    user = auth.check_user_role(request)
-    if user == "applicant":
-        template = "base_applicant.html"
-    elif user == "company":
-        template = "employer.html"
+    template = get_templates.get_base_template(request)
 
     if request.method == "POST":
         if not home_page.delete_me(request.user, request.POST.get("password")):
@@ -612,21 +596,30 @@ def catalog_of_company(request):
     Выводит каталог всех компаний.
     """
     paginator = pagination_for_pages.create_pagination_for_search(company.get_all_company())
-    if request.user.is_authenticated:
-        user = auth.check_user_role(request)
-        if user == "applicant":
-            template_name = "base_applicant.html"
-        elif user == "company":
-            template_name = "employer.html"
-    else:
-        template_name = "base.html"
+
     return render(
         request,
         "catalog_of_company.html",
         {
-            "template": template_name,
+            "template": get_templates.get_base_template(request),
             "page": paginator.get_page(request.GET.get("page")),
         }
     )
 
 
+def show_info_about_company(request, company_id: int):
+    """
+    Показывает информацию об одной компании.
+    """
+    company_data = company.get_company_by_id(company_id)
+    if company_data is None:
+        return HttpResponseNotFound()
+    return render(
+        request,
+        "show_info_about_company.html",
+        {
+            "template": get_templates.get_base_template(request),
+            "company": company_data,
+            "all_vacancies": company_data.vacancy_set.all()
+        }
+    )
