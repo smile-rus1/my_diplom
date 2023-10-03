@@ -27,7 +27,7 @@
     {% for item in page %}
     <div class="vacancy-container">
         <div class="vacancy-card">
-            <a href="#" class="card-link"><h2 class="vacancy-title">{{ item.title_company }}</h2></a>
+            <a href="{% url 'show_info_about_company' item.id %}" class="card-link"><h2 class="vacancy-title">{{ item.title_company }}</h2></a>
             <p class="vacancy-description">
                 Описание компании:
                 {% if item.description_company %}
