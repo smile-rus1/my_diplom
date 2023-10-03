@@ -1,0 +1,69 @@
+{% extends template %}
+
+{% load static %}
+
+{% block title %} Каталог компаний {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_company.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/pagination.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_styles.css' %}" rel="stylesheet"/>
+<style>
+.company-contacts {
+    font-size: 14px;
+    color: #777;
+    margin: 0 0 10px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <p>ТУТ БУДЕТ СОРТИРОВКА ИЛИ ФИЛЬТРАЦИЯ!</p>
+</div>
+<div class="main-content">
+    {% for item in page %}
+    <div class="vacancy-container">
+        <div class="vacancy-card">
+            <a href="#" class="card-link"><h2 class="vacancy-title">{{ item.title_company }}</h2></a>
+            <p class="vacancy-description">
+                Описание компании:
+                {% if item.description_company %}
+                    {% if item.description_company|length > 50 %}
+                        {{item.description_company|slice:":50"}}...
+                    {% else %}
+                        {{item.description_company}}
+                    {% endif %}
+                {% endif %}
+            </p>
+            <p class="company-contacts">{% if item.phone_company %}Телефон:{{item.phone_company}}{%endif%}</p>
+            <p class="company-contacts">Email:{{item.user.email}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="ad-container">
+    <div>
+        <p>тут могла быть ваша реклама</p>
+    </div>
+</div>
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page.has_previous %}
+            <a href="?{{ request.GET.urlencode }}&page=1">&laquo; первая</a>
+            <a href="?{{ request.GET.urlencode }}&page={{ page.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current-page">{{ page.number }}</span>
+
+        {% if page.has_next %}
+            <a href="?{{ request.GET.urlencode }}&page={{ page.next_page_number }}">следующая</a>
+            <a href="?{{ request.GET.urlencode }}&page={{ page.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

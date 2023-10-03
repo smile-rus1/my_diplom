@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
-    responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company
+    responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages
@@ -605,3 +605,28 @@ def send_invitation_from_the_company(request, resume_id: int):
             request.POST.get("title_vacancy")
         )
     return redirect("responded_to_vacancy")
+
+
+def catalog_of_company(request):
+    """
+    Выводит каталог всех компаний.
+    """
+    paginator = pagination_for_pages.create_pagination_for_search(company.get_all_company())
+    if request.user.is_authenticated:
+        user = auth.check_user_role(request)
+        if user == "applicant":
+            template_name = "base_applicant.html"
+        elif user == "company":
+            template_name = "employer.html"
+    else:
+        template_name = "base.html"
+    return render(
+        request,
+        "catalog_of_company.html",
+        {
+            "template": template_name,
+            "page": paginator.get_page(request.GET.get("page")),
+        }
+    )
+
+
