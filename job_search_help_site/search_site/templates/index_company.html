@@ -97,7 +97,7 @@
 <div class="container-content">
         <div class="header">
             <h6 class="elegant-header">Популярные компании</h6>
-            <a class="link-button" href="#">Каталог компаний</a>
+            <a class="link-button" href="{% url 'catalog_company' %}" target="_blank">Каталог компаний</a>
         </div>
         <div class="row">
             {% for item in popular_company %}
