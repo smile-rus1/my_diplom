@@ -157,8 +157,7 @@ img {
         </div>
         {% for vacancy in all_vacancies %}
             <div class="vacancy-company">
-                                            <!-- ссылку потом добавить на новый созданый контроллер!               -->
-                <div class="vacancy-title"><a href="#">{{vacancy.title_vacancy}}</a></div>
+                <div class="vacancy-title"><a href="{% if not request.user.applicant %} {% url 'vacancy_company' vacancy.id %}{% else %}{% url 'vacancy' vacancy.id %}{%endif%}">{{vacancy.title_vacancy}}</a></div>
                 <div class="vacancy-salary">З/П {% if vacancy.salary %}{{vacancy.salary}}{% else %}Не указана{% endif %}</div>
                 <div class="vacancy-location">{{vacancy.location}}</div>
                 <div class="vacancy-date">{{vacancy.created_at|date:"d F Y"}}</div>

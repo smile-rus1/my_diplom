@@ -10,7 +10,7 @@ from search_site import models
 from .home_page import get_company
 
 
-def get_vacancy_for_applicant(vacancy_id: int) -> models.Vacancy:
+def get_vacancy_by_id(vacancy_id: int) -> models.Vacancy:
     """
     Возвращает vacancy для applicant.
     """
