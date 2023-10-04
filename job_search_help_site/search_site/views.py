@@ -12,9 +12,17 @@ from . import pagination_for_pages, get_templates
 
 def index(request):
     """
-    начальная страница на сайте.
+    Начальная страница на сайте.
     """
-    return render(request, "index.html")
+    return render(
+        request,
+        "index.html",
+        {
+            "popular_company": popular_company.get_lst_company_data(
+                popular_company.get_most_popular_company_on_total_vacancy()[:5]
+            )
+        }
+    )
 
 
 def help_for_people(request):
@@ -27,7 +35,7 @@ def help_for_people(request):
 
 def login_applicant(request):
     """
-    авторизация кандидата по url login/applicant.
+    Авторизация кандидата по url login/applicant.
     """
     if request.method == 'POST':
         if not auth.login_user(
@@ -46,7 +54,7 @@ def login_applicant(request):
 
 def register_applicant(request):
     """
-    регистрация кандидата по url register/applicant
+    Регистрация кандидата по url register/applicant
     еще будет меняться т.к. не настроил модельки еще!
     """
     if request.method == "POST":
@@ -65,6 +73,9 @@ def register_applicant(request):
 
 
 def index_employer(request):
+    """
+    Возвращает страницу для просмотра компаний.
+    """
     return render(request, "index_employer.html")
 
 
@@ -116,11 +127,17 @@ def register_employer(request):
 
 
 def admin_redirect(request):
+    """
+    Переводит на админ-панель.
+    """
     if request.user.is_superuser:
         return redirect(reverse('admin:index'))
 
 
 def main_employer(request):
+    """
+    Возвращате гланую страницу для компаний.
+    """
     resumes = resume_of_applicants_for_company.get_resume_for_company_by_algorithm_in_main_page(request.user)
 
     return render(
@@ -147,13 +164,20 @@ def logout_user(request):
 
 def main_applicant(request):
     """
-    главная страница для кандидатов
+    Главная страница для кандидатов
     """
     if not home_page.get_applicant(request.user):
         return redirect("main_employer")
-    return render(request, "index_applicant.html", {
-        "vacancies": vacancy.get_vacancy_by_algorithm_on_main_page(request.user)
-    })
+    return render(
+        request,
+        "index_applicant.html",
+        {
+            "vacancies": vacancy.get_vacancy_by_algorithm_on_main_page(request.user),
+            "popular_company": popular_company.get_lst_company_data(
+                popular_company.get_most_popular_company_on_total_vacancy()[:5]
+            )
+        }
+    )
 
 
 def search_vacancy(request):
@@ -305,6 +329,10 @@ def update_resume(request, resume_id: int):
 
 
 def vacancy_for_applicant(request, vacancy_id):
+    """
+    Возвращает страницу вакансий для кандидатов.
+    P.S. Переделать эту вьюху чтобы не была такая большая.
+    """
     if request.method == "POST":
         application = response_for_applicant.respond_on_vacancy(
             request.user,
@@ -331,6 +359,9 @@ def vacancy_for_applicant(request, vacancy_id):
 
 
 def respond_on_vacancy_applicant(request):
+    """
+    Возвращает вакансии на которые был подан отклик.
+    """
     user_responses = responses_on_vacancy.get_all_responses_on_vacancy(request.user)
     status = request.GET.get('status', '')
     if status:

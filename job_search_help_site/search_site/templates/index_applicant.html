@@ -14,6 +14,13 @@
         color: #777;
         margin: 0 0 10px;
      }
+
+.container-img img{
+    width: 100%;
+    text-align: center;
+    max-width: 30%;
+    height: auto;
+}
 </style>
 {% endblock %}
 
@@ -49,22 +56,22 @@
             <a class="link-button" href="{% url 'catalog_company' %}">Каталог компаний</a>
         </div>
         <div class="row">
+            {% for item in popular_company %}
                 <div class="item-company">
-                    <p>asdasd</p>
+                    <div class="container-img">
+                        <a href="{% url 'show_info_about_company' item.company.id %}" target="_blank">
+                        {% if item.company.image_company %}
+                            <img src="{{ item.company.image_company.url }}">
+                        {% else %}
+                            <img src="{% static 'photo/employment.png' %}">
+                        {% endif %}
+                        </a>
+                    </div>
+                    <h3>{{ item.company.title_company }}</h3>
+                    <p>Количество вакансий: {{ item.vacancy_count }}</p>
                 </div>
-                <div class="item-company">
-                    <p>asdasd</p>
-                </div>
-                <div class="item-company">
-                    <p>asdasd</p>
-                </div>
-                <div class="item-company">
-                    <p>asdasd</p>
-                </div>
-                <div class="item-company">
-                    <p>asdasd</p>
-                </div>
-            </div>
+            {% endfor %}
+        </div>
         <hr>
         <div class="container-block">
             <div class="column-block">
