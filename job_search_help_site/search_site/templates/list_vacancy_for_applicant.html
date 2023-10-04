@@ -1,4 +1,4 @@
-{% extends 'base_applicant.html' %}
+{% extends template %}
 
 {% load static %}
 {% block title %} Предложенные вакансии {% endblock %}
@@ -76,23 +76,23 @@
         <div class="search-sidebar">
             {% if item.company.image_company %}
             <div class="container-img">
-                <a href="#"><img src="{{ item.company.image_company.url }}" class="company-image"></a>
+                <a href="{% url 'show_info_about_company' item.company.id %}"><img src="{{ item.company.image_company.url }}" class="company-image"></a>
             </div>
             {% else %}
             <div class="container-img">
-                <a href="#"><img src="{% static 'photo/employment.png' %}" alt="" style="width: 100%"></a>
+                <a href="{% url 'show_info_about_company' item.company.id %}"><img src="{% static 'photo/employment.png' %}" alt="" style="width: 100%"></a>
             </div>
             {% endif %}
         </div>
         <div class="vacancy-content">
-            <a href="{% url 'vacancy' item.id %}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
+            <a href="{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'vacancy_company' item.id %}{%endif%}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
             <h2>{{ item.company.title_company }}</h2>
             <p>{% if item.experience %}{{ item.experience }}{% else %}Можно без опыта{% endif %}</p>
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
             <p>{{ item.type_of_employment }}</p>
             <p>{% if item.description|length > 100 %} {{ item.description|slice:":100" }}...{% else %}{{item.description}}{% endif %}</p>
             <p class="key-skills">Ключевые навыки: {{ item.key_skills }}</p>
-            <button class="button-vacancy" onclick="window.location.href='{% url 'vacancy' item.id %}'">Откликнуться</button>
+            <button class="button-vacancy" onclick="window.location.href='{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'login_applicant' %}{%endif%}'">Откликнуться</button>
         </div>
     </div>
 {% endfor %}

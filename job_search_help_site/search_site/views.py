@@ -186,7 +186,14 @@ def search_vacancy(request):
     """
     vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
     paginator = pagination_for_pages.create_pagination_for_search(vacancies)
-    return render(request, "list_vacancy_for_applicant.html", {"page": paginator.get_page(request.GET.get("page"))})
+    return render(
+        request,
+        "list_vacancy_for_applicant.html",
+        {
+            "template": get_templates.get_base_template(request),
+            "page": paginator.get_page(request.GET.get("page"))
+        }
+    )
 
 
 def resumes_applicant(request):
@@ -562,7 +569,14 @@ def search_resume(request):
     """
     resumes = algorithm_for_search_resume.get_all_resume_by_criterion(request.GET.get("resume"))
     paginator = pagination_for_pages.create_pagination_for_search(resumes)
-    return render(request, "list_resume_for_company.html", {"page": paginator.get_page(request.GET.get("page"))})
+    return render(
+        request,
+        "list_resume_for_company.html",
+        {
+            "template": get_templates.get_base_template(request),
+            "page": paginator.get_page(request.GET.get("page")),
+        }
+    )
 
 
 def raising_resume(request, resume_id: int):
