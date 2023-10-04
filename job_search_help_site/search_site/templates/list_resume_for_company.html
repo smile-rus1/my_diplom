@@ -85,17 +85,17 @@
         <div class="search-sidebar">
             {% if item.applicant.image and request.user.company.is_confirmed %}
             <div class="container-img">
-                <a href="{% url 'show_info_about_applicant_resume' item.applicant.id %}" target="_blank"><img src="{{ item.applicant.image.url }}" class="company-image"></a>
+                <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.applicant.id %}{% else %}#{% endif %}" target="_blank"><img src="{{ item.applicant.image.url }}" class="company-image"></a>
             </div>
             {% else %}
             <div class="container-img">
-                <a href="{% url 'show_info_about_applicant_resume' item.id %}" target="_blank"><img src="{% static 'photo/user_no_photo.png' %}" alt="" style="width: 100%"></a>
+                <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.id %}{% else %}#{% endif %}" target="_blank"><img src="{% static 'photo/user_no_photo.png' %}" alt="" style="width: 100%"></a>
             </div>
             {% endif %}
         </div>
         <div class="vacancy-content">
             <p class="vacancy-update-time">Обновлено: {{ item.updated_at }}</p>
-            <a href="{% url 'show_info_about_applicant_resume' item.id %}" target="_blank" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
+            <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.id %}{% else %}#{% endif %}" target="_blank" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
             <h4>Предполагаемая заработная плата: {{item.salary}}</h4>
             <p>{% if item.experience %}Опыт работы: {{ item.experience }}{% else %}Нет опыта{% endif %}</p>
             <p>{% if item.place_of_work %}Последнее место работы: {{item.place_of_work}}{% endif %}</p>

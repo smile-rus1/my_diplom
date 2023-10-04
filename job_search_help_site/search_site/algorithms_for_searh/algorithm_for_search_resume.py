@@ -8,6 +8,8 @@ def get_all_resume_by_criterion(criteria: str) -> models.Resume:
     Возвращает все Resume, в которых находятся эти критерии, которые
     были переданы.
     """
+    if criteria == "ALL_RESUME":
+        return _get_all_resume()
     return models.Resume.objects.filter(_get_resume_by_criteria(criteria), is_published=True)\
         .prefetch_related("applicant")\
         .order_by("-updated_at")
@@ -22,3 +24,10 @@ def _get_resume_by_criteria(criteria: str) -> Q:
         q |= Q(name_of_resume__icontains=cr.strip()) | Q(key_skills__icontains=cr.strip()) \
              | Q(about_applicant__icontains=cr.strip()) | Q(profession__icontains=cr.strip())
     return q
+
+
+def _get_all_resume() -> models.Resume:
+    """
+    Возвращает все резюме на страницу.
+    """
+    return models.Resume.objects.all()
