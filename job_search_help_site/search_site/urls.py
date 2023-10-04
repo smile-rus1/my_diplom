@@ -11,6 +11,7 @@ urlpatterns = [
     path("delete_application/<int:application_id>", views.delete_application_on_list_of_active, name="hide_application"),
     path("company_catalog/", views.catalog_of_company, name="catalog_company"),
     path("company/<int:company_id>", views.show_info_about_company, name="show_info_about_company"),
+    path("vacancy_company/<int:vacancy_id>", views.show_vacancy, name="vacancy_company"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),

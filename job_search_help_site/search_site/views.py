@@ -315,7 +315,7 @@ def vacancy_for_applicant(request, vacancy_id):
         if application is None:
             return render(request, "vacancy_for_applicant.html",
                           {
-                              "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
+                              "vacancy": vacancy.get_vacancy_by_id(vacancy_id),
                               "error_message": "У вас нет ни одного резюме, создайте хотя-бы одно!"
                           }
                           )
@@ -323,7 +323,7 @@ def vacancy_for_applicant(request, vacancy_id):
 
     return render(request, "vacancy_for_applicant.html",
                   {
-                      "vacancy": vacancy.get_vacancy_for_applicant(vacancy_id),
+                      "vacancy": vacancy.get_vacancy_by_id(vacancy_id),
                       "resumes": resume.get_all_resumes(request.user),
                       "apply": response_for_applicant.is_has_applied_respond(request.user, vacancy_id),
                   }
@@ -621,5 +621,19 @@ def show_info_about_company(request, company_id: int):
             "template": get_templates.get_base_template(request),
             "company": company_data,
             "all_vacancies": company_data.vacancy_set.all()
+        }
+    )
+
+
+def show_vacancy(request, vacancy_id: int):
+    """
+    Показывает вакансию для пользователя.
+    """
+    return render(
+        request,
+        "show_info_about_vacancy.html",
+        {
+            "template": get_templates.get_base_template(request),
+            "vacancy": vacancy.get_vacancy_by_id(vacancy_id)
         }
     )
