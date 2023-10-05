@@ -12,6 +12,7 @@ urlpatterns = [
     path("company_catalog/", views.catalog_of_company, name="catalog_company"),
     path("company/<int:company_id>", views.show_info_about_company, name="show_info_about_company"),
     path("vacancy_company/<int:vacancy_id>", views.show_vacancy, name="vacancy_company"),
+    path("search_vacancy/", views.search_vacancy, name="search_vacancy"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),
@@ -26,7 +27,6 @@ urlpatterns = [
     path("applicant/change_published/<int:resume_id>", views.change_published_resume, name="change_published_resume"),
     path("vacancy/<int:vacancy_id>", views.vacancy_for_applicant, name="vacancy"),
     path("applicant/responses/", views.respond_on_vacancy_applicant, name="all_respond_on_vacancy"),
-    path("applicant/search/", views.search_vacancy, name="search_vacancy"),
     path("applicant/raising/<int:resume_id>", views.raising_resume, name="raising_resume"),
 
     # url для employer

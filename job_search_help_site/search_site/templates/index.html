@@ -24,8 +24,8 @@
 <div class="main-content">
     <div class="search-container">
         <h3 class="search-header">Найди свою идеальную вакансию у нас!</h3>
-        <form action="" method="GET">
-            <input type="text" name="query" placeholder="Введите название професии, должности или компании">
+        <form action="{% url 'search_vacancy' %}" method="GET" class="search-form">
+            <input type="text" name="vacancy" placeholder="Введите название професии, должности или компании">
             <button type="submit">Поиск</button>
         </form>
         <div class="clickable-strings">
@@ -128,5 +128,21 @@
 {% endblock %}
 
 {% block js %}
-<script src="{% static  'search_site/js/click_search_handle.js' %}"></script>
+ <script>
+const searchForm = document.getElementById('search-form');
+const searchInput = document.querySelector('input[name="vacancy"]');
+const clickableStrings = document.querySelectorAll('.clickable-string');
+
+// Функция, которая добавляет текст из кликаемой строки в поисковую строку
+function handleClickableStringClick(event) {
+    const clickedString = event.target.textContent;
+    searchInput.value = clickedString;
+    searchForm.submit();
+}
+
+// Добавляем обработчик события клика для каждой кликаемой строки
+clickableStrings.forEach(string => {
+    string.addEventListener('click', handleClickableStringClick);
+});
+ </script>
 {% endblock %}

@@ -1,6 +1,5 @@
-// Получаем ссылки на элементы DOM
 const searchForm = document.getElementById('search-form');
-const searchInput = document.querySelector('input[name="query"]');
+const searchInput = document.querySelector('input[name="resume"]');
 const clickableStrings = document.querySelectorAll('.clickable-string');
 
 // Функция, которая добавляет текст из кликаемой строки в поисковую строку

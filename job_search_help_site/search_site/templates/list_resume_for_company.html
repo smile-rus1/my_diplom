@@ -95,7 +95,7 @@
         </div>
         <div class="vacancy-content">
             <p class="vacancy-update-time">Обновлено: {{ item.updated_at }}</p>
-            <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.id %}{% else %}#{% endif %}" target="_blank" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
+            <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.id %}{% else %}{% url 'login_employer' %}{% endif %}" target="_blank" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
             <h4>Предполагаемая заработная плата: {{item.salary}}</h4>
             <p>{% if item.experience %}Опыт работы: {{ item.experience }}{% else %}Нет опыта{% endif %}</p>
             <p>{% if item.place_of_work %}Последнее место работы: {{item.place_of_work}}{% endif %}</p>
