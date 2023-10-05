@@ -1,13 +1,13 @@
 from search_site import models
 
 
-def delete_application_on_user_of_list_active(application_id: int) -> None:
+def change_application_on_user_of_list_active(application_id: int) -> None:
     """
     Удаляет отклик у пользователя.
     """
     application = models.Application.objects.filter(id=application_id).first()
-    # тут можно через поле hidden, которое нужно будет в будующем добавить, чтобы можно было "прятать отклик"
-    print(application)
+    application.hidden = not application.hidden
+    application.save()
 
 
 def reject_invitation_from_company():

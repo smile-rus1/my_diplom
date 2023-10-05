@@ -597,12 +597,12 @@ def raising_vacancy(request, vacancy_id: int):
     return redirect("vacancy_company")
 
 
-def delete_application_on_list_of_active(request, application_id: int):
+def change_vision_application_on_list_of_active(request, application_id: int):
     """
     Пользователь удаляет отклик.
     """
     if request.method == "POST":
-        applications.delete_application_on_user_of_list_active(application_id)
+        applications.change_application_on_user_of_list_active(application_id)
     return redirect("all_respond_on_vacancy")
 
 

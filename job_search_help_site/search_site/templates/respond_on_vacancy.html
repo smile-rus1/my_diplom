@@ -101,10 +101,14 @@ select:focus {
                     {{response.vacancy.title_vacancy}}
                 </a>
                 <br>
-                <form method="post" action="{% url 'hide_application' response.id %}">
+                <form method="post" action="{% url 'change_vision' response.id %}">
                     {% csrf_token %}
                     <span>
-                        <button class="responses-button">Удалить отклик</button>
+                        {% if not response.hidden %}
+                            <button class="responses-button">Удалить отклик</button>
+                        {% else %}
+                            <button class="responses-button">Восстановить</button>
+                        {% endif %}
                     </span>
                 </form>
             </td>
