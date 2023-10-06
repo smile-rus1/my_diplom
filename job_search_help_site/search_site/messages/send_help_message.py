@@ -9,8 +9,8 @@ def send_message_from_help_page_to_email(topic: str, content: str, email: str, f
     """
     send_mail(
         topic,
-        fullname + "\n" + content,
-        email,
+        f"Адрес отправителя: {email}\n\nПолное имя отправителя: {fullname}\nСообщение:\n{content}",
+        settings.EMAIL_HOST_USER,
         [settings.EMAIL_HOST_USER],
         fail_silently=False
     )

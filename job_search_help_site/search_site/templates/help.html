@@ -53,6 +53,26 @@
 
     <button type="submit" class="btn-sub">Отправить</button>
 </form>
+<script>
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Ждем 20 секунд, затем удаляем сообщение из сессии
+    setTimeout(function() {
+        fetch('/clear_session_success_message/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken  // Устанавливаем CSRF-токен в заголовке
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Обработка успешного удаления сообщения, если это необходимо
+        })
+        .catch(error => {
+            // Обработка ошибки, если это необходимо
+        });
+    }, 20000); // 20 секунд в миллисекундах
+</script>
 {% endblock %}
 
 {% block js %}

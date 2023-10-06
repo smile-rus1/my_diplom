@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -697,10 +697,20 @@ def send_message_from_help_page(request):
     """
     if request.method == "POST":
         if send_help_message.send_message_from_help_page_to_email(
-            topic=request.POST.get("otherTopic") if request.POST.get("topic") == "other" else  request.POST.get("topic"),
+            topic=request.POST.get("otherTopic") if request.POST.get("topic") == "other" else request.POST.get("topic"),
             content=request.POST.get("content"),
             email=request.POST.get("email"),
             fullname=request.POST.get("fullname")
         ):
-            request.session['success'] = "Сообщение успешно отправлено"
+            request.session['message'] = "Сообщение успешно отправлено"
     return redirect("help")
+
+
+def clear_session_success_message(request):
+    """
+    Удаляет сообщение из сессии 'success'
+    """
+    request.session.pop("message", None)
+    return JsonResponse(
+        {'message': 'Сообщение удалено из сессии'}
+    )
