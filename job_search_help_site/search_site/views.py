@@ -8,6 +8,7 @@ from .services import auth, home_page, resume, vacancy, response_for_applicant, 
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages, get_templates
+from .messages import send_help_message
 
 
 def index(request):
@@ -29,8 +30,14 @@ def help_for_people(request):
     """
     Страница help для user
     """
-    template = get_templates.get_base_template(request)
-    return render(request, "help.html", {"template": template})
+    return render(
+        request,
+        "help.html",
+        {
+            "template": get_templates.get_base_template(request),
+            "success": request.session.get('success', '') if request.session.get('success', '') else None
+        }
+    )
 
 
 def login_applicant(request):
@@ -682,3 +689,18 @@ def show_vacancy(request, vacancy_id: int):
             "vacancy": vacancy.get_vacancy_by_id(vacancy_id)
         }
     )
+
+
+def send_message_from_help_page(request):
+    """
+    Отправляет сообщение со страницы help.
+    """
+    if request.method == "POST":
+        if send_help_message.send_message_from_help_page_to_email(
+            topic=request.POST.get("otherTopic") if request.POST.get("topic") == "other" else  request.POST.get("topic"),
+            content=request.POST.get("content"),
+            email=request.POST.get("email"),
+            fullname=request.POST.get("fullname")
+        ):
+            request.session['success'] = "Сообщение успешно отправлено"
+    return redirect("help")

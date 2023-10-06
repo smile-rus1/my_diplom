@@ -13,6 +13,7 @@ urlpatterns = [
     path("company/<int:company_id>", views.show_info_about_company, name="show_info_about_company"),
     path("vacancy_company/<int:vacancy_id>", views.show_vacancy, name="vacancy_company"),
     path("search_vacancy/", views.search_vacancy, name="search_vacancy"),
+    path("help_message/", views.send_message_from_help_page, name="send_message_from_help_page"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),

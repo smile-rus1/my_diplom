@@ -11,19 +11,24 @@
 {% endblock %}
 
 {% block content %}
-<h2 class="header">Заголовок уровня 3</h2>
-    <p class="text-par">Первый параграф с текстом.</p>
-    <p class="text-par">Второй параграф с текстом.</p>
-
-<form action="" method="post">
+<h2 class="header">Пишите на по поводу различных вопросов</h2>
+    <p class="text-par">Если вы хотите подсказать нам, как улучшить наш сайт, высказать ваши замечания или задать вопрос службе поддержки, пожалуйста, выберите подходящую тему и категорию вашего вопроса из предложенных вариантов:</p>
+<form action="{% url 'send_message_from_help_page' %}" method="post">
     {% csrf_token %}
+
+    {% if success %}
+    <div style="color: #09d910; font-size: 24px; margin-bottom: 16px;">
+        <p>{{ success }}</p>
+    </div>
+    {% endif %}
+
     <div class="main-container">
         <label for="topic" class="label-container">Тема:</label>
-        <select id="topic" onchange="checkOtherOption()">
-            <option value="тема1">Тема 1</option>
-            <option value="тема2">Тема 2</option>
-            <option value="тема3">Тема 3</option>
-            <option value="другое">Другое</option>
+        <select id="topic" onchange="checkOtherOption()" name="topic">
+            <option value="bag_system">Найден баг в системе</option>
+            <option value="add_new_functional">Улучшение сайта, добавление нового функционала</option>
+            <option value="complaints">Жалобы на компании, кандидатов</option>
+            <option value="other">Другое</option>
         </select>
 
         <div id="otherTopicContainer" style="display: none;">
@@ -38,12 +43,12 @@
     </div>
     <div class="main-container">
         <label for="name" class="label-container">Имя:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="fullname" required value="{{request.user.applicant.second_name}} {{request.user.applicant.first_name}}">
     </div>
 
     <div class="main-container">
         <label for="email" class="label-container">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" value="{{request.user.email}}" required>
     </div>
 
     <button type="submit" class="btn-sub">Отправить</button>
@@ -58,7 +63,7 @@
         const otherTopicContainer = document.getElementById("otherTopicContainer");
         const otherTopicInput = document.getElementById("otherTopic");
 
-        if (select.value === "другое") {
+        if (select.value === "other") {
             otherTopicContainer.style.display = "block";
             otherTopicInput.setAttribute("required", "required");
         } else {
