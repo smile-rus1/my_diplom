@@ -714,3 +714,17 @@ def clear_session_success_message(request):
     return JsonResponse(
         {'message': 'Сообщение удалено из сессии'}
     )
+
+
+def forgot_password(request):
+    """
+    Восстановление пароля пользователя.
+    """
+
+    return render(
+        request,
+        "page_forgot_password.html",
+        {
+            "template": get_templates.get_base_template(request)
+        }
+    )
