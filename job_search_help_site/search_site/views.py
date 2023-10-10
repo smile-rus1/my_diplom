@@ -35,7 +35,7 @@ def help_for_people(request):
         "help.html",
         {
             "template": get_templates.get_base_template(request),
-            "success": request.session.get('success', '') if request.session.get('success', '') else None
+            "success": request.session.get('message', '') if request.session.get('message', '') else None
         }
     )
 

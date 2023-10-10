@@ -58,7 +58,7 @@
 
     // Ждем 20 секунд, затем удаляем сообщение из сессии
     setTimeout(function() {
-        fetch('/clear_session_success_message/', {
+        fetch('{% url 'clear_session_success_message' %}', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrftoken  // Устанавливаем CSRF-токен в заголовке
@@ -69,9 +69,9 @@
             // Обработка успешного удаления сообщения, если это необходимо
         })
         .catch(error => {
-            // Обработка ошибки, если это необходимо
+            window.location.href = "{% url 'index' %}"
         });
-    }, 20000); // 20 секунд в миллисекундах
+    }, 5000);
 </script>
 {% endblock %}
 
