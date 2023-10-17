@@ -50,6 +50,34 @@
     .btn-msg:first-child {
         margin-right: 30px; /* Отступ справа от первой кнопки */
     }
+
+      select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  width: 240px;
+}
+
+select:hover {
+  border-color: #aaa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 </style>
 {% endblock %}
 
@@ -60,6 +88,112 @@
         <button class="search-button">Поиск</button>
      </form>
 </div>
+
+<div class="vacancy-container">
+    <div class="search-sidebar">
+        <h3>Опыт работы</h3>
+        <select class="experience" id="experience">
+           <option></option>
+           <option value="no_experience" {% if selector.experience == "no_experience" %}selected{%endif%}>Нет опыта</option>
+           <option value="between_one_and_three"{% if selector.experience == "between_one_and_three" %}selected{%endif%} %}>От 1 до 3 лет</option>
+           <option value="between_three_and_five" {% if selector.experience == "between_three_and_five" %}selected{%endif%}>От 3 до 5 лет</option>
+           <option value="more_then_five" {% if selector.experience == "more_then_five" %}selected{%endif%}>Более 5 лет</option>
+       </select>
+        <script>
+        document.getElementById('experience').addEventListener('change', function() {
+        var selectedValue = this.value;
+
+        var currentURL = window.location.href;
+        var url = new URL(currentURL);
+
+        if (selectedValue === "") {
+            url.searchParams.delete('experience');
+        } else {
+            url.searchParams.set('experience', selectedValue);
+        }
+        window.location.href = url.toString();
+    });
+        </script>
+    </div>
+   <div class="search-sidebar">
+       <h3>Тип занятости</h3>
+       <select class="time_employment" id="time_employment">
+           <option></option>
+           <option value="part_time" {% if selector.time_employment == "part_time" %}selected{%endif%}>Подработка</option>
+           <option value="part_employment" {% if selector.time_employment == "part_employment" %}selected{%endif%}>Частичная занятость</option>
+           <option value="full_time" {% if selector.time_employment == "full_time" %}selected{%endif%}>Полный рабочий день</option>
+           <option value="internship" {% if selector.time_employment == "internship" %}selected{%endif%}>Стажировка</option>
+           <option value="distant_work" {% if selector.time_employment == "distant_work" %}selected{%endif%}>Удаленная работа</option>
+           <option value="shift_work" {% if selector.time_employment == "shift_work" %}selected{%endif%}>Вахтовый метод работы</option>
+           <option value="season_work" {% if selector.time_employment == "season_work" %}selected{%endif%}>Сезонная работа</option>
+           <option value="contract_work" {% if selector.time_employment == "contract_work" %}selected{%endif%}>Контрактная работа</option>
+       </select>
+        <script>
+         document.getElementById('time_employment').addEventListener('change', function() {
+            var selectedValue = this.value;
+
+            var currentURL = window.location.href;
+            var url = new URL(currentURL);
+
+            if (selectedValue === "") {
+                url.searchParams.delete('time_employment');
+            } else {
+                url.searchParams.set('time_employment', selectedValue);
+            }
+            window.location.href = url.toString();
+        });
+        </script>
+   </div>
+    <div class="search-sidebar">
+       <h3>Специализация</h3>
+       <select class="specialization" id="specialization">
+           <option></option>
+           <option value="production_manufacturing" {% if selector.specialization == "production_manufacturing" %}selected{%endif%}>Производство и изготовление</option>
+           <option value="finance_investments" {% if selector.specialization == "finance_investments" %}selected{%endif%}>Финансы и инвестиции</option>
+           <option value="medicine_healthcare" {% if selector.specialization == "medicine_healthcare" %}selected{%endif%}>Медицина и здравоохранение</option>
+           <option value="education" {% if selector.specialization == "education" %}selected{%endif%}>Образование</option>
+           <option value="transport_logistic" {% if selector.specialization == "transport_logistic" %}selected{%endif%}>Транспорт и логистика</option>
+           <option value="information_technology" {% if selector.specialization == "information_technology" %}selected{%endif%}>Информационные технологии</option>
+           <option value="marketing_advertising" {% if selector.specialization == "marketing_advertising" %}selected{%endif%}>Маркетинг и реклама</option>
+           <option value="retail" {% if selector.specialization == "retail" %}selected{%endif%}>Розничная торговля</option>
+       </select>
+        <script>
+          document.getElementById('specialization').addEventListener('change', function() {
+            var selectedValue = this.value;
+
+            var currentURL = window.location.href;
+            var url = new URL(currentURL);
+
+            if (selectedValue === "") {
+                url.searchParams.delete('specialization');
+            } else {
+                url.searchParams.set('specialization', selectedValue);
+            }
+            window.location.href = url.toString();
+        });
+        </script>
+   </div>
+    <div class="search-sidebar">
+        <h3>Дата публикации</h3>
+        <select class="date_publication" id="date_publication">
+            <option value="ALL_TIME" {% if selector.date_publication == "ALL_TIME" %}selected{%endif%}>За все время</option>
+            <option value="LAST_MONTH" {% if selector.date_publication == "LAST_MONTH" %}selected{%endif%}>За последний месяц</option>
+            <option value="LAST_WEEK" {% if selector.date_publication == "LAST_WEEK" %}selected{%endif%}>За последниюю неделю</option>
+            <option value="LAST_THREE_DAYS" {% if selector.date_publication == "LAST_THREE_DAYS" %}selected{%endif%}>За последние три дня</option>
+            <option value="LAST_DAY" {% if selector.date_publication == "LAST_DAY" %}selected{%endif%}>За сутки</option>
+        </select>
+        <script>
+          document.getElementById('date_publication').addEventListener('change', function() {
+                var selectedValue = this.value;
+                var currentURL = window.location.href;
+                var url = new URL(currentURL);
+                url.searchParams.set('date_publication', selectedValue);
+                window.location.href = url.toString();
+            });
+        </script>
+    </div>
+</div>
+
 {% if not page %}
 <div class="not-found">
     <h2>По запросу "{{ request.GET.vacancy }}" ничего не было найдено!</h2>
@@ -88,6 +222,7 @@
             <a href="{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'vacancy_company' item.id %}{%endif%}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
             <h2>{{ item.company.title_company }}</h2>
             <p>{% if item.experience %}{{ item.experience }}{% else %}Можно без опыта{% endif %}</p>
+            <p>Специализация: {{ item.specialization }}</p>
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
             <p>{{ item.type_of_employment }}</p>
             <p>{% if item.description|length > 100 %} {{ item.description|slice:":100" }}...{% else %}{{item.description}}{% endif %}</p>

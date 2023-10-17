@@ -7,7 +7,7 @@ from .services import auth, home_page, resume, vacancy, response_for_applicant, 
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
-from . import pagination_for_pages, get_templates
+from . import pagination_for_pages, get_templates, enums
 from .messages import send_help_message
 
 
@@ -191,14 +191,23 @@ def search_vacancy(request):
     """
     Ищет вакансии по введенному значению от кандидата.
     """
-    vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
+    if [param for param in enums.RequestSearchVacancyParameters if request.GET.get(param.value)]:
+        vacancies = algorithm_for_search_vacancy.get_vacancies_by_parameters(request)
+    else:
+        vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
     paginator = pagination_for_pages.create_pagination_for_search(vacancies)
     return render(
         request,
         "list_vacancy_for_applicant.html",
         {
             "template": get_templates.get_base_template(request),
-            "page": paginator.get_page(request.GET.get("page"))
+            "page": paginator.get_page(request.GET.get("page")),
+            "selector": {  # в будующем мб вынести в dict-compr т.к. это бизнес-логика c помощью Enums
+                "time_employment": request.GET.get("time_employment", ""),
+                "specialization": request.GET.get("specialization", ""),
+                "experience": request.GET.get("experience", ""),
+                "date_publication": request.GET.get("date_publication", "")
+                         }
         }
     )
 
