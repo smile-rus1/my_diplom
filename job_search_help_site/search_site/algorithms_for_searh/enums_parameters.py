@@ -53,3 +53,36 @@ class PublicationTimeType(Enum):
     LAST_THREE_DAYS = "LAST_THREE_DAYS"
     LAST_DAY = "LAST_DAY"
 
+
+class ProfessionType(Enum):
+    """
+    Перечисление для выбора профессий.
+    """
+
+    NO_PROFESSION = "Нет профессии"
+    DEVELOPER = "Разработчик"
+    DESIGNER = "Дизайнер"
+    MANAGER = "Менеджер"
+    SECURITY = "Охранник"
+    COURIER = "Курьер"
+    DRIVER = "Водитель"
+    ADMINISTRATOR = "Администратор"
+    SECRETARY = "Секретарь"
+    COOK = "Повар"
+    SWAMPER = "Разнорабочий"
+    ASSISTANT = "Помощник"
+
+
+class EducationType(Enum):
+    """
+    Перечисление для выбора образования.
+    """
+    NO_EDUCATION = "Нет образования"
+    AVERAGE = "Среднее"
+    SPECIALIZED_SECONDARY = "Среднее специальное"
+    INCOMPLETE_HIGHER = "Неоконченное высшее"
+    HIGHER = "Высшее"
+    BACHELOR = "Бакалавр"
+    MASTER = "Магистр"
+    PHD = "Кандидат наук"
+    DOCTOR_SCIENCE = "Доктор наук"
