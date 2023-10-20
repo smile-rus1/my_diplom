@@ -140,9 +140,9 @@ def change_raising_vacancy(vacancy_id: int) -> None:
     current_time = timezone.now()
     cutoff_time = current_time - update_interval
 
-    if vacancy.publication_time.tzinfo is None:
-        vacancy.publication_time = timezone.make_aware(vacancy.publication_time)
+    if vacancy.updated_at.tzinfo is None:
+        vacancy.updated_ate = timezone.make_aware(vacancy.updated_at)
 
-    if vacancy.publication_time <= cutoff_time:
-        vacancy.publication_time = current_time
+    if vacancy.updated_at <= cutoff_time:
+        vacancy.updated_at = current_time
         vacancy.save()

@@ -93,7 +93,7 @@ select:focus {
     <div class="search-sidebar">
         <h3>Опыт работы</h3>
         <select class="experience" id="experience">
-           <option></option>
+           <option>Не имеет значения</option>
            <option value="no_experience" {% if selector.experience == "no_experience" %}selected{%endif%}>Нет опыта</option>
            <option value="between_one_and_three"{% if selector.experience == "between_one_and_three" %}selected{%endif%} %}>От 1 до 3 лет</option>
            <option value="between_three_and_five" {% if selector.experience == "between_three_and_five" %}selected{%endif%}>От 3 до 5 лет</option>
@@ -106,7 +106,7 @@ select:focus {
         var currentURL = window.location.href;
         var url = new URL(currentURL);
 
-        if (selectedValue === "") {
+        if (selectedValue === "Не имеет значения") {
             url.searchParams.delete('experience');
         } else {
             url.searchParams.set('experience', selectedValue);
@@ -118,7 +118,7 @@ select:focus {
    <div class="search-sidebar">
        <h3>Тип занятости</h3>
        <select class="time_employment" id="time_employment">
-           <option></option>
+           <option>Не имеет значения</option>
            <option value="part_time" {% if selector.time_employment == "part_time" %}selected{%endif%}>Подработка</option>
            <option value="part_employment" {% if selector.time_employment == "part_employment" %}selected{%endif%}>Частичная занятость</option>
            <option value="full_time" {% if selector.time_employment == "full_time" %}selected{%endif%}>Полный рабочий день</option>
@@ -135,7 +135,7 @@ select:focus {
             var currentURL = window.location.href;
             var url = new URL(currentURL);
 
-            if (selectedValue === "") {
+            if (selectedValue === "Не имеет значения") {
                 url.searchParams.delete('time_employment');
             } else {
                 url.searchParams.set('time_employment', selectedValue);
@@ -147,7 +147,7 @@ select:focus {
     <div class="search-sidebar">
        <h3>Специализация</h3>
        <select class="specialization" id="specialization">
-           <option></option>
+           <option>Не имеет значения</option>
            <option value="production_manufacturing" {% if selector.specialization == "production_manufacturing" %}selected{%endif%}>Производство и изготовление</option>
            <option value="finance_investments" {% if selector.specialization == "finance_investments" %}selected{%endif%}>Финансы и инвестиции</option>
            <option value="medicine_healthcare" {% if selector.specialization == "medicine_healthcare" %}selected{%endif%}>Медицина и здравоохранение</option>
@@ -164,7 +164,7 @@ select:focus {
             var currentURL = window.location.href;
             var url = new URL(currentURL);
 
-            if (selectedValue === "") {
+            if (selectedValue === "Не имеет значения") {
                 url.searchParams.delete('specialization');
             } else {
                 url.searchParams.set('specialization', selectedValue);
@@ -196,7 +196,7 @@ select:focus {
 
 {% if not page %}
 <div class="not-found">
-    <h2>По запросу "{{ request.GET.vacancy }}" ничего не было найдено!</h2>
+    <h2>По запросу "{{ request.GET.vacancy }}" с фильтрами {{ request.GET.time_employment }} {{ request.GET.experience }} {{ request.GET.date_publication }} {{ request.GET.specialization }} ничего не было найдено!</h2>
     <div class="container-text">
         <p>По вашему запросу ещё будут появляться новые вакансии. Присылать вам?</p>
         <button class="btn-msg">На почту</button>

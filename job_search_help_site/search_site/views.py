@@ -583,7 +583,10 @@ def search_resume(request):
     """
     Ищет резюме по введенному значению
     """
-    resumes = algorithm_for_search_resume.get_all_resume_by_criterion(request.GET.get("resume"))
+    if [param for param in enums.RequestSearchResumeParameters if request.GET.get(param.value)]:
+        resumes = algorithm_for_search_resume.get_resumes_by_parameters(request)
+    else:
+        resumes = algorithm_for_search_resume.get_all_resume_by_criterion(request.GET.get("resume"))
     paginator = pagination_for_pages.create_pagination_for_search(resumes)
     return render(
         request,
@@ -591,9 +594,38 @@ def search_resume(request):
         {
             "template": get_templates.get_base_template(request),
             "page": paginator.get_page(request.GET.get("page")),
+            "selector": {  # в будующем мб вынести в dict-compr т.к. это бизнес-логика c помощью Enums
+                "experience": request.GET.get("experience", ""),
+                "profession": request.GET.get("profession", ""),
+                "education": request.GET.get("education", ""),
+                        }
         }
     )
 
+
+# def search_vacancy(request):
+#     """
+#     Ищет вакансии по введенному значению от кандидата.
+#     """
+#     if [param for param in enums.RequestSearchVacancyParameters if request.GET.get(param.value)]:
+#         vacancies = algorithm_for_search_vacancy.get_vacancies_by_parameters(request)
+#     else:
+#         vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
+#     paginator = pagination_for_pages.create_pagination_for_search(vacancies)
+#     return render(
+#         request,
+#         "list_vacancy_for_applicant.html",
+#         {
+#             "template": get_templates.get_base_template(request),
+#             "page": paginator.get_page(request.GET.get("page")),
+#             "selector": {  # в будующем мб вынести в dict-compr т.к. это бизнес-логика c помощью Enums
+#                 "time_employment": request.GET.get("time_employment", ""),
+#                 "specialization": request.GET.get("specialization", ""),
+#                 "experience": request.GET.get("experience", ""),
+#                 "date_publication": request.GET.get("date_publication", "")
+#                          }
+#         }
+#     )
 
 def raising_resume(request, resume_id: int):
     """

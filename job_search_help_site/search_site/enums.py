@@ -10,3 +10,14 @@ class RequestSearchVacancyParameters(Enum):
     SPECIALIZATION = "specialization"
     TIME_EMPLOYMENT = "time_employment"
     DATE_PUBLICATION = "date_publication"
+
+
+class RequestSearchResumeParameters(Enum):
+    """
+    Перечисление для параметров поиска резюме для компаний.
+    """
+
+    EXPERIENCE = "experience"
+    PROFESSION = "profession"
+    EDUCATION = "education"
+

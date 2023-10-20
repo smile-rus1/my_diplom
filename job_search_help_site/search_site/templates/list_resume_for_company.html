@@ -57,6 +57,34 @@
       margin-top: 5px;
       color: #2cc406;
     }
+
+    select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+select {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  width: 240px;
+}
+
+select:hover {
+  border-color: #aaa;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 </style>
 {% endblock %}
 
@@ -69,9 +97,101 @@
      </form>
 </div>
 
+<div class="vacancy-container">
+    <div class="search-sidebar">
+            <h3>Опыт работы кандидата</h3>
+            <select class="experience" id="experience">
+               <option>Не имеет значения</option>
+               <option value="no_experience" {% if selector.experience == "no_experience" %}selected{%endif%}>Нет опыта</option>
+               <option value="between_one_and_three"{% if selector.experience == "between_one_and_three" %}selected{%endif%} %}>От 1 до 3 лет</option>
+               <option value="between_three_and_five" {% if selector.experience == "between_three_and_five" %}selected{%endif%}>От 3 до 5 лет</option>
+               <option value="more_then_five" {% if selector.experience == "more_then_five" %}selected{%endif%}>Более 5 лет</option>
+            </select>
+            <script>
+            document.getElementById('experience').addEventListener('change', function() {
+                var selectedValue = this.value;
+
+                var currentURL = window.location.href;
+                var url = new URL(currentURL);
+
+                if (selectedValue === "Не имеет значения") {
+                    url.searchParams.delete('experience');
+                } else {
+                    url.searchParams.set('experience', selectedValue);
+                }
+                window.location.href = url.toString();
+            });
+            </script>
+    </div>
+    <div class="search-sidebar">
+        <h3>Проффесия</h3>
+        <select class="profession" id="profession">
+            <option>Не имеет значения</option>
+            <option value="NO_PROFESSION" {% if selector.profession == "NO_PROFESSION" %}selected{%endif%}>Нет профессии</option>
+            <option value="DEVELOPER" {% if selector.profession == "DEVELOPER" %}selected{%endif%}>Разработчик</option>
+            <option value="DESIGNER" {% if selector.profession == "DESIGNER" %}selected{%endif%}>Дизайнер</option>
+            <option value="MANAGER" {% if selector.profession == "MANAGER" %}selected{%endif%}>Менеджер</option>
+            <option value="SECURITY" {% if selector.profession == "SECURITY" %}selected{%endif%}>Охранник</option>
+            <option value="COURIER" {% if selector.profession == "COURIER" %}selected{%endif%}>Курьер</option>
+            <option value="DRIVER" {% if selector.profession == "DRIVER" %}selected{%endif%}>Водитель</option>
+            <option value="ADMINISTRATOR" {% if selector.profession == "ADMINISTRATOR" %}selected{%endif%}>Администратор</option>
+            <option value="SECRETARY" {% if selector.profession == "SECRETARY" %}selected{%endif%}>Секретарь</option>
+            <option value="COOK" {% if selector.profession == "COOK" %}selected{%endif%}>Повар</option>
+            <option value="SWAMPER" {% if selector.profession == "SWAMPER" %}selected{%endif%}>Разнорабочий</option>
+            <option value="ASSISTANT" {% if selector.profession == "ASSISTANT" %}selected{%endif%}>Помощник</option>
+        </select>
+        <script>
+            document.getElementById('profession').addEventListener('change', function() {
+                var selectedValue = this.value;
+
+                var currentURL = window.location.href;
+                var url = new URL(currentURL);
+
+                if (selectedValue === "Не имеет значения") {
+                    url.searchParams.delete('profession');
+                } else {
+                    url.searchParams.set('profession', selectedValue);
+                }
+                window.location.href = url.toString();
+            });
+            </script>
+    </div>
+    <div class="search-sidebar">
+        <h3>Образование</h3>
+        <select class="education" id="education">
+            <option>Не имеет значения</option>
+            <option value="NO_EDUCATION" {% if selector.education == "NO_EDUCATION" %}selected{%endif%}>Нет образования</option>
+            <option value="AVERAGE" {% if selector.education == "AVERAGE" %}selected{%endif%}>Среднее</option>
+            <option value="SPECIALIZED_SECONDARY" {% if selector.education == "SPECIALIZED_SECONDARY" %}selected{%endif%}>Среднее специальное</option>
+            <option value="INCOMPLETE_HIGHER" {% if selector.education == "INCOMPLETE_HIGHER" %}selected{%endif%}>Неоконченное высшее</option>
+            <option value="HIGHER" {% if selector.education == "HIGHER" %}selected{%endif%}>Высшее</option>
+            <option value="BACHELOR" {% if selector.education == "BACHELOR" %}selected{%endif%}>Бакалавр</option>
+            <option value="MASTER" {% if selector.education == "MASTER" %}selected{%endif%}>Магистр</option>
+            <option value="PHD" {% if selector.education == "PHD" %}selected{%endif%}>Кандидат наук</option>
+            <option value="DOCTOR_SCIENCE" {% if selector.education == "DOCTOR_SCIENCE" %}selected{%endif%}>Доктор наук</option>
+        </select>
+        <script>
+            document.getElementById('education').addEventListener('change', function() {
+                var selectedValue = this.value;
+
+                var currentURL = window.location.href;
+                var url = new URL(currentURL);
+
+                if (selectedValue === "Не имеет значения") {
+                    url.searchParams.delete('education');
+                } else {
+                    url.searchParams.set('education', selectedValue);
+                }
+                window.location.href = url.toString();
+            });
+            </script>
+    </div>
+</div>
+
+
 {% if not page %}
 <div class="not-found">
-    <h2>По запросу "{{ request.GET.vacancy }}" ничего не было найдено!</h2>
+    <h2>По запросу "{{ request.GET.resume }}" с фильтрами "{{ request.GET.experience }} {{ request.GET.profession }} {{ request.GET.education }}" ничего не было найдено!</h2>
     <div class="container-text">
         <p>По вашему запросу ещё будут появляться новые вакансии. Присылать вам?</p>
         <button class="btn-msg">На почту</button>
