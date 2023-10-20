@@ -109,7 +109,7 @@ def login_employer(request):
         ):
             return render(request, "login_employer.html", {'error_message': "Неправильный email или пароль!"})
         else:
-            return redirect("main_employer")
+            return redirect("main_applicant")
 
     return render(request, "login_employer.html")
 
@@ -437,7 +437,7 @@ def create_vacancy(request):
 def update_vacancy(request, vacancy_id: int):
     """
     Обновляет vacancy компании по vacancy_id.
-    Позже сделать так, чтобы в заместо 404 ошибка, переводило на главную страницу.
+    Позже сделать так, чтобы взаместо 404 ошибка, переводило на главную страницу.
     """
     if vacancy.get_vacancy_for_company(request.user, vacancy_id) is None:
         return redirect("vacancy_company")
@@ -466,8 +466,13 @@ def update_vacancy(request, vacancy_id: int):
         else:
             return redirect("vacancy_company")
 
-    return render(request, "create_vacancy.html",
-                  {"vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id)})
+    return render(
+        request,
+        "create_vacancy.html",
+        {
+            "vacancy": vacancy.get_vacancy_for_company(request.user, vacancy_id)
+        }
+                )
 
 
 def change_published_vacancy(request, vacancy_id: int):
@@ -603,30 +608,6 @@ def search_resume(request):
     )
 
 
-# def search_vacancy(request):
-#     """
-#     Ищет вакансии по введенному значению от кандидата.
-#     """
-#     if [param for param in enums.RequestSearchVacancyParameters if request.GET.get(param.value)]:
-#         vacancies = algorithm_for_search_vacancy.get_vacancies_by_parameters(request)
-#     else:
-#         vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
-#     paginator = pagination_for_pages.create_pagination_for_search(vacancies)
-#     return render(
-#         request,
-#         "list_vacancy_for_applicant.html",
-#         {
-#             "template": get_templates.get_base_template(request),
-#             "page": paginator.get_page(request.GET.get("page")),
-#             "selector": {  # в будующем мб вынести в dict-compr т.к. это бизнес-логика c помощью Enums
-#                 "time_employment": request.GET.get("time_employment", ""),
-#                 "specialization": request.GET.get("specialization", ""),
-#                 "experience": request.GET.get("experience", ""),
-#                 "date_publication": request.GET.get("date_publication", "")
-#                          }
-#         }
-#     )
-
 def raising_resume(request, resume_id: int):
     """
     Поднимает резюме в поиске.
@@ -688,7 +669,7 @@ def catalog_of_company(request):
     """
     Выводит каталог всех компаний.
     """
-    paginator = pagination_for_pages.create_pagination_for_search(company.get_all_company())
+    paginator = pagination_for_pages.pagination_for_catalog_company(company.get_all_company())
 
     return render(
         request,
