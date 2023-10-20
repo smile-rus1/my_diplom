@@ -83,7 +83,7 @@ class Resume(models.Model):
     gender = models.CharField(max_length=10, verbose_name="Пол", null=False)
     # location = models.CharField(max_length=100, verbose_name="Местоположение, null=True)
     education = models.CharField(max_length=30, null=True)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления резюме")
     about_applicant = models.CharField(blank=True, null=True, max_length=500)
     profession = models.TextField(verbose_name="Профессия", null=False)
     key_skills = models.TextField(verbose_name="Ключевые навыки", null=False)
@@ -130,7 +130,7 @@ class Vacancy(models.Model):
     specialization = models.CharField(max_length=30, verbose_name="Специализация", null=True)
     key_skills = models.CharField(max_length=100, verbose_name="Ключевые навыки", null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
-    publication_time = models.DateTimeField(default=timezone.now, verbose_name="Обновление вакансии")
+    updated_at = models.DateTimeField(default=timezone.now, verbose_name="Время обновления вакансии")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
     # is_confirmed = models.BooleanField(default=True, verbose_name="Проверено")  #мб еще поле сделать чтобы админ мог проверять и потверждать
 
@@ -138,7 +138,7 @@ class Vacancy(models.Model):
 
     class Meta:
         verbose_name_plural = "Вакансии"
-        ordering = ["-is_published", "-publication_time", "-created_at"]
+        ordering = ["-is_published", "-updated_at", "-created_at"]
 
 
 class Application(models.Model):

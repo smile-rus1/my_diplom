@@ -45,11 +45,8 @@
           <option {% if resume.profession == "Администратор"%}selected{%endif%}>Администратор</option>
           <option {% if resume.profession == "Секретарь"%}selected{%endif%}>Секретарь</option>
           <option {% if resume.profession == "Повар"%}selected{%endif%}>Повар</option>
-          <option {% if resume.profession == "Электрик"%}selected{%endif%}>Электрик</option>
           <option {% if resume.profession == "Разнорабочий"%}selected{%endif%}>Разнорабочий</option>
-          <option {% if resume.profession == "Кладовщий"%}selected{%endif%}>Кладовщик</option>
           <option {% if resume.profession == "Помощник"%}selected{%endif%}>Помощник</option>
-          <option {% if resume.profession == "Уборщик"%}selected{%endif%}>Уборщик</option>
         </select>
       </div>
 
@@ -80,7 +77,7 @@
         <label for="workplace">Место работы</label>
         <input type="text" id="workplace" name="workplace" value="{{resume.place_of_work}}">
         <span class="tooltip">
-          <span class="tooltip-text">Если в данный момент работаете то напишите где, иначе не пишите</span>
+          <span class="tooltip-text">Напишите, если где-то работали</span>
           <sup>?</sup>
         </span>
       </div>

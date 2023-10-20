@@ -35,7 +35,7 @@
       {% for vacancy in vacancies %}
       <div class="resume-container">
         <h2 class="resume-title">{{ vacancy.title_vacancy }}</h2>
-        <p>Вакансия была поднята в поиске: {{ vacancy.publication_time|time:"H:i" }}</p>
+        <p>Вакансия была поднята в поиске: {{ vacancy.updated_at|time:"H:i" }}</p>
         <div>
           <p>Создано: <span>{{vacancy.created_at}}</span></p>
           <h4>Навыки:</h4>
@@ -89,7 +89,7 @@
             var updateButtons = document.querySelectorAll('.button-raising');
             updateButtons.forEach(function(button) {
               var resumeId = button.getAttribute('data-resume-id');
-              var lastUpdate = new Date('{{ vacancy.publication_time|date:"c" }}');
+              var lastUpdate = new Date('{{ vacancy.updated_at|date:"c" }}');
               var currentTime = new Date();
               var updateInterval = 4 * 60 * 60 * 1000; // 4 часа в миллисекундах
               if (currentTime - lastUpdate >= updateInterval) {
