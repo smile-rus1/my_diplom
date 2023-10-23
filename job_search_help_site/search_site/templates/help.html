@@ -56,7 +56,6 @@
 <script>
     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // Ждем 20 секунд, затем удаляем сообщение из сессии
     setTimeout(function() {
         fetch('{% url 'clear_session_success_message' %}', {
             method: 'POST',

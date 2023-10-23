@@ -670,6 +670,10 @@ def catalog_of_company(request):
     Выводит каталог всех компаний.
     """
     paginator = pagination_for_pages.pagination_for_catalog_company(company.get_all_company())
+    if request.GET.get("letters"):
+        paginator = pagination_for_pages.pagination_for_catalog_company(
+            company.get_company_by_letter(request.GET.get("letters"))
+        )
 
     return render(
         request,

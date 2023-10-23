@@ -16,13 +16,193 @@
     color: #777;
     margin: 0 0 10px;
 }
+
+.company-filter {
+    margin-left: 20px;
+    margin-top: 20px;
+    display: block;
+    flex-wrap: nowrap;
+}
+
+.lst-company {
+    list-style: none;
+    display: flex;
+}
+
+.list-item {
+    margin-right: 10px;
+}
+
+.link-item {
+    text-decoration: none;
+}
+
+.not-found {
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        text-align: center;
+        margin-bottom: 200px;
+    }
+
+.btn-msg {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 70px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div>
-    <p>ТУТ БУДЕТ СОРТИРОВКА ИЛИ ФИЛЬТРАЦИЯ!</p>
+<div class="company-filter">
+    <ul class="lst-company" id="lst-company-rus">
+    </ul>
+
+    <ul class="lst-company" id="lst-company-en">
+    </ul>
+
+    <ul class="lst-company" id="lst-company-num">
+        <li class="list-item">
+            <a href="#" class="link-item" id="btn-num">0-9</a>
+        </li>
+        <li class="list-item">
+            <div class="all">
+            <span>
+                <a id="btn-clear" style="text-decoration: none; margin-left: 60px; cursor: pointer;">ВСЕ</a>
+            </span>
+        </div>
+        </li>
+    </ul>
 </div>
+
+<script>
+        var letters = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я'];
+        var ul = document.getElementById("lst-company-rus");
+
+        function updateURL(selectedLetter) {
+            var currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('letters', selectedLetter);
+            window.location.href = currentURL.href;
+        }
+
+        var letterLinks = document.querySelectorAll('.link-item');
+
+        for (var i = 0; i < letters.length; i++) {
+            var li = document.createElement('li');
+            li.className = 'list-item';
+
+            var a = document.createElement('a');
+            a.href = '#';
+            a.className = 'link-item';
+            a.textContent = letters[i];
+
+            a.addEventListener('click', function (event) {
+                event.preventDefault();
+                var selectedLetter = this.textContent;
+                updateURL(selectedLetter);
+            });
+
+            li.appendChild(a);
+            ul.appendChild(li);
+        }
+</script>
+<script>
+        var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        var ul = document.getElementById("lst-company-en");
+
+        function updateURL(selectedLetter) {
+            var currentURL = new URL(window.location.href);
+            currentURL.searchParams.set('letters', selectedLetter);
+            window.location.href = currentURL.href;
+        }
+
+        var letterLinks = document.querySelectorAll('.link-item');
+
+        for (var i = 0; i < letters.length; i++) {
+            var li = document.createElement('li');
+            li.className = 'list-item';
+
+            var a = document.createElement('a');
+            a.href = '#';
+            a.className = 'link-item';
+            a.textContent = letters[i];
+
+            a.addEventListener('click', function (event) {
+                event.preventDefault();
+                var selectedLetter = this.textContent;
+                updateURL(selectedLetter);
+            });
+
+            li.appendChild(a);
+            ul.appendChild(li);
+        }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var btnClear = document.getElementById("btn-clear");
+
+    btnClear.addEventListener("click", function() {
+    var currentUrl = window.location.href;
+
+    var startIndex = currentUrl.indexOf("letters=");
+
+    if (startIndex !== -1) {
+      var endIndex = currentUrl.indexOf("&", startIndex);
+      if (endIndex === -1) {
+        endIndex = currentUrl.length;
+      }
+      currentUrl = currentUrl.slice(0, startIndex) + currentUrl.slice(endIndex);
+      window.location.href = currentUrl;
+    }
+  });
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var link = document.getElementById("btn-num");
+
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
+        var currentURL = window.location.href;
+        var url = new URL(currentURL);
+        url.searchParams.set('letters', "NUMBER");
+
+        window.location.href = url.toString();
+  });
+});
+
+</script>
+
+{% if not page %}
+<div class="not-found">
+    <h2>К сожалению, компаний {% if not request.GET.letters == "NUMBER"  %} на букву "{{request.GET.letters}}"{% endif %} еще пока что нет</h2>
+    <button class="btn-msg" id="btn-all">Показать все доступные компании</button>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var btnAll = document.getElementById("btn-all");
+
+    btnAll.addEventListener("click", function() {
+    var currentUrl = window.location.href;
+
+    var startIndex = currentUrl.indexOf("letters=");
+
+    if (startIndex !== -1) {
+      var endIndex = currentUrl.indexOf("&", startIndex);
+      if (endIndex === -1) {
+        endIndex = currentUrl.length;
+      }
+      currentUrl = currentUrl.slice(0, startIndex) + currentUrl.slice(endIndex);
+      window.location.href = currentUrl;
+    }
+  });
+});
+</script>
+{% endif %}
+
 <div class="main-content">
     {% for item in page %}
     <div class="vacancy-container">
