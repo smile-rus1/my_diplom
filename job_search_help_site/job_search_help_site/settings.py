@@ -92,6 +92,22 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.getenv("REDIS_LOCATION"),
+        # 'OPTIONS': {
+        #             'CLIENT_CLASS': os.getenv("REDIS_CLIENT_CLASS"),
+        #         }
+    }
+}
+
+# для потверждения и регистрации через Redis
+
+SOAQAZ_USER_CONFIRMATION_KEY = "user_confirmation_{token}"
+SOAQAZ_USER_CONFIRMATION_TIMEOUT = 300
+
+
 # для отправки сообщений
 
 EMAIL_HOST = "smtp.yandex.ru"
