@@ -14,9 +14,15 @@
         <h2>Регистрация соискателя</h2>
         {% if messages %}
             {% for message in messages %}
-                <div class="error-message">
-                    {{ message }}
-                </div>
+                {% if message.tags != "success" %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="color: #0cb309; font-size: 24px; margin-bottom: 16px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
             {% endfor %}
         {% endif %}
         <form action="" method="post">

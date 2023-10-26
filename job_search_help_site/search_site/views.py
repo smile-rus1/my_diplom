@@ -1,7 +1,8 @@
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.core.cache import cache
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
@@ -9,6 +10,7 @@ from .services import auth, home_page, resume, vacancy, response_for_applicant, 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
 from . import pagination_for_pages, get_templates, enums
 from .messages import send_help_message
+from job_search_help_site import settings
 
 
 def index(request):
@@ -38,6 +40,31 @@ def help_for_people(request):
             "success": request.session.get('message', '') if request.session.get('message', '') else None
         }
     )
+
+
+def register_confirm(request, token):
+    """
+    Потверждение регистрации от пользователей.
+    """
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    user_info = cache.get(redis_key) or {}
+    user_role = user_info.get("role") or {}
+
+    if user_id := user_info.get("user_id"):
+        if auth.is_confirmation_user(request, user_id):
+            if user_role == "applicant":
+                return redirect(to=reverse_lazy("main_applicant"))
+            elif user_role == "company":
+                return redirect(to=reverse_lazy("main_employer"))
+            else:
+                return redirect(to=reverse_lazy("index"))
+    else:
+        if user_role == "applicant":
+            return redirect(to=reverse_lazy("register_applicant"))
+        elif user_role == "company":
+            return redirect(to=reverse_lazy("register_employer"))
+
+    return redirect("index")
 
 
 def login_applicant(request):
@@ -74,7 +101,7 @@ def register_applicant(request):
         ):
             return redirect("register_applicant")
         else:
-            return redirect("main_applicant")
+            return redirect("register_applicant")
 
     return render(request, "register_applicant.html")
 
@@ -128,7 +155,7 @@ def register_employer(request):
         ):
             return redirect("register_employer")
         else:
-            return redirect("main_employer")
+            return redirect("register_employer")
 
     return render(request, "register_employer.html")
 

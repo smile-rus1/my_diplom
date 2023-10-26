@@ -1,7 +1,15 @@
+import uuid
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.core.mail import send_mail
+from django.core.cache import cache
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 
 from search_site import models
+
+from job_search_help_site import settings
 
 
 def register_user(request, email: str, password1: str, password2: str, type_user: str) -> bool:
@@ -20,6 +28,7 @@ def register_user(request, email: str, password1: str, password2: str, type_user
         return messages.error(request, "Такой email уже зарегистрирован!")
 
     user.set_password(password1)
+    user.is_active = False
     user.save()
 
     if type_user == "applicant":
@@ -28,8 +37,52 @@ def register_user(request, email: str, password1: str, password2: str, type_user
     if type_user == "company":
         _register_company(user)
 
-    login_user(request, {"email": email, "password": password1})
+    confirm_link = create_confirm_link(request, user, type_user)
+    message = (f"Ссылка на потверждение:\n%s" % confirm_link)
+
+    # почему-то не отправляется сообщение, потом решить проблему эту! (email в ЧС отправили:( )
+    send_mail(
+        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
+        message=message,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[user.email, ],
+        fail_silently=False
+    )
+    messages.success(request, "Вам на email отправлено письмо!")
+
     return True
+
+
+def create_confirm_link(request, user: models.CustomUser, role: str):
+    """
+    Создает ссылку для потверждения пользователя.
+    """
+    token = uuid.uuid4().hex
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    cache.set(redis_key, {"user_id": user.id, "role": role}, timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
+
+    confirm_link = request.build_absolute_uri(
+        reverse_lazy(
+            "register_confirm", kwargs={"token": token}
+        )
+    )
+    print(f"confirm_link {confirm_link}")
+    return confirm_link
+
+
+def is_confirmation_user(request, user_id) -> bool:
+    """
+    Потверждение пользоваетеля.
+    """
+    try:
+        user = get_object_or_404(models.CustomUser, id=user_id)
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return True
+
+    except AttributeError:
+        return False
 
 
 def login_user(request, user: dict) -> bool:

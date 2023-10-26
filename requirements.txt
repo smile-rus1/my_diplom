@@ -10,7 +10,10 @@ django==4.2.3
     # via
     #   -r requirements.in
     #   django-debug-toolbar
+    #   django-redis
 django-debug-toolbar==4.1.0
+    # via -r requirements.in
+django-redis==5.4.0
     # via -r requirements.in
 mysqlclient==2.2.0
     # via -r requirements.in
@@ -18,8 +21,8 @@ pillow==10.0.0
     # via -r requirements.in
 python-dotenv==1.0.0
     # via -r requirements.in
-python-multipart==0.0.6
-    # via -r requirements.in
+redis==5.0.1
+    # via django-redis
 sqlparse==0.4.4
     # via
     #   django
