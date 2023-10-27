@@ -147,3 +147,59 @@ def _is_valid_password(password1: str) -> bool:
         return False
 
     return True
+
+
+def check_email_in_db(email: str) -> bool:
+    """
+    Проверка на то, что email существует в БД.
+    """
+    try:
+        user = models.CustomUser.objects.get(email=email)
+        return True
+
+    except models.CustomUser.DoesNotExist:
+        return False
+
+
+def get_link_forgot_password(request, email: str):
+    """
+    Восстановление забытого пароля у пользователя.
+    """
+    if not check_email_in_db(email):
+        messages.error(request, "Такого email не существует!")
+        return
+
+    token = uuid.uuid4().hex
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    cache.set(redis_key, {"email": email}, timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
+
+    recovery_link = request.build_absolute_uri(
+        reverse_lazy(
+            "recovery_password", kwargs={"token": token}
+        )
+    )
+    print(f"recovery_link: {recovery_link}")
+    send_mail(
+        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
+        message=f"Для восстановления пароля перейдите по ссылке {recovery_link}\nЕсли же это не Вы "
+                f"восстанавливаете пароль, то просто проигнорируйте.",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email, ],
+        fail_silently=False
+    )
+    messages.success(request, "Вам на email отправлено письмо!")
+
+
+def change_forgot_password(request, email: str, password1: str, password2: str) -> bool:
+    """
+    Меняет забытый пароль пользователя.
+    """
+    if not _match_password(password1, password2):
+        messages.error(request, "Пароли не совпадают!")
+        return False
+
+    user = models.CustomUser.objects.filter(email=email).first()
+    user.set_password(password1)
+    user.save()
+    return True
+

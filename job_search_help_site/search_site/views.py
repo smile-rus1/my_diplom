@@ -773,10 +773,38 @@ def forgot_password(request):
     """
     Восстановление пароля пользователя.
     """
-
+    if request.method == "POST":
+        auth.get_link_forgot_password(request, request.POST.get("email"))
     return render(
         request,
         "page_forgot_password.html",
+        {
+            "template": get_templates.get_base_template(request)
+        }
+    )
+
+
+def recovery_password(request, token):
+    """
+    Восстановление пароля пользователя.
+    """
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    email_info = cache.get(redis_key)
+    email_user = email_info.get("email") or {}
+    if request.method == "POST":
+        if not auth.change_forgot_password(
+            request=request,
+            email=email_user,
+            password1=request.POST.get("password1"),
+            password2=request.POST.get("password2")
+        ):
+            return HttpResponseRedirect(request.path)
+
+        return redirect("login_applicant")
+
+    return render(
+        request,
+        "page_recovery_password.html",
         {
             "template": get_templates.get_base_template(request)
         }

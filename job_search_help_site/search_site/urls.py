@@ -16,6 +16,7 @@ urlpatterns = [
     path("help_message/", views.send_message_from_help_page, name="send_message_from_help_page"),
     path("clear_session_success_message/", views.clear_session_success_message, name="clear_session_success_message"),
     path("forgot_password/", views.forgot_password, name="forgot_password"),
+    path("recovery_link/<token>/", views.recovery_password, name="recovery_password"),
     path("register_confirm/<token>/", views.register_confirm, name="register_confirm"),
 
     # для applicant
