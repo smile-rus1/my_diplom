@@ -23,7 +23,9 @@ def index(request):
         {
             "popular_company": popular_company.get_lst_company_data(
                 popular_company.get_most_popular_company_on_total_vacancy()[:5]
-            )
+            ),
+            "count_company": popular_company.get_total_company(),
+            "count_vacancy": popular_company.get_total_vacancy(),
         }
     )
 

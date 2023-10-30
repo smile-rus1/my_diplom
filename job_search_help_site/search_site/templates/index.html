@@ -37,11 +37,11 @@
     </div>
     <div class="container-search-people">
         <div class="content-count-vacancy">
-            <span>10000</span>
+            <span>{{count_vacancy}}</span>
             <p>Вакансий</p>
         </div>
         <div class="content-count-company">
-            <span>10000</span>
+            <span>{{count_company}}</span>
             <p>Компаний</p>
         </div>
     </div>
@@ -53,26 +53,57 @@
         </div>
         <div class="row">
             <div class="item">
-                <p>Контент 5</p>
-                <p>Контент 5</p>
-                <p>Контент 5</p>
+                <h3>Информационные технологии</h3>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Разработчик ПО"><p>Разработчик ПО</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Тестировщик ПО"><p>Тестировщик ПО</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Инженер-программист"><p>Инженер-программист</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Системный администратор"><p>Системный администратор</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Системный инженер"><p>Системный инженер</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Гейм дизайнер"><p>Гейм дизайнер</a>
             </div>
             <div class="item">
-                <p>Контент 6</p>
-                <p>Контент 6</p>
-                <p>Контент 6</p>
+                <h3>Финансы, бухгалтерия</h3>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Брокер"><p>Брокер</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Бухгалтер"><p>Бухгалтер</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Казначей"><p>Казначей</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Методолог"><p>Методолог</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Финансовый аналитик"><p>Финансовый аналитик</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Экономист"><p>Экономист</a>
             </div>
             <div class="item">
-                <p>Контент 7</p>
-                <p>Контент 7</p>
-                <p>Контент 7</p>
+                <h3>Рабочий персонал</h3>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Грузчик"><p>Грузчик</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Кладовщик"><p>Кладовщик</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Разнорабочий"><p>Разнорабочий</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Механик"><p>Механик</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Слесарь, сантехник"><p>Слесарь, сантехник</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Машинист"><p>Машинист</a>
             </div>
             <div class="item">
-                <p>Контент 8</p>
-                <p>Контент 8</p>
-                <p>Контент 8</p>
+                <h3>Строительство</h3>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Руководитель проектов"><p>Руководитель проектов</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Архитектор"><p>Архитектор</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Инженер проекта"><p>Инженер проекта</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Прораб"><p>Прораб</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Инженер-конструктор"><p>Инженер-конструктор</a>
+                <a href="#" class="link-vacancy"  style="color: black; text-decoration: none;" data-vacancy="Агент по недвижимости"><p>Агент по недвижимости</a>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const vacancyLinks = document.querySelectorAll('.link-vacancy');
+
+                vacancyLinks.forEach(function(link) {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const vacancyName = link.getAttribute('data-vacancy');
+                        const url = `{% url 'search_vacancy' %}?vacancy=${vacancyName}`;
+
+                        window.location.href = url.toString();
+                    });
+                });
+            });
+        </script>
 
         <div class="header">
             <h6 class="elegant-header">Работа в компаниях</h6>
@@ -82,7 +113,7 @@
             {% for item in popular_company %}
                 <div class="item-company">
                     <div class="container-img">
-                        <a href="#">
+                        <a href="{% url 'show_info_about_company' item.company.id %}">
                         {% if item.company.image_company %}
                             <img src="{{ item.company.image_company.url }}">
                         {% else %}

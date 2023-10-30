@@ -43,26 +43,57 @@
         </div>
         <div class="row">
             <div class="item">
-                <p>Контент 5</p>
-                <p>Контент 5</p>
-                <p>Контент 5</p>
+                <h3>Информационные технологии</h3>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Разработчик ПО"><p>Разработчик ПО</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Тестировщик ПО"><p>Тестировщик ПО</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Инженер-программист"><p>Инженер-программист</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Системный администратор"><p>Системный администратор</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Системный инженер"><p>Системный инженер</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Гейм дизайнер"><p>Гейм дизайнер</a>
             </div>
             <div class="item">
-                <p>Контент 6</p>
-                <p>Контент 6</p>
-                <p>Контент 6</p>
+                <h3>Финансы, бухгалтерия</h3>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Брокер"><p>Брокер</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Бухгалтер"><p>Бухгалтер</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Казначей"><p>Казначей</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Методолог"><p>Методолог</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Финансовый аналитик"><p>Финансовый аналитик</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Экономист"><p>Экономист</a>
             </div>
             <div class="item">
-                <p>Контент 7</p>
-                <p>Контент 7</p>
-                <p>Контент 7</p>
+                <h3>Рабочий персонал</h3>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Грузчик"><p>Грузчик</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Кладовщик"><p>Кладовщик</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Разнорабочий"><p>Разнорабочий</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Механик"><p>Механик</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Слесарь, сантехник"><p>Слесарь, сантехник</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Машинист"><p>Машинист</a>
             </div>
             <div class="item">
-                <p>Контент 8</p>
-                <p>Контент 8</p>
-                <p>Контент 8</p>
+                <h3>Строительство</h3>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Руководитель проектов"><p>Руководитель проектов</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Архитектор"><p>Архитектор</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Инженер проекта"><p>Инженер проекта</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Прораб"><p>Прораб</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Инженер-конструктор"><p>Инженер-конструктор</a>
+                <a href="#" class="link-resume"  style="color: black; text-decoration: none;" data-resume="Агент по недвижимости"><p>Агент по недвижимости</a>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const vacancyLinks = document.querySelectorAll('.link-resume');
+
+                vacancyLinks.forEach(function(link) {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const vacancyName = link.getAttribute('data-resume');
+                        const url = `{% url 'search_resume' %}?resume=${vacancyName}`;
+
+                        window.location.href = url.toString();
+                    });
+                });
+            });
+        </script>
     </div>
 
 
