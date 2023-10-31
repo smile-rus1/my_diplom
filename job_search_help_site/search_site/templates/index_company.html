@@ -103,7 +103,7 @@
             {% for item in popular_company %}
                 <div class="item-company">
                     <div class="container-img">
-                        <a href="#">
+                        <a href="{% url 'show_info_about_company' item.company.id %}">
                         {% if item.company.image_company %}
                             <img src="{{ item.company.image_company.url }}">
                         {% else %}

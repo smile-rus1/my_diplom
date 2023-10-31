@@ -13,6 +13,10 @@ from .messages import send_help_message
 from job_search_help_site import settings
 
 
+def page_not_found(request, exception):
+    return render(request, 'NOTFOUND.html', {"template": get_templates.get_base_template(request)}, status=404)
+
+
 def index(request):
     """
     Начальная страница на сайте.
