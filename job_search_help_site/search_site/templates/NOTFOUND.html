@@ -1,0 +1,33 @@
+{% extends template %}
+
+{% load static %}
+
+{% block title %}Не найдено{% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/help.css' %}" rel="stylesheet"/>
+<style>
+       .cnt-not-found {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .head {
+            font-size: 36px;
+        }
+
+        .par {
+            font-size: 18px;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cnt-not-found">
+    <h1 class="head">Страница не была найдена</h1>
+    <p class="par">Извините, запрашиваемая вами страница не найдена.</p>
+</div>
+{% endblock %}
