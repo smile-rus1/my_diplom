@@ -33,5 +33,5 @@ if settings.DEBUG:
 
 if not settings.DEBUG:
     handler404 = 'search_site.views.page_not_found'
-    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -155,11 +155,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATICFILES_DIRS = []
 
-
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, "search_site", "media")
+MEDIA_URL = '/media/'
 
 
 # Default primary key field type
@@ -167,6 +169,50 @@ if not DEBUG:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# MEDIA
-MEDIA_ROOT = os.path.join(BASE_DIR, 'search_site/media')
-MEDIA_URL = '/media/'
+# логирование
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '%(name)-12s %(levelname)-8s %(message)s'
+        },
+        'file': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'debug.log'
+        },
+        'file_log_sql': {
+                    'level': 'DEBUG',
+                    'class': 'logging.FileHandler',
+                    'formatter': 'file',
+                    'filename': 'sql_query.log'
+        }
+    },
+    'loggers': {
+        '': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file'],
+            'propagate': True
+        },
+        'django.request': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        },
+        # 'django.db.backends': {
+        #     'handlers': ['console', "file_log_sql"],
+        #     'level': 'DEBUG',
+        # }, # для sql-запросов
+    }
+}

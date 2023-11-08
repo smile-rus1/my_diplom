@@ -5,3 +5,7 @@ venv
 job_search_help_site/search_site/media
 job_search_help_site/search_site/migrations
 requirements.in
+job_search_help_site/sql_query.log
+job_search_help_site/debug.log
+job_search_help_site/staticfiles
+job_search_help_site/static
