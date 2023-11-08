@@ -120,7 +120,7 @@ select:focus {
   <div class="ad-container">
     <div>
       <h2>
-        <a href="#" class="title-link-company">{{vacancy.company.title_company}}</a>
+        <a href="{% url 'show_info_about_company' vacancy.company.id %}" class="title-link-company">{{vacancy.company.title_company}}</a>
         {% if vacancy.company.is_confirmed %}
           <span><img src="{% static 'photo/confirmed.png' %}" title="Эта компания потверждена" width="5%"></span>
         {%else%}

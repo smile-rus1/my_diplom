@@ -22,6 +22,12 @@
 </style>
 {% endblock %}
 
+{% block total_responses %}
+  {% if total_responses %}
+    <small>{{ total_responses }}</small>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="main-container">
   <div class="content-container">

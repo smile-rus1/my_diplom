@@ -24,6 +24,12 @@
 </style>
 {% endblock %}
 
+{% block total_responses %}
+  {% if total_responses %}
+    <small>{{ total_responses }}</small>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="header-search">
      <form action="{% url 'search_vacancy' %}" method="get" class="search-form">

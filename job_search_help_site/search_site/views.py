@@ -38,12 +38,15 @@ def help_for_people(request):
     """
     Страница help для user
     """
+    total_responses = cache.get("count_responses")
+
     return render(
         request,
         "help.html",
         {
             "template": get_templates.get_base_template(request),
-            "success": request.session.get('message', '') if request.session.get('message', '') else None
+            "success": request.session.get('message', '') if request.session.get('message', '') else None,
+            "total_responses": total_responses
         }
     )
 
@@ -208,6 +211,7 @@ def main_applicant(request):
     """
     if not home_page.get_applicant(request.user):
         return redirect("main_employer")
+    total_responses = cache.get("count_responses")
     return render(
         request,
         "index_applicant.html",
@@ -215,7 +219,8 @@ def main_applicant(request):
             "vacancies": vacancy.get_vacancy_by_algorithm_on_main_page(request.user),
             "popular_company": popular_company.get_lst_company_data(
                 popular_company.get_most_popular_company_on_total_vacancy()[:5]
-            )
+            ),
+            "total_responses": total_responses
         }
     )
 
@@ -249,7 +254,16 @@ def resumes_applicant(request):
     """
     Страница для applicant, где создается и выводиться резюме.
     """
-    return render(request, "applicant_resumes.html", {"resumes": resume.get_all_resumes(request.user)})
+    total_responses = cache.get("count_responses")
+    return render(
+        request,
+        "applicant_resumes.html",
+        {
+            "resumes": resume.get_all_resumes(request.user),
+            "total_responses": total_responses
+
+        }
+    )
 
 
 def change_published_resume(request, resume_id: int):
@@ -265,6 +279,7 @@ def applicant_home_page(request):
     """
     Домашняя страница applicant, где можно изменить информацию об applicant.
     """
+    total_responses = cache.get("count_responses")
     if request.method == "POST":
         if home_page.change_info_about_applicant(
                 request.user,
@@ -282,7 +297,14 @@ def applicant_home_page(request):
                           {"error_message": "Ошибка, такой телефон уже есть!"}
                           )
 
-    return render(request, "home_page_applicant.html", {"applicant": home_page.get_applicant(request.user)})
+    return render(
+        request,
+        "home_page_applicant.html",
+        {
+            "applicant": home_page.get_applicant(request.user),
+            "total_responses": total_responses
+        }
+    )
 
 
 def change_password(request):
@@ -420,15 +442,18 @@ def respond_on_vacancy_applicant(request):
     """
     user_responses = responses_on_vacancy.get_all_responses_on_vacancy(request.user)
     status = request.GET.get('status', '')
+    total_responses = responses_on_vacancy.get_total_responses(user_responses)
     if status:
         status = request.GET.get('status')
         user_responses = responses_on_vacancy.get_filter_responses(user_responses, status)
+
     return render(
         request,
         "respond_on_vacancy.html",
         {
             "status": status,
-            "responses": user_responses
+            "responses": user_responses,
+            "total_responses": total_responses
         }
     )
 

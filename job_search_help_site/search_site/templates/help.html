@@ -10,6 +10,12 @@
 <link type="text/css" href="{% static 'search_site/styles/help.css' %}" rel="stylesheet"/>
 {% endblock %}
 
+{% block total_responses %}
+  {% if total_responses %}
+    <small>{{ total_responses }}</small>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <h2 class="header">Пишите на по поводу различных вопросов</h2>
     <p class="text-par">Если вы хотите подсказать нам, как улучшить наш сайт, высказать ваши замечания или задать вопрос службе поддержки, пожалуйста, выберите подходящую тему и категорию вашего вопроса из предложенных вариантов:</p>
