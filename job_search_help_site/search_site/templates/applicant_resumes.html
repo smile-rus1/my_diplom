@@ -33,15 +33,15 @@
   <div class="content-container">
     <h1>Ваши резюме</h1>
     <div class="buttons">
-      <button class="button-primary" onclick="return window.location.href='#'">Заказать резюме</button>
       <button class="button-secondary" onclick="return window.location.href='{% url 'create_resume' %}'">Создать резюме</button>
+      <button class="button-primary" onclick="return window.location.href='#'">Заказать резюме</button>
     </div>
 
     <div class="summary-container">
       {% for resume in resumes %}
       <div class="resume-container">
         <h2 class="resume-title">{{ resume.name_of_resume }}</h2>
-        <p>Резюме было поднято в поиске: {{ resume.updated_at|time:"H:i" }}</p>
+        <p>Резюме было поднято в поиске: {{ resume.updated_at|date:"H:i, d F"}}</p>
         <div>
           {% if resume.about_applicant %}
           <h4>Описание:</h4>
@@ -94,12 +94,19 @@
               var lastUpdate = new Date('{{ resume.updated_at|date:"c" }}');
               var currentTime = new Date();
               var updateInterval = 4 * 60 * 60 * 1000;
+              var timeDifference = updateInterval - (currentTime - lastUpdate);
+
               if (currentTime - lastUpdate >= updateInterval) {
                 button.disabled = false;
                 button.textContent = 'Поднять резюме';
+
               } else {
                 button.disabled = true;
+                var remainingTime = new Date(timeDifference);
+                var hours = remainingTime.getUTCHours();
+                var minutes = remainingTime.getUTCMinutes();
                 button.textContent = 'Резюме уже поднято';
+                button.title = `Резюме можно будет поднять через: ${hours} ч. ${minutes} мин.`;
               }
             });
           }
