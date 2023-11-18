@@ -5,6 +5,6 @@ from .models import Application
 
 @receiver(post_save, sender=Application)
 def set_is_invited(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.cover_letter == "":
         instance.is_invited = True
         instance.save()

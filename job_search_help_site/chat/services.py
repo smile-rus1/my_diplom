@@ -40,9 +40,9 @@ def create_message_for_cover_letter_of_candidate(**data_application) -> None:
     Создает первое сообщение в модель Message, как сопроводительное письмо.
     """
     models.Message.objects.create(
-        user=data_application["user"],
-        room=data_application["room"],
-        content=data_application["content"],
-        first_name=data_application["first_name"],
-        last_name=data_application["last_name"],
+        user=data_application.get("user"),
+        room=data_application.get("room"),
+        content=data_application.get("content"),
+        first_name=data_application.get("first_name"),
+        last_name=data_application.get("last_name"),
     )

@@ -67,6 +67,9 @@ def get_is_applied_respond_from_company(user: models.CustomUser) -> list[models.
     Проверяет сделала ли отклик уже компания кандидату.
     """
     lst_apply_respond = [
-        ls.vacancy for ls in models.Application.objects.filter(is_invited=True, vacancy__company__user=user)
+        ls.vacancy for ls in models.Application.objects.filter(
+            is_invited=True,
+            vacancy__company__user=user,
+        )
     ]
     return lst_apply_respond
