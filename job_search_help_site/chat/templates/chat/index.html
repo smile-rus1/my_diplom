@@ -1,0 +1,30 @@
+{% extends 'chat/base_chat.html' %}
+
+{% load static %}
+{% block title %}Все чаты{% endblock %}
+
+{% block content %}
+<div class="p-10 lg:p-20 text-center">
+    <h1 class="text-3xl lg:text-6xl text-white">Доступные чаты</h1>
+</div>
+
+<div class="w-full flex flex-wrap items-center">
+    {% for room in rooms %}
+        <div class="w-full lg:w-1/4 px-3 py-3">
+            <div class="p-4 bg-white shadow rounded-xl text-center">
+                {% if request.user.company %}
+                    <h2 class="mb-3 text-1xl font-semibold">Чат с резюме {{ room.name_resume }} кандидата {{ room.application.applicant.first_name }} </h2>
+                {% elif request.user.applicant %}
+                    <h2 class="mb-3 text-1xl font-semibold">Чат вакансии {{ room.application.vacancy.title_vacancy}} {{room.application.vacancy.company.name_user}}</h2>
+                {% endif %}
+                <a href="{% url 'room' room.id %}" class="px-5 py-3 block rounded-xl text-white bg-teal-600 hover:bg-teal-700">
+                    {% if request.user.applicant %}
+                        <img src="{{ room.application.vacancy.company.image_company.url }}">
+                    {% endif %}
+                    Войти в чат
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

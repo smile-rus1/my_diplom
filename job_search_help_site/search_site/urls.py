@@ -18,6 +18,7 @@ urlpatterns = [
     path("forgot_password/", views.forgot_password, name="forgot_password"),
     path("recovery_link/<token>/", views.recovery_password, name="recovery_password"),
     path("register_confirm/<token>/", views.register_confirm, name="register_confirm"),
+    path("change_password/", views.change_password, name="change_password"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),
@@ -25,7 +26,6 @@ urlpatterns = [
     path("applicant/", views.main_applicant, name="main_applicant"),
     path("applicant/resumes", views.resumes_applicant, name="rezume_applicant"),
     path("applicant/home_page", views.applicant_home_page, name="applicant_home_page"),
-    path("applicant/home_page/change_password", views.change_password, name="change_password_applicant"),
     path("applicant/create_resume", views.create_resume, name="create_resume"),
     path("applicant/delete_resume/<int:resume_id>", views.delete_resume, name="delete_resume"),
     path("applicant/update_resume/<int:resume_id>", views.update_resume, name="update_resume"),
@@ -45,7 +45,6 @@ urlpatterns = [
     path("employer/change_published/<int:vacancy_id>", views.change_published_vacancy, name="change_published"),
     path("employer/delete_vacancy/<int:vacancy_id>", views.delete_vacancy, name="delete_vacancy"),
     path("employer/home_page", views.home_page_company, name="company_home_page"),
-    path("employer/home_page/change_password", views.change_password, name="change_password_employer"),
     path("employer/responses/", views.responded_to_vacancy, name="responded_to_vacancy"),
     path("employer/responses/<int:applicant_id>/<int:vacancy_id>", views.show_info_about_applicant_of_application, name="show_info_of_applicant"),
     path("employer/change_state/<int:application_id>", views.change_state_application_of_applicant, name="change_state"),
