@@ -39,12 +39,44 @@ def show_all_info_about_applicant(resume_id: int) -> models.Resume:
     return models.Resume.objects.filter(id=resume_id).select_related("applicant__user").first()
 
 
-def change_application_status_of_applicant(**user_data: [int, str]) -> models.Application:
+def change_application_status_of_applicant(**user_data) -> None:
     """
     Меняет status у applicant по id вакансии.
     """
-    return models.Application.objects.filter(id=user_data.get("application_id"))\
-        .update(status=user_data.get("status"))
+    application = models.Application.objects.filter(id=user_data.get("application_id"))
+    application.update(status=user_data.get("status"))
+
+    if not application:
+        return
+
+    link_to_redirect = user_data.get("request").build_absolute_uri(
+        reverse_lazy("vacancy", kwargs={"vacancy_id": application.first().vacancy.id})
+    )
+
+    if user_data.get("status") == "access":
+        send_mail_to_users.send_mail_to_users(
+            subject=f"Компания пригласила вас на интервью",
+            message=f"«Здраствуйте\n"
+                    f"Благодарим Вас, за отклик на вакансию {application.first().vacancy.title_vacancy}, "
+                    f"наши специалисты рассмотрят Ваше резюме и сообщат о решении.\n"
+                    f"С уважением {application.first().vacancy.company.name_user}»\n"
+                    f"\nВакансия: {application.first().vacancy.title_vacancy}\n"
+                    f"\n\nСсылка для перехода: {link_to_redirect}",
+            email_recipient=f"{application.first().applicant.user.email}"
+        )
+
+    elif user_data.get("status") == "reject":
+        send_mail_to_users.send_mail_to_users(
+            subject=f"Компания не готова пригласить вас на интервью",
+            message=f"«Здраствуйте\n"
+                    f"Мы ознокомились с Вашим резюме и к сожалению "
+                    f"не готовы пригласить Вас на дальнейшее собеседование по этой вакансии. "
+                    f"Возможно в будующем, мы вернемся к вашей кандидатуре, если у нас возникнет потребность.\n"
+                    f"С уважением {application.first().vacancy.company.name_user}»\n"
+                    f"\nВакансия: {application.first().vacancy.title_vacancy}\n"
+                    f"\n\nСсылка для перехода: {link_to_redirect}",
+            email_recipient=f"{application.first().applicant.user.email}"
+        )
 
 
 def create_invitation_to_applicant(request, resume_id: int, vacancy: str) -> None:

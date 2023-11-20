@@ -413,7 +413,7 @@ def vacancy_for_applicant(request, vacancy_id):
     """
     if request.method == "POST":
         application = response_for_applicant.respond_on_vacancy(
-            request.user,
+            request,
             vacancy_id,
             request.POST.get("covering_letter"),
             request.POST.get("resumes_of_applicant")
@@ -636,6 +636,7 @@ def change_state_application_of_applicant(request, application_id: int):
     """
     if request.method == "POST":
         responded_to_vacancy_of_applicant.change_application_status_of_applicant(
+            request=request,
             status=request.POST.get("change-state"),
             application_id=application_id
         )
