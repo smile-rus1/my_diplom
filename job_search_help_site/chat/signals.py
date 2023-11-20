@@ -1,5 +1,3 @@
-# chat/signals.py
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -45,7 +43,9 @@ def create_chat_room(sender, instance, created, **kwargs):
             services.create_message_for_cover_letter_of_candidate(
                 user=candidate.user,
                 room=new_room,
-                content=""
+                content=f"Здраствуйте, приглашаем вас на вакансию {instance.vacancy.title_vacancy}",
+                first_name=instance.vacancy.company.name_user,
+                last_name=instance.vacancy.company.second_name_user
             )
 
         elif instance.cover_letter != "":
