@@ -1,6 +1,8 @@
 from django.http import Http404
+from django.urls import reverse_lazy
 
 from search_site import models
+from . import send_mail_to_users
 
 
 def get_all_responded_to_vacancy(user: models.CustomUser) -> models.Application:
@@ -45,12 +47,12 @@ def change_application_status_of_applicant(**user_data: [int, str]) -> models.Ap
         .update(status=user_data.get("status"))
 
 
-def send_invitation_from_the_company_to_applicant(user: models.CustomUser, resume_id: int, vacancy: str) -> None:
+def create_invitation_to_applicant(request, resume_id: int, vacancy: str) -> None:
     """
     Присылает приглашение кандидату от компании.
     """
     resume = models.Resume.objects.filter(id=resume_id).select_related("applicant").first()
-    vacancy = models.Vacancy.objects.filter(title_vacancy=vacancy, company=user.company).first()
+    vacancy = models.Vacancy.objects.filter(title_vacancy=vacancy, company=request.user.company).first()
 
     models.Application.objects.create(
         applicant=resume.applicant,
@@ -59,6 +61,17 @@ def send_invitation_from_the_company_to_applicant(user: models.CustomUser, resum
         cover_letter="",
         company=vacancy.company.title_company,
         status="access"
+    )
+    link_to_redirect = request.build_absolute_uri(
+        reverse_lazy("vacancy", kwargs={"vacancy_id": vacancy.id})
+    )
+
+    send_mail_to_users.send_mail_to_users(
+        subject=f"Компания пригласила вас на интервью",
+        message=f"Компания {vacancy.company.title_company} пригласила вас на интервью."
+                f"\nВакансия: {vacancy.title_vacancy}\n"
+                f"Ссылка для перехода: {link_to_redirect}",
+        email_recipient=f"{resume.applicant.user.email}"
     )
 
 
