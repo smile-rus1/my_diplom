@@ -1,8 +1,11 @@
+from django.urls import reverse_lazy
+
 from search_site import models
+from . import send_mail_to_users
 
 
 def respond_on_vacancy(
-        user: models.CustomUser,
+        request,
         vacancy_id: int,
         cover_letter: str,
         resume: str
@@ -10,7 +13,7 @@ def respond_on_vacancy(
     """
     Applicant откликается на вакансию company.
     """
-    applicant = models.Applicant.objects.get(user=user)
+    applicant = models.Applicant.objects.get(user=request.user)
     if not _is_applicant_has_resume(applicant):
         return None
 
@@ -23,6 +26,18 @@ def respond_on_vacancy(
         cover_letter=cover_letter,
         company=vacancy.company.title_company
     )
+
+    link_to_redirect = request.build_absolute_uri(
+        reverse_lazy("show_info_about_applicant_resume", kwargs={"resume_id": resume.id})
+    )
+    send_mail_to_users.send_mail_to_users(
+        subject=f"Кандидат откликнулся на вашу вакансию",
+        message=f"Кандидат {applicant.second_name} {applicant.first_name} откликнулся "
+                f"на вакансию {vacancy.title_vacancy}"
+                f"Ссылка на резюме кандидата: {link_to_redirect}",
+        email_recipient=f"{vacancy.company.user.email}"
+    )
+
     return application
 
 
