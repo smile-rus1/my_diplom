@@ -715,8 +715,8 @@ def send_invitation_from_the_company(request, resume_id: int):
     Присылает приглашение кандидату
     """
     if request.method == "POST":
-        responded_to_vacancy_of_applicant.send_invitation_from_the_company_to_applicant(
-            request.user,
+        responded_to_vacancy_of_applicant.create_invitation_to_applicant(
+            request,
             resume_id,
             request.POST.get("title_vacancy")
         )
