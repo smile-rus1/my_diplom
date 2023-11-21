@@ -7,6 +7,13 @@
 <link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/applicant_home.css' %}" rel="stylesheet"/>
 <link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+
+<style>
+.confirm-company {
+   text-decoration: none;
+   color: blue;
+}
+</style>
 {% endblock %}
 
 {% block total_responses %}
@@ -20,11 +27,19 @@
     <div class="left-container">
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-          {% if error_message %}
-        <div class="error-message">
-            <p>{{ error_message }}</p>
-        </div>
-        {% endif %}
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags != "success" %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="color: #0cb309; font-size: 24px; margin-bottom: 16px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
         <table>
           <tr>
             <td>Имя</td>
@@ -61,6 +76,10 @@
            <tr>
             <td>Пароль</td>
             <td><a href="{% url 'change_password' %}" class="link-password">Изменить пароль</a></td>
+          </tr>
+          <tr>
+            <td>Потверждение компании</td>
+            <td><a href="{% url 'request_confirm_role' %}" class="confirm-company">Потвердить пользователя</a></td>
           </tr>
         </table>
         <button type="submit">Сохранить</button>

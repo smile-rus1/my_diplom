@@ -19,6 +19,8 @@ urlpatterns = [
     path("recovery_link/<token>/", views.recovery_password, name="recovery_password"),
     path("register_confirm/<token>/", views.register_confirm, name="register_confirm"),
     path("change_password/", views.change_password, name="change_password"),
+    path("request_confirm_role", views.request_confirm_role, name="request_confirm_role"),
+    path("confirm_role/<token>", views.confirm_users_role, name="confirm_users_role"),
 
     # для applicant
     path("login/applicant", views.login_applicant, name="login_applicant"),
