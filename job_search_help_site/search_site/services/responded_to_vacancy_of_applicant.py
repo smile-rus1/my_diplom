@@ -56,7 +56,7 @@ def change_application_status_of_applicant(**user_data) -> None:
     if user_data.get("status") == "access":
         send_mail_to_users.send_mail_to_users(
             subject=f"Компания пригласила вас на интервью",
-            message=f"«Здраствуйте\n"
+            message=f"«Здравствуйте\n"
                     f"Благодарим Вас, за отклик на вакансию {application.first().vacancy.title_vacancy}, "
                     f"наши специалисты рассмотрят Ваше резюме и сообщат о решении.\n"
                     f"С уважением {application.first().vacancy.company.name_user}»\n"
@@ -68,7 +68,7 @@ def change_application_status_of_applicant(**user_data) -> None:
     elif user_data.get("status") == "reject":
         send_mail_to_users.send_mail_to_users(
             subject=f"Компания не готова пригласить вас на интервью",
-            message=f"«Здраствуйте\n"
+            message=f"«Здравствуйте\n"
                     f"Мы ознокомились с Вашим резюме и к сожалению "
                     f"не готовы пригласить Вас на дальнейшее собеседование по этой вакансии. "
                     f"Возможно в будующем, мы вернемся к вашей кандидатуре, если у нас возникнет потребность.\n"
