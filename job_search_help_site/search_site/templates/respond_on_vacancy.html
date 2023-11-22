@@ -91,7 +91,9 @@ select:focus {
             <th>
                 <div>
                     <select class="custom-select" id="custom-select">
+                        {% if not filter %}
                         <option value="" {% if status == "" %}selected{%endif%}>Все отклики</option>
+                        {% endif %}
                         <option value="pending" {% if status == "pending" %}selected{%endif%}>В ожидании</option>
                         <option value="invitation" {% if status == "access" %}selected{%endif%}>Приглашение</option>
                         <option value="reject" {% if status == "reject" %}selected{%endif%}>Отказ</option>
