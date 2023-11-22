@@ -453,7 +453,8 @@ def respond_on_vacancy_applicant(request):
         {
             "status": status,
             "responses": user_responses,
-            "total_responses": total_responses
+            "total_responses": total_responses,
+            "filter": request.GET.get('filter', '')
         }
     )
 
@@ -691,7 +692,8 @@ def change_vision_application_on_list_of_active(request, application_id: int):
     """
     if request.method == "POST":
         applications.change_application_on_user_of_list_active(application_id)
-    return redirect("all_respond_on_vacancy")
+
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def show_info_about_applicant_resume(request, resume_id):
