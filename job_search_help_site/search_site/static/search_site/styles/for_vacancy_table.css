@@ -20,4 +20,13 @@ th {
     background-color: #f2f2f2;
 }
 
+tr.tabs {
+    display: flex;
+}
 
+tr.tabs th {
+    display: table-cell;
+    padding: 15px;
+    text-align: left;
+    background-color: #f2f2f2;
+}

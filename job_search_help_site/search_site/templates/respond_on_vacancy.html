@@ -45,6 +45,15 @@ select:focus {
     color: blue;
     margin-top: 15px; /* Пример: отступ сверху */
 }
+
+.link-tabs {
+    text-decoration: none;
+    color: #373837
+}
+.link-tabs:hover {
+    color: #0f87f7;
+}
+
 </style>
 {% endblock %}
 
@@ -58,6 +67,26 @@ select:focus {
 <div class="container-table">
     <h1 class="header-for-respond">Ваши отклики на вакансии</h1>
     <table>
+         <tr class="tabs">
+             <th><a href="" class="link-tabs" id="active">Активные</a></th>
+             <th><a href="{% url 'all_respond_on_vacancy' %}" class="link-tabs" id="all">Все отклики</a></th>
+        </tr>
+        <script>
+            const activeLink = document.getElementById('active');
+
+            function handleActiveLinkClick(event) {
+              event.preventDefault();
+              const currentUrl = window.location.href;
+
+              if (!currentUrl.includes('filter=active'))
+              {
+                const separator = currentUrl.includes('?') ? '&' : '?';
+                const newUrl = `${currentUrl}${separator}filter=active`;
+                window.location.href = newUrl;
+              }
+            }
+            activeLink.addEventListener('click', handleActiveLinkClick);
+        </script>
         <tr>
             <th>
                 <div>
@@ -73,15 +102,20 @@ select:focus {
         <script>
             document.getElementById('custom-select').addEventListener('change', function() {
                 var selectedValue = this.value;
+                var currentUrl = new URL(window.location.href);
+
                 if (selectedValue === 'pending') {
-                    window.location.href = '/applicant/responses?status=pending';
+                    currentUrl.searchParams.set('status', 'pending');
                 } else if (selectedValue === 'invitation') {
-                    window.location.href = '/applicant/responses?status=access';
+                    currentUrl.searchParams.set('status', 'access');
                 } else if (selectedValue === 'reject') {
-                    window.location.href = '/applicant/responses?status=reject';
+                    currentUrl.searchParams.set('status', 'reject');
                 } else {
-                    window.location.href = '/applicant/responses/';
+                    currentUrl.pathname = '/applicant/responses/';
+                    currentUrl.search = '';
                 }
+
+                window.location.href = currentUrl.href;
             });
         </script>
     </table>
@@ -93,6 +127,7 @@ select:focus {
         </tr>
       {% for response in responses %}
         <tr>
+            {% if filter == "" %}
             <td>
                 {% if response.status == "pending" %}
                     В ожидании
@@ -110,15 +145,37 @@ select:focus {
                 <form method="post" action="{% url 'change_vision' response.id %}">
                     {% csrf_token %}
                     <span>
-                        {% if not response.hidden %}
-                            <button class="responses-button">Удалить отклик</button>
-                        {% else %}
+                        {% if response.hidden %}
                             <button class="responses-button">Восстановить</button>
                         {% endif %}
                     </span>
                 </form>
             </td>
             <td>{{response.application_date}}</td>
+            {% elif filter == "active" and not response.hidden %}
+                <td>
+                {% if response.status == "pending" %}
+                    В ожидании
+                {% elif response.status == "access" %}
+                    <span style="color: green;">Приглашение</span>
+                {% else %}
+                    <span style="color: red;">Отказ</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'vacancy' response.vacancy.id %}" class="card-link">
+                    {{response.vacancy.title_vacancy}}
+                </a>
+                <br>
+                <form method="post" action="{% url 'change_vision' response.id %}">
+                    {% csrf_token %}
+                    <span>
+                        <button class="responses-button">Скрыть отклик</button>
+                    </span>
+                </form>
+            </td>
+            <td>{{response.application_date}}</td>
+            {% endif %}
         </tr>
     {% endfor %}
     </table>
