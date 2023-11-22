@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from search_site import models
 
 from job_search_help_site import settings
+from . import send_mail_to_users
 
 
 def register_user(request, email: str, password1: str, password2: str, type_user: str) -> bool:
@@ -203,3 +204,59 @@ def change_forgot_password(request, email: str, password1: str, password2: str) 
     user.save()
     return True
 
+
+def create_confirm_link_role(request) -> str:
+    """
+    Создает ссылку для потверждения роли пользователя и возвращает ее.
+    """
+    token = uuid.uuid4().hex
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    cache.set(redis_key, {
+        "user_role_conf_id": request.user.id,
+        "user_role_conf": check_user_role(request)
+    },
+              timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT
+              )
+
+    confirm_link = request.build_absolute_uri(
+            reverse_lazy(
+                "confirm_users_role", kwargs={"token": token}
+            )
+        )
+    return confirm_link
+
+
+def confirm_role_users(request):
+    """
+    Потверждение у пользователя его роли.
+    """
+    role = "компании" if check_user_role(request) == "company" else "кандидата"
+    link_confirmed = create_confirm_link_role(request)
+
+    send_mail_to_users.send_mail_to_users(
+            subject=f"Проверка {role} на подлинность",
+            message=f"«Здравствуйте!\n"
+                    f"Вы решили подтвердить свою роль на нашем сайте. "
+                    f"Для дальнейшего подтверждения, перейдите по ссылке, которая будет указана ниже, "
+                    f"чтобы мы могли связаться с Вами."
+                    f"»\n"
+                    f"\nСсылка для потверждения: {link_confirmed}",
+            email_recipient=f"{request.user.email}"
+    )
+    print(f"LINK CONFIRM_USER: {link_confirmed}")
+    messages.success(request, "Вам на email отправлено письмо с потверждением!")
+
+
+def create_request_to_confirm(request, user_id: int) -> bool:
+    """
+    Создает запрос на потверждение пользователя для админов.
+    """
+    try:
+        user = models.CustomUser.objects.get(id=int(user_id))
+        # тут в какую-то модель новую типо сделать запись на то, чтобы потвердить
+        # RequestModel.objects.create(user_mail=user.email)
+        messages.success(request, "Заявка на рассмотрение отправлена!")
+    except models.CustomUser.DoesNotExist:
+        messages.error(request, "Что-то пошло не так, поробуйте чуть позже!")
+        return False
+    return True

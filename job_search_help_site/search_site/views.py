@@ -841,3 +841,30 @@ def recovery_password(request, token):
             "template": get_templates.get_base_template(request)
         }
     )
+
+
+def request_confirm_role(request):
+    auth.confirm_role_users(request=request)
+    if role := auth.check_user_role(request) == "company":
+        return redirect("company_home_page")
+    else:
+        return redirect("applicant_home_page")
+
+
+def confirm_users_role(request, token):
+    """
+    Потверждение ролей различных пользователей (company/applicant).
+    """
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    user_info = cache.get(redis_key) or {}
+    user_role = user_info.get("user_role_conf") or {}
+
+    if user_id := user_info.get("user_role_conf_id"):
+        if not auth.create_request_to_confirm(request, user_id):
+            return redirect("applicant_home_page") if user_role == "applicant" \
+                else redirect("company_home_page")
+
+        return redirect("applicant_home_page") \
+            if user_role == "applicant" else redirect("company_home_page")
+
+    return redirect("index")
