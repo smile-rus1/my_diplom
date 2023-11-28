@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+amqp==5.2.0
+    # via kombu
 asgiref==3.7.2
     # via
     #   channels
@@ -19,14 +21,34 @@ autobahn==23.6.2
     # via daphne
 automat==22.10.0
     # via twisted
+billiard==4.2.0
+    # via celery
+celery==5.3.6
+    # via -r requirements.in
 cffi==1.16.0
-    # via cryptography
+    # via
+    #   cryptography
+    #   gevent
 channels==4.0.0
     # via
     #   -r requirements.in
     #   channels-redis
 channels-redis==4.1.0
     # via -r requirements.in
+click==8.1.7
+    # via
+    #   celery
+    #   click-didyoumean
+    #   click-plugins
+    #   click-repl
+click-didyoumean==0.3.0
+    # via celery
+click-plugins==1.1.1
+    # via celery
+click-repl==0.3.0
+    # via celery
+colorama==0.4.6
+    # via click
 constantly==23.10.4
     # via twisted
 cryptography==41.0.5
@@ -46,6 +68,10 @@ django-debug-toolbar==4.1.0
     # via -r requirements.in
 django-redis==5.4.0
     # via -r requirements.in
+gevent==23.9.1
+    # via -r requirements.in
+greenlet==3.0.1
+    # via gevent
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -56,12 +82,16 @@ idna==3.4
     #   twisted
 incremental==22.10.0
     # via twisted
+kombu==5.3.4
+    # via celery
 msgpack==1.0.7
     # via channels-redis
 mysqlclient==2.2.0
     # via -r requirements.in
 pillow==10.0.0
     # via -r requirements.in
+prompt-toolkit==3.0.41
+    # via click-repl
 pyasn1==0.5.0
     # via
     #   pyasn1-modules
@@ -72,6 +102,8 @@ pycparser==2.21
     # via cffi
 pyopenssl==23.3.0
     # via twisted
+python-dateutil==2.8.2
+    # via celery
 python-dotenv==1.0.0
     # via -r requirements.in
 redis==5.0.1
@@ -81,7 +113,9 @@ redis==5.0.1
 service-identity==23.1.0
     # via twisted
 six==1.16.0
-    # via automat
+    # via
+    #   automat
+    #   python-dateutil
 sqlparse==0.4.4
     # via
     #   django
@@ -95,9 +129,22 @@ txaio==23.1.1
 typing-extensions==4.8.0
     # via twisted
 tzdata==2023.3
-    # via django
+    # via
+    #   celery
+    #   django
+vine==5.1.0
+    # via
+    #   amqp
+    #   celery
+    #   kombu
+wcwidth==0.2.12
+    # via prompt-toolkit
+zope-event==5.0
+    # via gevent
 zope-interface==6.1
-    # via twisted
+    # via
+    #   gevent
+    #   twisted
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
