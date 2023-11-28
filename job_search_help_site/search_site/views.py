@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
@@ -8,8 +9,7 @@ from .services import auth, home_page, resume, vacancy, response_for_applicant, 
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
 
 from .algorithms_for_searh import algorithm_for_search_vacancy, algorithm_for_search_resume
-from . import pagination_for_pages, get_templates, enums
-from .messages import send_help_message
+from . import pagination_for_pages, get_templates, enums, tasks
 from job_search_help_site import settings
 
 
@@ -783,24 +783,16 @@ def send_message_from_help_page(request):
     Отправляет сообщение со страницы help.
     """
     if request.method == "POST":
-        if send_help_message.send_message_from_help_page_to_email(
-            topic=request.POST.get("otherTopic") if request.POST.get("topic") == "other" else request.POST.get("topic"),
-            content=request.POST.get("content"),
-            email=request.POST.get("email"),
-            fullname=request.POST.get("fullname")
-        ):
-            request.session['message'] = "Сообщение успешно отправлено"
+        data_message = {
+            "topic": request.POST.get("otherTopic") if request.POST.get("topic") == "other" else request.POST.get("topic"),
+            "content": request.POST.get("content"),
+            "email": request.POST.get("email"),
+            "fullname": request.POST.get("fullname")
+        }
+        tasks.send_message_from_help_page.delay(data_message)
+        # send_message_from_help_page_to_email(data_message=data_message)
+        messages.success(request, "Сообщение успешно отправлено!")
     return redirect("help")
-
-
-def clear_session_success_message(request):
-    """
-    Удаляет сообщение из сессии 'success'
-    """
-    request.session.pop("message", None)
-    return JsonResponse(
-        {'message': 'Сообщение удалено из сессии'}
-    )
 
 
 def forgot_password(request):
