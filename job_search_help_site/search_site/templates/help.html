@@ -8,6 +8,7 @@
 
 {% block css %}
 <link type="text/css" href="{% static 'search_site/styles/help.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block total_responses %}
@@ -17,6 +18,19 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+            {% for message in messages %}
+                {% if message.tags != "success" %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="color: #0cb309; font-size: 24px; margin-bottom: 16px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
 <h2 class="header">Пишите на по поводу различных вопросов</h2>
     <p class="text-par">Если вы хотите подсказать нам, как улучшить наш сайт, высказать ваши замечания или задать вопрос службе поддержки, пожалуйста, выберите подходящую тему и категорию вашего вопроса из предложенных вариантов:</p>
 <form action="{% url 'send_message_from_help_page' %}" method="post">
@@ -59,25 +73,6 @@
 
     <button type="submit" class="btn-sub">Отправить</button>
 </form>
-<script>
-    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    setTimeout(function() {
-        fetch('{% url 'clear_session_success_message' %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken  // Устанавливаем CSRF-токен в заголовке
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Обработка успешного удаления сообщения, если это необходимо
-        })
-        .catch(error => {
-            window.location.href = "{% url 'index' %}"
-        });
-    }, 5000);
-</script>
 {% endblock %}
 
 {% block js %}
