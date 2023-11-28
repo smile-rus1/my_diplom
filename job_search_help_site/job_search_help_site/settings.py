@@ -132,7 +132,14 @@ EMAIL_HOST_PASSWORD = os.getenv("YANDEX_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("YANDEX_HOST_USER")
 
 
-#
+# для Celery
+CELERY_BROKER_URL = "redis://localhost:6379/1"
+CELERY_BROKER_OPTIONS = {"visibility_timeout": 10}
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+CELERY_ACCEPT_CONTENT = {"application/json"}
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
