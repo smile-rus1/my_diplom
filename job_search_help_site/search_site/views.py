@@ -789,8 +789,7 @@ def send_message_from_help_page(request):
             "email": request.POST.get("email"),
             "fullname": request.POST.get("fullname")
         }
-        tasks.send_message_from_help_page.delay(data_message)
-        # send_message_from_help_page_to_email(data_message=data_message)
+        tasks.send_message_from_help_page.apply_async(args=(data_message,), countdown=60)
         messages.success(request, "Сообщение успешно отправлено!")
     return redirect("help")
 

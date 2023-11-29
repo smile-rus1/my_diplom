@@ -11,6 +11,7 @@ from search_site import models
 
 from job_search_help_site import settings
 from . import send_mail_to_users
+from .. import tasks
 
 
 def register_user(request, email: str, password1: str, password2: str, type_user: str) -> bool:
@@ -41,14 +42,11 @@ def register_user(request, email: str, password1: str, password2: str, type_user
     confirm_link = create_confirm_link(request, user, type_user)
     message = (f"Ссылка на потверждение:\n%s" % confirm_link)
 
-    # почему-то не отправляется сообщение, потом решить проблему эту! (email в ЧС отправили:( )
-    send_mail(
-        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[user.email, ],
-        fail_silently=False
-    )
+    data_user = {
+        "message": message,
+        "email": email
+    }
+    tasks.send_link_confirmation_on_register.delay(data_user)
     messages.success(request, "Вам на email отправлено письмо!")
 
     return True
@@ -180,14 +178,11 @@ def get_link_forgot_password(request, email: str):
         )
     )
     print(f"recovery_link: {recovery_link}")
-    send_mail(
-        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
-        message=f"Для восстановления пароля перейдите по ссылке {recovery_link}\nЕсли же это не Вы "
-                f"восстанавливаете пароль, то просто проигнорируйте.",
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email, ],
-        fail_silently=False
-    )
+    mail_data = {
+        "recovery_link": recovery_link,
+        "email": email
+    }
+    tasks.send_link_from_forgot_password_page.delay(mail_data)
     messages.success(request, "Вам на email отправлено письмо!")
 
 
