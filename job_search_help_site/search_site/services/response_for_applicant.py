@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 
 from search_site import models
-from . import send_mail_to_users
+from .. import tasks
 
 
 def respond_on_vacancy(
@@ -30,13 +30,15 @@ def respond_on_vacancy(
     link_to_redirect = request.build_absolute_uri(
         reverse_lazy("show_info_about_applicant_resume", kwargs={"resume_id": resume.id})
     )
-    send_mail_to_users.send_mail_to_users(
-        subject=f"Кандидат откликнулся на вашу вакансию",
-        message=f"Кандидат {applicant.second_name} {applicant.first_name} откликнулся "
-                f"на вакансию {vacancy.title_vacancy}"
-                f"Ссылка на резюме кандидата: {link_to_redirect}",
-        email_recipient=f"{vacancy.company.user.email}"
-    )
+    data_message = {
+        "subject": "Кандидат откликнулся на вашу вакансию",
+        "message": f"Кандидат {applicant.second_name} {applicant.first_name} откликнулся "
+                   f"на вакансию {vacancy.title_vacancy}"
+                   f"Ссылка на резюме кандидата: {link_to_redirect}",
+        "email_recipient": vacancy.company.user.email,
+    }
+
+    tasks.send_message_on_email.apply_async(args=(data_message, ), countdown=600)
 
     return application
 

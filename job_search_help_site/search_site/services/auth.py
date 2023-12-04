@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
-from django.core.mail import send_mail
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -10,7 +9,6 @@ from django.urls import reverse_lazy
 from search_site import models
 
 from job_search_help_site import settings
-from . import send_mail_to_users
 from .. import tasks
 
 
@@ -221,24 +219,25 @@ def create_confirm_link_role(request) -> str:
     return confirm_link
 
 
-def confirm_role_users(request):
+def confirm_role_users(request) -> None:
     """
     Потверждение у пользователя его роли.
     """
     role = "компании" if check_user_role(request) == "company" else "кандидата"
     link_confirmed = create_confirm_link_role(request)
 
-    send_mail_to_users.send_mail_to_users(
-            subject=f"Проверка {role} на подлинность",
-            message=f"«Здравствуйте!\n"
-                    f"Вы решили подтвердить свою роль на нашем сайте. "
-                    f"Для дальнейшего подтверждения, перейдите по ссылке, которая будет указана ниже, "
-                    f"чтобы мы могли связаться с Вами."
-                    f"»\n"
-                    f"\nСсылка для потверждения: {link_confirmed}",
-            email_recipient=f"{request.user.email}"
-    )
+    data_message = {
+        "subject": f"Проверка {role} на подлинность",
+        "message": f"«Здравствуйте!\n"
+                   f"Вы решили подтвердить свою роль на нашем сайте. "
+                   f"Для дальнейшего подтверждения, перейдите по ссылке, которая будет указана ниже, "
+                   f"чтобы мы могли связаться с Вами.»\n"
+                   f"\nСсылка для потверждения: {link_confirmed}",
+        "email_recipient": request.user.email
+    }
+    tasks.send_message_on_email.apply_async(args=(data_message,), countdown=15)
     print(f"LINK CONFIRM_USER: {link_confirmed}")
+
     messages.success(request, "Вам на email отправлено письмо с потверждением!")
 
 
