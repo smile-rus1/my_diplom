@@ -2,7 +2,7 @@ from django.http import Http404
 from django.urls import reverse_lazy
 
 from search_site import models
-from . import send_mail_to_users
+from .. import tasks
 
 
 def get_all_responded_to_vacancy(user: models.CustomUser) -> models.Application:
@@ -24,7 +24,7 @@ def show_all_info_about_applicant_of_application(
     """
     try:
         return models.Application.objects \
-            .filter(applicant__isnull=False)\
+            .filter(applicant__isnull=False) \
             .select_related("applicant__user", "vacancy__company") \
             .filter(vacancy__company=user.company, applicant=applicant_id, vacancy=vacancy_id).first()
 
@@ -53,30 +53,29 @@ def change_application_status_of_applicant(**user_data) -> None:
         reverse_lazy("vacancy", kwargs={"vacancy_id": application.first().vacancy.id})
     )
 
+    data_message = {
+        "subject": "Компания пригласила вас на интервью",
+        "email_recipient": application.first().applicant.user.email,
+    }
+
     if user_data.get("status") == "access":
-        send_mail_to_users.send_mail_to_users(
-            subject=f"Компания пригласила вас на интервью",
-            message=f"«Здравствуйте\n"
-                    f"Благодарим Вас, за отклик на вакансию {application.first().vacancy.title_vacancy}, "
-                    f"наши специалисты рассмотрят Ваше резюме и сообщат о решении.\n"
-                    f"С уважением {application.first().vacancy.company.name_user}»\n"
-                    f"\nВакансия: {application.first().vacancy.title_vacancy}\n"
-                    f"\n\nСсылка для перехода: {link_to_redirect}",
-            email_recipient=f"{application.first().applicant.user.email}"
-        )
+        data_message["message"] = f"«Здравствуйте\n" \
+                                  f"Благодарим Вас, за отклик на вакансию {application.first().vacancy.title_vacancy}, " \
+                                  f"наши специалисты рассмотрят Ваше резюме и сообщат о решении.\n" \
+                                  f"С уважением {application.first().vacancy.company.name_user}»\n" \
+                                  f"\nВакансия: {application.first().vacancy.title_vacancy}\n" \
+                                  f"\n\nСсылка для перехода: {link_to_redirect}"
 
     elif user_data.get("status") == "reject":
-        send_mail_to_users.send_mail_to_users(
-            subject=f"Компания не готова пригласить вас на интервью",
-            message=f"«Здравствуйте\n"
-                    f"Мы ознокомились с Вашим резюме и к сожалению "
-                    f"не готовы пригласить Вас на дальнейшее собеседование по этой вакансии. "
-                    f"Возможно в будующем, мы вернемся к вашей кандидатуре, если у нас возникнет потребность.\n"
-                    f"С уважением {application.first().vacancy.company.name_user}»\n"
-                    f"\nВакансия: {application.first().vacancy.title_vacancy}\n"
-                    f"\n\nСсылка для перехода: {link_to_redirect}",
-            email_recipient=f"{application.first().applicant.user.email}"
-        )
+        data_message["message"] = f"«Здравствуйте\n" \
+                                  f"Мы ознокомились с Вашим резюме и к сожалению " \
+                                  f"не готовы пригласить Вас на дальнейшее собеседование по этой вакансии. " \
+                                  f"Возможно в будующем, мы вернемся к вашей кандидатуре, если у нас возникнет " \
+                                  f"потребность.\n" \
+                                  f"С уважением {application.first().vacancy.company.name_user}»\n" \
+                                  f"\n\nСсылка для перехода: {link_to_redirect}"
+
+    tasks.send_message_on_email.apply_async(args=(data_message,), countdown=900)
 
 
 def create_invitation_to_applicant(request, resume_id: int, vacancy: str) -> None:
@@ -98,13 +97,15 @@ def create_invitation_to_applicant(request, resume_id: int, vacancy: str) -> Non
         reverse_lazy("vacancy", kwargs={"vacancy_id": vacancy.id})
     )
 
-    send_mail_to_users.send_mail_to_users(
-        subject=f"Компания пригласила вас на интервью",
-        message=f"Компания {vacancy.company.title_company} пригласила вас на интервью."
-                f"\nВакансия: {vacancy.title_vacancy}\n"
-                f"Ссылка для перехода: {link_to_redirect}",
-        email_recipient=f"{resume.applicant.user.email}"
-    )
+    data_message = {
+        "subject": "Компания пригласила вас на интервью",
+        "message": f"Компания {vacancy.company.title_company} пригласила вас на интервью."
+                   f"\nВакансия: {vacancy.title_vacancy}\n"
+                   f"Ссылка для перехода: {link_to_redirect}",
+        "email_recipient": resume.applicant.user.email,
+    }
+
+    tasks.send_message_on_email.apply_async(args=(data_message,), countdown=900)
 
 
 def get_is_applied_respond_from_company(user: models.CustomUser) -> list[models.Vacancy]:

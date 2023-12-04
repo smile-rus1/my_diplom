@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
-from django.core.mail import send_mail
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -10,7 +9,7 @@ from django.urls import reverse_lazy
 from search_site import models
 
 from job_search_help_site import settings
-from . import send_mail_to_users
+from .. import tasks
 
 
 def register_user(request, email: str, password1: str, password2: str, type_user: str) -> bool:
@@ -41,14 +40,11 @@ def register_user(request, email: str, password1: str, password2: str, type_user
     confirm_link = create_confirm_link(request, user, type_user)
     message = (f"Ссылка на потверждение:\n%s" % confirm_link)
 
-    # почему-то не отправляется сообщение, потом решить проблему эту! (email в ЧС отправили:( )
-    send_mail(
-        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[user.email, ],
-        fail_silently=False
-    )
+    data_user = {
+        "message": message,
+        "email": email
+    }
+    tasks.send_link_confirmation_on_register.delay(data_user)
     messages.success(request, "Вам на email отправлено письмо!")
 
     return True
@@ -180,14 +176,11 @@ def get_link_forgot_password(request, email: str):
         )
     )
     print(f"recovery_link: {recovery_link}")
-    send_mail(
-        subject="Пожалуйста потвердите свою регистрацию на сайте rabota_help",
-        message=f"Для восстановления пароля перейдите по ссылке {recovery_link}\nЕсли же это не Вы "
-                f"восстанавливаете пароль, то просто проигнорируйте.",
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[email, ],
-        fail_silently=False
-    )
+    mail_data = {
+        "recovery_link": recovery_link,
+        "email": email
+    }
+    tasks.send_link_from_forgot_password_page.delay(mail_data)
     messages.success(request, "Вам на email отправлено письмо!")
 
 
@@ -226,24 +219,25 @@ def create_confirm_link_role(request) -> str:
     return confirm_link
 
 
-def confirm_role_users(request):
+def confirm_role_users(request) -> None:
     """
     Потверждение у пользователя его роли.
     """
     role = "компании" if check_user_role(request) == "company" else "кандидата"
     link_confirmed = create_confirm_link_role(request)
 
-    send_mail_to_users.send_mail_to_users(
-            subject=f"Проверка {role} на подлинность",
-            message=f"«Здравствуйте!\n"
-                    f"Вы решили подтвердить свою роль на нашем сайте. "
-                    f"Для дальнейшего подтверждения, перейдите по ссылке, которая будет указана ниже, "
-                    f"чтобы мы могли связаться с Вами."
-                    f"»\n"
-                    f"\nСсылка для потверждения: {link_confirmed}",
-            email_recipient=f"{request.user.email}"
-    )
+    data_message = {
+        "subject": f"Проверка {role} на подлинность",
+        "message": f"«Здравствуйте!\n"
+                   f"Вы решили подтвердить свою роль на нашем сайте. "
+                   f"Для дальнейшего подтверждения, перейдите по ссылке, которая будет указана ниже, "
+                   f"чтобы мы могли связаться с Вами.»\n"
+                   f"\nСсылка для потверждения: {link_confirmed}",
+        "email_recipient": request.user.email
+    }
+    tasks.send_message_on_email.apply_async(args=(data_message,), countdown=15)
     print(f"LINK CONFIRM_USER: {link_confirmed}")
+
     messages.success(request, "Вам на email отправлено письмо с потверждением!")
 
 
