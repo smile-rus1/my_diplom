@@ -1,0 +1,45 @@
+.footer-columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 1;
+  margin: 0 5px;
+}
+
+.column h4 {
+  color: #ccc;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.column a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.column a:hover {
+  color: #fff;
+}
+
+.footer-info {
+  margin-top: 20px;
+  text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-columns {
+    flex-direction: column;
+  }
+
+  .column {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+.par {
+
+}
