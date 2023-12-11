@@ -216,7 +216,7 @@ select:focus {
         <div class="vacancy-content">
             <p class="vacancy-update-time">Обновлено: {{ item.updated_at }}</p>
             <a href="{% if request.user.company %}{% url 'show_info_about_applicant_resume' item.id %}{% else %}{% url 'login_employer' %}{% endif %}" target="_blank" class="card-link"><h1>{{ item.name_of_resume }}</h1></a>
-            <h4>Предполагаемая заработная плата: {{item.salary}}</h4>
+            {% if item.salary %}<h4>Предполагаемая заработная плата: {{item.salary}}</h4>{% endif %}
             <p>{% if item.experience %}Опыт работы: {{ item.experience }}{% else %}Нет опыта{% endif %}</p>
             <p>{% if item.place_of_work %}Последнее место работы: {{item.place_of_work}}{% endif %}</p>
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
@@ -226,7 +226,7 @@ select:focus {
     </div>
 {% endfor %}
 
-<div class="pagination">
+<div class="pagination">cd
     <span class="step-links">
         {% if page.has_previous %}
             <a href="?{{ request.GET.urlencode }}&page=1">&laquo; первая</a>

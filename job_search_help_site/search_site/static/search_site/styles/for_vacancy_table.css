@@ -30,3 +30,54 @@ tr.tabs th {
     text-align: left;
     background-color: #f2f2f2;
 }
+
+
+/* Для телефона (максимальная ширина 767px) */
+@media screen and (max-width: 767px) {
+  .header-for-respond {
+    padding: 6px;
+    margin-bottom: 10px;
+  }
+
+  .container-table {
+    margin: 0 10px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+
+  tr.tabs {
+    flex-direction: column;
+  }
+
+  tr.tabs th {
+    display: block;
+    text-align: left;
+    padding: 8px;
+  }
+}
+
+/* Для планшета (ширина от 768px до 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .header-for-respond {
+    padding: 8px;
+    margin-bottom: 18px;
+  }
+
+  .container-table {
+    margin: 0 25px;
+  }
+}
+
+/* Для ноутбука и более крупных экранов (ширина от 1024px и более) */
+@media screen and (min-width: 1024px) {
+  .header-for-respond {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .container-table {
+    margin: 0 30px;
+  }
+}

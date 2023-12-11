@@ -81,3 +81,90 @@ button:hover {
     text-decoration: none;
     color: blue;
 }
+
+/* Для телефона (максимальная ширина 767px) */
+@media screen and (max-width: 767px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-container, .right-container {
+    width: 100%;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="file"],
+  input[type="password"] {
+    width: 100%;
+  }
+}
+
+/* Для планшета (ширина от 768px до 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .left-container {
+    width: 50%;
+  }
+
+  .right-container {
+    width: 50%;
+  }
+
+  .right-container img {
+    max-width: 80%;
+  }
+}
+
+/* Для ноутбука и более крупных экранов (ширина от 1024px и более) */
+@media screen and (min-width: 1024px) {
+  .container {
+    display: flex;
+  }
+
+  .left-container {
+    width: 60%;
+  }
+
+  .right-container {
+    flex: 1;
+  }
+}
+
+/* Для смартфонов с очень узкими экранами (максимальная ширина 479px) */
+@media screen and (max-width: 479px) {
+  .left-container, .right-container {
+    width: 100%;
+  }
+
+  .right-container {
+    padding: 10px;
+  }
+
+  .right-container img {
+    margin-bottom: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="file"],
+  input[type="password"] {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+/* Для смартфонов с портретной ориентацией (ширина от 480px до 767px) */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .left-container, .right-container {
+    width: 100%;
+  }
+
+  .right-container img {
+    max-width: 50%;
+    margin-bottom: 10px;
+  }
+}

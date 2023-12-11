@@ -82,3 +82,59 @@ textarea {
   .tooltip:hover .tooltip-text {
     display: block;
   }
+
+
+/* Для телефона (максимальная ширина 767px) */
+@media screen and (max-width: 767px) {
+  .container {
+    width: 90%;
+    border-radius: 0;
+    padding: 10px;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  select,
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+  }
+}
+
+/* Для планшета (ширина от 768px до 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: 80%;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  label {
+    margin-bottom: 3px;
+  }
+}
+
+/* Для ноутбука и более крупных экранов (ширина от 1024px и более) */
+@media screen and (min-width: 1024px) {
+  .container {
+    width: 600px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+  }
+
+  select,
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 80%;
+  }
+
+  .small-select {
+    width: auto;
+  }
+}

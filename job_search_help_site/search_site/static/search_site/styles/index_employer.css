@@ -54,3 +54,48 @@ font-size: 18px; /* Размер шрифта заголовка */
 .spacing-div {
     margin: 100px;
 }
+
+/* Для телефона (максимальная ширина 767px) */
+@media screen and (max-width: 767px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .container {
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .img-photo {
+    max-width: 100%;
+  }
+
+  .link-vacancy {
+    padding: 8px 16px;
+    margin-top: 20px;
+  }
+}
+
+/* Для планшета (ширина от 768px до 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .title {
+    font-size: 32px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}

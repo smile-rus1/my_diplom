@@ -51,6 +51,9 @@ a {
     color: #ff0000;
 }
 
+.navbar-wrapper {
+    width: 100%;
+}
 /* тут стили для навигационной панели */
 
 div.main-navbar {
@@ -61,11 +64,12 @@ div.main-navbar {
 div.main-navbar ul {
     list-style: none;
     margin: 0;
-    padding: 5px 20px;
+    padding: 0 20px; /* Отступы слева и справа */
 }
 
 div.main-navbar li {
-    margin: 0 20px;
+    display: inline-block;
+    margin: 0 10px;
 }
 
 div.main-navbar a {
@@ -224,4 +228,195 @@ div.login-btn:active {
     width:100%;
 }
 /*конец стилей футера*/
+
+@media only screen and (max-width: 320px) {
+    div.main-navbar {
+        padding: 5px 0; /* Изменение отступов */
+    }
+}
+
+@media only screen and (max-width: 576px) {
+        .navbar-wrapper {
+            font-size: 14px;
+            padding: 10px;
+            width: 100%;
+        }
+
+@media only screen and (max-width: 768px) {
+    /* Уменьшаем размер шрифтов ссылок */
+    .link-nav-bar-applicant-employer,
+    div.register-btn,
+    div.login-btn {
+        font-size: 14px;
+    }
+
+    /* Меняем размер кнопок войти и регистрации */
+    div.register-btn{
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    div.login-btn {
+        padding: 8px 50px;
+        border-radius: 8px;
+    }
+
+    /* Адаптивный дизайн для навигационной панели */
+    .nav-panel-applicant-employer {
+        padding: 10px;
+    }
+
+    .left-div {
+      display: inline-block; /* Используем inline-block для левых div */
+    }
+
+    /* Меняем размер изображений в панели */
+    img.navbar-image {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+    }
+
+    div.img-main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    div.img-main img.navbar-image {
+        width: 30px;
+        height: 20px;
+        align-elements: center;
+    }
+
+    div.img-main img.navbar-image {
+        width: 30px;
+        height: 20px;
+    }
+
+    /* Адаптивный дизайн для контейнера поиска */
+    .container-search-people {
+        flex-direction: column;
+    }
+
+    .content-count-company,
+    .content-count-vacancy {
+        width: 100%;
+        float: none;
+    }
+
+    .content-count-company,
+    .content-count-vacancy p {
+        font-size: 14px;
+    }
+
+    /* Адаптивный дизайн для футера */
+    #footer {
+        height: auto;
+    }
+
+    ul.topnav {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    ul.topnav li {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    ul.topnav li.right {
+        float: none;
+    }
+
+    ul.topnav li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 12px 0;
+        text-decoration: none;
+    }
+    div.main-navbar {
+        padding: 8px 0;
+    }
+
+    div.main-navbar ul {
+        padding: 0;
+    }
+
+    div.main-navbar li {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+/* Для планшетов (ширина экрана от 768px до 1023px) */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    /* Изменения для панели с выбором кандидата или подбором персонала */
+    .nav-panel-applicant-employer {
+        padding: 12px; /* Изменение отступов для панели */
+    }
+
+    .left-div,
+    .right-div {
+        margin: 0 8px; /* Изменение отступов для блоков */
+    }
+
+    /* Навигационная панель */
+    div.main-navbar {
+        padding: 8px; /* Изменение отступов для основной навигационной панели */
+    }
+
+    div.main-navbar ul {
+        padding: 0; /* Изменение отступов списка */
+    }
+
+    div.main-navbar li {
+        display: block;
+        margin: 5px 0; /* Изменение отступов элементов списка */
+    }
+
+    div.main-navbar a {
+        padding: 10px; /* Изменение отступов текста ссылок */
+    }
+
+    /* Кнопки входа и регистрации */
+    div.register-btn {
+        font-size: 16px; /* Изменение размера шрифта */
+        padding: 10px 20px; /* Изменение отступов кнопки регистрации */
+        border-radius: 10px; /* Изменение радиуса скругления углов */
+    }
+
+    div.login-btn {
+        font-size: 16px; /* Изменение размера шрифта */
+        padding: 10px 20px; /* Изменение отступов кнопки входа */
+        border-radius: 10px; /* Изменение радиуса скругления углов */
+    }
+
+    /* Контент */
+    .container-search-people {
+        flex-direction: row; /* Возвращение горизонтального расположения элементов */
+    }
+
+    .content-count-company,
+    .content-count-vacancy {
+        width: 50%; /* Изменение ширины элементов */
+        padding: 30px; /* Изменение отступов */
+        margin-bottom: 30px; /* Изменение отступа между элементами */
+    }
+
+    .content-count-company p,
+    .content-count-vacancy p {
+        margin-bottom: 15px; /* Изменение отступа между абзацами */
+    }
+
+    /* Изображения */
+    img.navbar-image {
+        width: 35px; /* Изменение размера изображений */
+        height: 35px;
+        margin-left: 15px; /* Изменение отступов */
+    }
+}
 
