@@ -10,6 +10,7 @@
 
 <div class="w-full flex flex-wrap items-center">
     {% for room in rooms %}
+        {% if request.user in room.allowed_users.all %}
         <div class="w-full lg:w-1/4 px-3 py-3">
             <div class="p-4 bg-white shadow rounded-xl text-center">
                 {% if request.user.company %}
@@ -25,6 +26,7 @@
                 </a>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

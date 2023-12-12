@@ -33,3 +33,11 @@ def room(request, room_id: int):
             "messages": messages,
         }
     )
+
+
+def exit_from_room_chat(request, room_id: int):
+    """
+    Выход из комнаты чата.
+    """
+    services.exit_from_room_chat(request.user, room_id)
+    return redirect("index_chat")

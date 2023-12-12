@@ -2,6 +2,8 @@ import json
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.shortcuts import get_object_or_404
+
 from .models import Room, Message, User
 
 
@@ -26,11 +28,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json.get('message', None)
+        delete_message = text_data_json.get('delete_message', None)
+        message_id = text_data_json.get('message_id', None)
 
         # Get room
         room = await self.get_room()
         sender = self.scope['user']
+
+        if delete_message:
+            await self.delete_message_from_chat(message_id)
+            await self.send(text_data=json.dumps({
+                'delete_success': True,
+                'message_id': message_id,
+            }))
+            return
 
         user = await self.get_user_by_email(sender)
         user_data = await self.prepare_user_data(user)
@@ -109,3 +121,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return user.company.second_name_user, user.company.name_user
         except:
             return user.applicant.second_name, user.applicant.first_name
+
+    @sync_to_async
+    def delete_message_from_chat(self, message_id: int):
+        message = get_object_or_404(Message, id=message_id)
+        message.delete()

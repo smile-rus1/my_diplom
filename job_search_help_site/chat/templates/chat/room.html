@@ -10,6 +10,14 @@
 {% endif %}
 {% endblock %}
 
+{% block divexit %}
+<div class="flex items-center space-x-4">
+    <a href="{% url 'exit_from_room_chat' room.id %}" class="px-5 py-3 rounded-xl text-white bg-teal-900 hover:bg-teal-200 block" onclick="return confirm('Вы действительно хотите выйти из чата?')">
+        Выход из чата
+    </a>
+</div>
+{% endblock  %}
+
 {% block content %}
 <div class="p-10 lg:p-20 text-center">
     <h1 class="text-3xl lg:text-6xl text-white">
@@ -24,7 +32,17 @@
 
 <div class="lg:w-2/4 mx-4 lg:mx-auto p-4 bg-white rounded-xl">
     <div class="chat-messages space-y-3" id="chat-messages">
-        {% for m in messages %}<b>{{ m.last_name }} {{ m.first_name }}</b>: {{ m.content }}<br>{% endfor %}
+        {% for m in messages %}
+        <div style="margin: 0px; padding: 5px;" data-message-id="{{ m.id }}">
+            <b>{{ m.first_name }} {{ m.last_name }}</b>:
+                <span id="content-message" data-id="{{ m.id }}">{{ m.content }}<br></span>
+            {% if m.user.id == request.user.id %}
+                <span id="delete-message" class="delete-button" data-message-id="{{ m.id }}" style="cursor: pointer;">&#128465;</span>&nbsp;
+                <span id="edit-message" class="edit-button" data-message-id="{{ m.id }}" style="cursor: pointer;">&#x270F;</span>
+            {% endif %}
+                <br>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
@@ -58,6 +76,11 @@
     const room_id = JSON.parse(document.getElementById('json-room_id').textContent);
     const userName = JSON.parse(document.getElementById('json-email').textContent);
 
+    function scrollToBottom() {
+        let objDiv = document.getElementById("chat-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
 
     const chatSocket = new WebSocket(
         'ws://'
@@ -71,12 +94,61 @@
         return ;
     }
 
+    function deleteMessage(messageId)
+    {
+       chatSocket.send(JSON.stringify({
+            'delete_message': true,
+            'message_id': messageId,
+        }));
+    }
+
+    function editMessage(messageId, newContent) {
+        chatSocket.send(JSON.stringify({
+            'edit_message': true,
+            'message_id': messageId,
+            'new_content': newContent,
+        }));
+    }
+
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
 
         if (data.message) {
-            document.querySelector('#chat-messages').innerHTML += ('<b>' + data.last_name + " "+ data.first_name + '</b>: ' + data.message + '<br>');
-        }
+            var newMessage = '<div style="margin: 0px; padding: 5px;" data-message-id="' + data.id + '">';
+
+            newMessage += '<b>' + data.first_name + ' ' + data.last_name + '</b>:</span> ';
+            newMessage += '<span id="content-message">' + data.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>';
+            newMessage += '<span id="delete-message" class="delete-button" data-message-id="' + data.id + '" style="cursor: pointer;">&#128465;</span>&nbsp;';
+            newMessage += '<span id="edit-message" class="edit-button" data-message-id="' + data.id + '" style="cursor: pointer;">&#x270F;</span>';
+            newMessage += '<br></div>';
+
+            const chatMessages = document.querySelector('#chat-messages');
+            chatMessages.innerHTML += newMessage;
+
+            const deleteButton = chatMessages.querySelector(`[data-message-id="${data.id}"] .delete-button`);
+            deleteButton.addEventListener('click', function() {
+                const userConfirmation = confirm('Вы уверены, что хотите удалить сообщение?');
+                const messageId = this.getAttribute('data-message-id');
+                const messageToDelete = document.querySelector(`[data-message-id="${messageId}"]`);
+
+                if (userConfirmation){
+                    deleteMessage(messageId);
+                    messageToDelete.remove();
+                }
+            });
+
+        } else if (data.edit_success) {
+            const editedMessageId = data.message_id;
+            const newContent = data.new_content;
+
+            document.querySelector(`#content-message-${editedMessageId}`).textContent = newContent;
+
+        } else if (data.delete_success) {
+            const deletedMessageId = data.message_id;
+            const messageElement = document.querySelector(`#content-message-${deletedMessageId}`);
+            if (messageElement) {
+                messageElement.parentNode.removeChild(messageElement);
+        }}
 
         scrollToBottom();
     };
@@ -98,15 +170,38 @@
         return false
     };
 
-    /**
-    * A function for finding the messages element, and scroll to the bottom of it.
-    */
-    function scrollToBottom() {
-        let objDiv = document.getElementById("chat-messages");
-        objDiv.scrollTop = objDiv.scrollHeight;
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const userConfirmation = confirm('Вы уверены, что хотите удалить сообщение?');
 
-    // Add this below the function to trigger the scroll on load.
+            const messageId = this.getAttribute('data-message-id');
+            const messageToDelete = document.querySelector(`[data-message-id="${messageId}"]`);
+
+            if (userConfirmation){
+                deleteMessage(messageId);
+                messageToDelete.remove();
+            }
+        });
+    });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-message-id');
+                const messageToDelete = document.querySelector(`[data-message-id="${messageId}"]`);
+
+                const messageElement = document.querySelector(`[data-id="${messageId}"]`);
+                document.getElementById('chat-message-input').value = messageElement.textContent;
+
+                deleteMessage(messageId);
+                messageToDelete.remove();
+
+                 });
+            });
+        });
+
     scrollToBottom();
 </script>
 {% endblock %}
