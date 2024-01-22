@@ -1,0 +1,62 @@
+{% extends 'base_applicant.html' %}
+
+{% load static %}
+{% block title %}Избранные вакансии{% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_for_main_page.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/news_and_useful_article.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/index_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/pagination.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/vacancy_styles.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<h1>Избранные вакансии</h1>
+{% for favorite in favorite_vacancies %}
+<div class="vacancy-container">
+    <div class="vacancy-content">
+        <a href="{% url 'vacancy' favorite.vacancy.id %}" class="card-link"><h1>{{ favorite.vacancy.title_vacancy }}</h1></a>
+        <h2>{{ favorite.company.title_company }}</h2>
+        <h4>{{ favorite.vacancy.salary }}</h4>
+        <p>Опыт работы: {% if favorite.vacancy.experience %}{{ favorite.vacancy.experience }}{% else %}Можно без опыта{% endif %}</p>
+        <p class="key-skills">Ключевые навыки: {{ favorite.vacancy.key_skills }}</p>
+        <div class="vacancy-buttons" style="display: flex;">
+            <button class="button-vacancy" onclick="window.location.href='{% url 'vacancy' favorite.vacancy.id %}'">Откликнуться</button>
+            <form id="likeForm_{{ favorite.id }}" method="post" action="{% url 'remove_favorite_vacancy' favorite.id %}">
+                <input type="hidden" name="_method" value="DELETE">
+                {% csrf_token %}
+                <button style="background: none; border: none; padding: 0;" type="button" onclick="likeVacancy('{{ favorite.id }}')">
+                    <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Убрать из понравивившихся">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeVacancy(id) {
+        var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+        $.ajax({
+            url: '/remove_favorite_vacancy/' + id,
+            type: 'DELETE',
+            headers: {'X-CSRFToken': csrfToken},
+            success: function(data) {
+                alert("Вакансия была удалена из понравившихся!");
+            },
+            error: function(xhr, status, error) {
+                alert('Произошла ошибка. Попробуйте чуть позже.');
+            }
+        });
+    }
+</script>
+
+{% endblock %}
