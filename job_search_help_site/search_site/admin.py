@@ -49,3 +49,8 @@ class VacancyAdmin(admin.ModelAdmin):
 class ApplicationAdmin(admin.ModelAdmin):
     # Добавьте поля, которые хотите отображать для модели Vacancy
     pass
+
+
+@admin.register(models.LikeVacancyUser)
+class LikeVacancyUserAdmin(admin.ModelAdmin):
+    ...

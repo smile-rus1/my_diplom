@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.core.cache import cache
+from django.views import View
 
 from .services import auth, home_page, resume, vacancy, response_for_applicant, responses_on_vacancy, \
     responded_to_vacancy_of_applicant, resume_of_applicants_for_company, applications, popular_company, company
@@ -861,3 +862,30 @@ def confirm_users_role(request, token):
             if user_role == "applicant" else redirect("company_home_page")
 
     return redirect("index")
+
+
+class LikeVacancyUserView(View):
+    """
+    Create and view like vacancy.
+    """
+    template_name = "like_vacancy_user.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            "favorite_vacancies": vacancy.get_all_favorite_vacancies(request.user)
+        }
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, id_vacancy: int, *args, **kwargs):
+        if vacancy.create_like_vacancy_user(request.user, id_vacancy) is None:
+            messages.error(request, "Возникла непредвиденная ошибка, попробуйте еще раз")
+            return HttpResponse(status=400)
+
+        return HttpResponse(status=201)
+
+    def delete(self, request, id_vacancy: int, *args, **kwargs):
+        vacancy.delete_like_vacancy_user(request.user, id_vacancy)
+        return HttpResponse(status=204)

@@ -220,14 +220,25 @@ select:focus {
         </div>
         <div class="vacancy-content">
             <a href="{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'vacancy_company' item.id %}{%endif%}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
-            <h2>{{ item.company.title_company }}</h2>
+            <h2>{{ item.salary }}</h2>
+            <p style="margin-bottom: 20px; padding: 0px">{{ item.company.title_company }}</p>
             <p>{% if item.experience %}{{ item.experience }}{% else %}Можно без опыта{% endif %}</p>
             <p>Специализация: {{ item.specialization }}</p>
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
             <p>{{ item.type_of_employment }}</p>
             <p>{% if item.description|length > 100 %} {{ item.description|slice:":100" }}...{% else %}{{item.description}}{% endif %}</p>
             <p class="key-skills">Ключевые навыки: {{ item.key_skills }}</p>
-            <button class="button-vacancy" onclick="window.location.href='{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'login_applicant' %}{%endif%}'">Откликнуться</button>
+
+            <div class="vacancy-buttons" style="display: flex;">
+                <button class="button-vacancy" onclick="window.location.href='{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'login_applicant' %}{%endif%}'">Откликнуться</button>
+
+                <form id="likeForm_{{ item.id }}" method="post" action="{% url 'add_favorite_vacancy' item.id %}">
+                    {% csrf_token %}
+                    <button style="background: none; border: none; padding: 0;" type="button" onclick="likeVacancy('{{ item.id }}')">
+                        <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 {% endfor %}
@@ -247,4 +258,25 @@ select:focus {
         {% endif %}
     </span>
 </div>
+{% endblock %}
+
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeVacancy(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Вакансия добавлена в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
 {% endblock %}

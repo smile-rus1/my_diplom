@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -146,3 +147,41 @@ def change_raising_vacancy(vacancy_id: int) -> None:
     if vacancy.updated_at <= cutoff_time:
         vacancy.updated_at = current_time
         vacancy.save()
+
+
+def get_all_favorite_vacancies(user: models.CustomUser) -> list[models.LikeVacancyUser]:
+    """
+    Get vacancies when user favorite.
+    """
+    return models.LikeVacancyUser.objects.filter(user=user).prefetch_related("vacancy").all()
+
+
+def create_like_vacancy_user(user: models.CustomUser, id_vacancy: int) -> bool | None:
+    """
+    Create record a favorite vacancy by user.
+    """
+    try:
+        with transaction.atomic():
+            vacancy = get_vacancy_by_id(id_vacancy)
+            models.LikeVacancyUser.objects.create(user=user, vacancy=vacancy)
+    except Exception:
+        return None
+    return True
+
+
+def delete_like_vacancy_user(user, id_vacancy: int) -> None:
+    """
+    Delete favorite vacancy by user.
+    """
+    try:
+        with transaction.atomic():
+            favorite_vacancy: models.LikeVacancyUser = models.LikeVacancyUser.objects.filter(
+                user=user, id=id_vacancy
+            ).first()
+
+            if favorite_vacancy.user != user:
+                return None
+
+            favorite_vacancy.delete()
+    except models.LikeVacancyUser.DoesNotExist:
+        return None

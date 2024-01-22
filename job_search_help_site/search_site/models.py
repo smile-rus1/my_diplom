@@ -167,3 +167,15 @@ class Application(models.Model):
 
     class Meta:
         verbose_name_plural = "Отправка резюме"
+
+
+class LikeVacancyUser(models.Model):
+    """
+    Модель вакансий понравившихся пользователям.
+    """
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Понравившиеся вакансии пользователей"
+        unique_together = ('user', 'vacancy')
