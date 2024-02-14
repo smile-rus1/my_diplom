@@ -45,7 +45,17 @@
             <p class="vacancy-company">Компания: {{vacancy.company.title_company}}</p>
             <p class="vacancy-description">{{vacancy.description}}</p>
             <p class="vacancy-location">Местоположение: {{vacancy.location}}</p>
-            <button class="apply-button" onclick="return window.location.href='{% url 'vacancy' vacancy.id %}'">Откликнуться</button>
+            <div style="display: flex;">
+                <button class="apply-button" onclick="return window.location.href='{% url 'vacancy' vacancy.id %}'">Откликнуться</button>
+                <div style="display: flex; align-items: center;">
+                    <form id="likeForm_{{ vacancy.id }}" method="post" action="{% url 'add_favorite_vacancy' vacancy.id %}">
+                        {% csrf_token %}
+                        <button style="background: none; border: none; padding: 0;" type="button" onclick="likeVacancy('{{ vacancy.id }}')">
+                            <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     {% endfor %}
@@ -95,4 +105,24 @@
         </div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeVacancy(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Вакансия добавлена в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
 {% endblock %}

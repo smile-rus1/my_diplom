@@ -68,6 +68,12 @@ select:focus {
           </div>
         {% endif %}
       <div class="response-vacancy-container">
+        <form id="likeForm_{{ vacancy.id }}" method="post" action="{% url 'add_favorite_vacancy' vacancy.id %}">
+                    {% csrf_token %}
+                    <button style="background: none; border: none; padding: 0; float: right;" type="button" onclick="likeVacancy('{{ vacancy.id }}')">
+                        <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                    </button>
+        </form>
         <h2 class="response-vacancy-title">{{vacancy.title_vacancy}}</h2>
         <p>Заработная плата: {% if vacancy.salary %}{{vacancy.salary}}{% else %}не указана{%endif%}</p>
         <p>Требуемый опыт работы: {% if vacancy.experience %}{{vacancy.experience}}{%else%}Не требуется{%endif%}</p>
@@ -132,4 +138,24 @@ select:focus {
    <p>Тут могла быть ваша реклама</p>
   </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeVacancy(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Вакансия добавлена в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
 {% endblock %}
