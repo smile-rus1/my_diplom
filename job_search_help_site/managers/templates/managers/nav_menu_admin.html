@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+            <a style="color:white; text-decoration:none; margin-right: 50px;" href="{% url 'managers:index_admins' %}"
+               id="" role="button" aria-expanded="false">
+                  Главная
+            </a>
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link active dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Менеджеры
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{% url 'managers:administration_managers' %}">Все менеджеры</a></li>
+                  <li><a class="dropdown-item" href="{% url 'managers:create_manager' %}">Создать нового менеджера</a></li>
+                </ul>
+              </li>
+            </ul>
+</div>
+<div class="collapse navbar-collapse" id="navbarNavvWhiteDropdown">
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="#" id="navbarWhiteDropdownMenuLinki" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Анализ рынка
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <li><a class="dropdown-item" href="#">Все кандидаты</a></li>
+                <li><a class="dropdown-item" href="#">Заявки на потверждение</a></li>
+                <li><a class="dropdown-item" href="#">Потвержденые кандидаты</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div class="collapse navbar-collapse" id="navbarNavDropdown" style="">
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Кабинет
+                  </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'admin:index' %}">Админ панель</a></li>
+                <li><a class="dropdown-item" href="{% url 'managers:logout_manager' %}">Выйти</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
