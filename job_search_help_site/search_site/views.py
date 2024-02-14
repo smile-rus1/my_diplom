@@ -91,7 +91,12 @@ def login_applicant(request):
         ):
             return render(request, 'login_applicant.html', {'error_message': "Неправильный email или пароль!"})
         else:
-            return redirect("main_applicant")
+            if auth.check_user_role(request) == "employer":
+                return redirect("main_employer")
+            elif auth.check_user_role(request) == "is_staff":
+                return redirect(reverse("managers:index_managers"))
+            elif auth.check_user_role(request) == "is_superuser":
+                return redirect(reverse("managers:index_admins"))
 
     return render(request, "login_applicant.html")
 
@@ -182,6 +187,13 @@ def main_employer(request):
     """
     Возвращате гланую страницу для компаний.
     """
+    if auth.check_user_role(request) == "applicant":
+        return redirect("main_applicant")
+    elif auth.check_user_role(request) == "is_superuser":
+        return redirect(reverse("managers:index_admins"))
+    elif auth.check_user_role(request) == "is_staff":
+        return redirect(reverse("managers:index_managers"))
+
     resumes = resume_of_applicants_for_company.get_resume_for_company_by_algorithm_in_main_page(request.user)
 
     return render(
@@ -210,8 +222,13 @@ def main_applicant(request):
     """
     Главная страница для кандидатов
     """
-    if not home_page.get_applicant(request.user):
+    if auth.check_user_role(request) == "employer":
         return redirect("main_employer")
+    elif auth.check_user_role(request) == "is_staff":
+        return redirect(reverse("managers:index_managers"))
+    elif auth.check_user_role(request) == "is_superuser":
+        return redirect(reverse("managers:index_admins"))
+
     total_responses = cache.get("count_responses")
     return render(
         request,

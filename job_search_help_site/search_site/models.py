@@ -179,3 +179,16 @@ class LikeVacancyUser(models.Model):
     class Meta:
         verbose_name_plural = "Понравившиеся вакансии пользователей"
         unique_together = ('user', 'vacancy')
+
+
+class RequestToVerificationUser(models.Model):
+    """
+    Model to verification user role.
+    """
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    role = models.CharField(null=False, max_length=15, verbose_name="Role of user")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date of create request")
+
+    class Meta:
+        ordering = ["-date_created"]
+        verbose_name_plural = "Запрос на верификацию пользователя"

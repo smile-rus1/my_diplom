@@ -1,0 +1,164 @@
+{% extends 'managers/base_admin.html' %}
+
+{% block title %} Главная {% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block dropdown_menu %}
+    {% include 'managers/nav_menu_manager.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <table class="table table-hover" id="example">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Email</th>
+                <th>Имя и фамилия</th>
+                <th>Номер телефона</th>
+                <th>Статус</th>
+                <th>Поменять статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function clearParamsAndNavigate(url) {
+    var baseUrl = window.location.origin + window.location.pathname;
+    window.location.href = baseUrl + url;
+}
+</script>
+
+<script>
+function getCookie(name) {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
+}
+
+function displayVerificationUserData() {
+    $(document).ready(function () {
+        var params = getAllUrlParams(window.location.href);
+        var url = '/managers/verification-user-role/?';
+
+        for (var key in params) {
+            if (params.hasOwnProperty(key)) {
+                url += key + '=' + params[key] + '&';
+            }
+        }
+        url = url.slice(0, -1);
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при получении данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    alert("Не удалось найти по указанному запросу!");
+                    return;
+                }
+
+                var tbody = $('#example tbody');
+                tbody.empty();
+
+                data.forEach(item => {
+                    var row = $('<tr>');
+                    row.append(`<td>${item.id}</td>`);
+                    row.append(`<td>${item.request_verification.user.email}</td>`);
+                    row.append(`<td>${item.second_name} ${item.first_name}</td>`);
+                    row.append(`<td>${item.phone_number}</td>`);
+
+                    // Создаем новый <td> для статуса и добавляем его в строку
+                    var statusTd = $(`<td style="color: ${item.confirm ? 'green' : 'red'}">${item.confirm ? 'Проверка пройдена' : 'Проверка не пройдена'}</td>`);
+                    row.append(statusTd);
+
+                    // Создаем новую кнопку с нужными атрибутами и обработчиком события
+                    var button = $(`<button class="status-button" data-id="${item.id}" data-confirm="${item.confirm}">
+                        ${item.confirm ? 'Изменить статус на "Не потвержден"' : 'Изменить статус на "Потвержден"'}
+                    </button>`);
+                    button.on('click', function () {
+                        var itemId = $(this).data('id');
+                        var newConfirmStatus = !$(this).data('confirm');
+                        const csrftoken = getCookie('csrftoken');
+
+                        // Отправляем PATCH-запрос на сервер
+                        fetch(`/managers/verification-user-role/${itemId}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrftoken
+                            },
+                            body: JSON.stringify({ confirm: newConfirmStatus }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Ошибка при обновлении статуса');
+                                }
+                                return response.json();
+                            })
+                            .then(updatedData => {
+                                // Обновляем текст и цвет <td> статуса
+                                statusTd.text(updatedData.confirm ? 'Проверка пройдена' : 'Проверка не пройдена');
+                                statusTd.css('color', updatedData.confirm ? 'green' : 'red');
+
+                                // Обновляем атрибут data-confirm кнопки
+                                button.data('confirm', updatedData.confirm);
+
+                                // Обновляем текст кнопки
+                                button.text(updatedData.confirm ? 'Изменить статус на "Не потвержден"' : 'Изменить статус на "Потвержден"');
+
+                                alert('Статус обновлен успешно:', updatedData);
+                            })
+                            .catch(error => {
+                                console.error('Ошибка при обновлении статуса:', error);
+                            });
+                    });
+                    row.append($('<td>').append(button));
+
+                    // Добавляем созданную строку в tbody
+                    tbody.append(row);
+                });
+            })
+            .catch(error => console.error('Ошибка при получении данных:', error));
+    });
+}
+
+displayVerificationUserData();
+</script>
+
+<script>
+function getAllUrlParams(url) {
+    var queryString = url.split('?')[1];
+    var params = {};
+    if (queryString) {
+        queryString = queryString.split('#')[0];
+        var pairs = queryString.split('&');
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split('=');
+            var key = decodeURIComponent(pair[0]);
+            var value = decodeURIComponent(pair[1] || '');
+            if (key.length) {
+                if (params[key]) {
+                    if (Array.isArray(params[key])) {
+                        params[key].push(value);
+                    } else {
+                        params[key] = [params[key], value];
+                    }
+                } else {
+                    params[key] = value;
+                }
+            }
+        }
+    }
+    return params;
+}
+</script>
+{% endblock %}

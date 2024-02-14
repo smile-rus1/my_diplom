@@ -1,0 +1,138 @@
+{% extends 'managers/base_admin.html' %}
+
+{% block title %} Все менеджеры {% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block dropdown_menu %}
+    {% include 'managers/nav_menu_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <table class="table table-hover" id="example">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Email менеджера</th>
+                <th>Дата последнего входа</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+{% block js %}
+<script>
+function clearParamsAndNavigate(url) {
+    var baseUrl = window.location.origin + window.location.pathname;
+    window.location.href = baseUrl + url;
+}
+</script>
+
+<script>
+function getCookie(name) {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
+}
+
+function displayManagers() {
+    $(document).ready(function () {
+        fetch("/managers/administration/")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при получении данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    alert("Не удалось найти по указанному запросу!");
+                    return;
+                }
+
+                var tbody = $('#example tbody');
+                tbody.empty();
+
+                data.forEach(item => {
+                    var row = $('<tr>');
+                    row.append(`<td>${item.id}</td>`);
+                    row.append(`<td>${item.email}</td>`);
+                    row.append(`<td>${prepareDate(item.last_login)}</td>`);
+                    row.append(
+                        $('<td>').append(
+                            $('<a>').attr('href', '#')
+                                    .addClass('btn btn-danger delete-link')
+                                    .text('Удалить')
+                        )
+                    );
+
+                    tbody.append(row);
+                });
+            })
+            .catch(error => console.error('Ошибка при получении данных:', error));
+    });
+}
+
+displayManagers();
+assignEventHandlers();
+</script>
+
+<script>
+    function assignEventHandlers() {
+        // Обработчик события для удаления
+        $(document).on('click', '.delete-link', function(event) {
+            event.preventDefault();
+            var row = $(this).closest('tr');
+            var id = row.find('td:first').text();
+
+            const csrftoken = getCookie('csrftoken');
+
+            if (confirm('Вы действительно хотите удалить эту компанию?')) {
+                fetch('/managers/administration/' + id, {
+                    method: 'DELETE',
+                    headers : {
+                        'X-CSRFToken': csrftoken
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при удалении данных');
+                    }
+                    row.remove();
+                })
+                .catch(error => console.error('Ошибка при удалении данных:', error));
+            }
+        });
+    }
+</script>
+
+<script>
+    function addZero(num) {
+        return (num < 10 ? '0' : '') + num;
+    }
+
+    function prepareDate(date){
+        var date = new Date(date);
+        var hours = addZero(date.getHours());
+        var minutes = addZero(date.getMinutes());
+
+        var day = addZero(date.getDate());
+        var monthNames = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня",
+                          "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+        var month = monthNames[date.getMonth()];
+        var year = date.getFullYear();
+
+        var formattedDate = "Был " + hours + ":" + minutes + ", " + day + " " + month + " " + year + " года";
+        return formattedDate;
+    }
+</script>
+{% endblock %}
+
+{% endblock %}
+

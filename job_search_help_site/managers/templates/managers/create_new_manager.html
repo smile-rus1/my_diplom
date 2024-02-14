@@ -1,0 +1,95 @@
+{% extends 'managers/base_admin.html' %}
+
+{% block title %} Создание нового менеджера {% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block dropdown_menu %}
+     {% include 'managers/nav_menu_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<form method="post" id="create-form">
+    {% csrf_token %}
+    <div class="container mt-5">
+        <div class="form-group col-md-6">
+            <label for="email" class="form-label"><i style="font-weight: bold;">Email</i></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <label for="password1" class="form-label"><i style="font-weight: bold;">Пароль менеджера</i></label>
+            <input type="password" class="form-control" id="password1" name="password1" placeholder="Пароль" required>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="password2" class="form-label"><i style="font-weight: bold;">Повторите пароль</i></label>
+            <input type="password" class="form-control" id="password2" name="password2" placeholder="Пароль" required>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <input type="submit" value="Создать нового менеджера" class="btn" style="background-color: #4f868c; color: white;font-size: larger;">
+        </div>
+    </div>
+</form>
+
+<script>
+function getCookie(name) {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
+}
+
+function checkPassword(password1, password2){
+    return password1 === password2
+}
+</script>
+
+<script>
+    function createManager(email, password1, password2){
+        if (!(checkPassword(password1, password2))){
+            return alert("Не совпадают пароли!");
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        const formData = {
+            email: email,
+            password1: password1,
+            password2: password2
+        };
+
+        fetch("/managers/administration/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok){
+                  return alert(`Не удалось создать менеджера, попробуйте еще раз!`);
+                }
+            alert("Менеджер был создан с email " + email);
+            }
+        )
+        .then(data => {
+             document.getElementById('email').value = "";
+             document.getElementById('password1').value = "";
+             document.getElementById('password2').value = "";
+        })
+        .catch(error => alert(error));
+    }
+
+    document.getElementById('create-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password1 = document.getElementById('password1').value;
+        const password2 = document.getElementById('password2').value;
+
+        createManager(email, password1, password2);
+    });
+</script>
+
+{% endblock %}
