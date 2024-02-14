@@ -10,7 +10,7 @@ def index(request):
 
     return render(
         request,
-        "chat/index.html",
+        "chat/all_company.html",
         {
             "rooms": rooms
         }

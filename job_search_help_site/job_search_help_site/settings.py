@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    "rest_framework",
+    'debug_toolbar',
 
     "search_site",
     "chat",
+    "managers",
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware'
+    'django.middleware.locale.LocaleMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'job_search_help_site.urls'
@@ -112,6 +116,11 @@ CACHES = {
         #             'CLIENT_CLASS': os.getenv("REDIS_CLIENT_CLASS"),
         #         }
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 30,
 }
 
 # для потверждения и регистрации через Redis
@@ -182,6 +191,10 @@ STATICFILES_DIRS = []
 # MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, "search_site", "media")
 MEDIA_URL = '/media/'
+
+INTERNAL_IPS = [
+    "127.0.0.1",  # откуда будет работать django toolbar
+]
 
 
 # Default primary key field type

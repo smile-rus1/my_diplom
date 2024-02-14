@@ -54,3 +54,8 @@ class ApplicationAdmin(admin.ModelAdmin):
 @admin.register(models.LikeVacancyUser)
 class LikeVacancyUserAdmin(admin.ModelAdmin):
     ...
+
+
+@admin.register(models.RequestToVerificationUser)
+class RequestToVerificationUserAdmin(admin.ModelAdmin):
+    ...

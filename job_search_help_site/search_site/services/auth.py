@@ -3,6 +3,7 @@ import uuid
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.core.cache import cache
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
@@ -107,6 +108,12 @@ def check_user_role(request):
 
         elif hasattr(user, 'company'):
             return "company"
+
+        if user.is_superuser:
+            return "is_superuser"
+
+        elif user.is_staff:
+            return "is_staff"
     return
 
 
@@ -246,11 +253,18 @@ def create_request_to_confirm(request, user_id: int) -> bool:
     Создает запрос на потверждение пользователя для админов.
     """
     try:
-        user = models.CustomUser.objects.get(id=int(user_id))
-        # тут в какую-то модель новую типо сделать запись на то, чтобы потвердить
-        # RequestModel.objects.create(user_mail=user.email)
+        with transaction.atomic():
+            user = models.CustomUser.objects.get(id=int(user_id))
+            models.RequestToVerificationUser.objects.create(
+                user=user,
+                role=check_user_role(request)
+            )
         messages.success(request, "Заявка на рассмотрение отправлена!")
+
     except models.CustomUser.DoesNotExist:
         messages.error(request, "Что-то пошло не так, поробуйте чуть позже!")
         return False
+
+    except Exception as e:
+        messages.error(request, "Возникла не предвиденная ошибка, попробуйте чуть позже!")
     return True
