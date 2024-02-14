@@ -906,3 +906,29 @@ class LikeVacancyUserView(View):
     def delete(self, request, id_vacancy: int, *args, **kwargs):
         vacancy.delete_like_vacancy_user(request.user, id_vacancy)
         return HttpResponse(status=204)
+
+
+class LikeResumeUserView(View):
+    """
+    Create and view like resume.
+    """
+    template_name = "like_resume_user.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            "favorite_resume": resume.get_all_favorite_resumes(request.user)
+        }
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, id_resume: int, *args, **kwargs):
+        if resume.create_like_resume_user(request.user, id_resume) is None:
+            messages.error(request, "Возникла непредвиденная ошибка, попробуйте еще раз")
+            return HttpResponse(status=400)
+        return HttpResponse(status=201)
+
+    def delete(self, request, id_resume: int, *args, **kwargs):
+        resume.delete_favorite_resume(request.user, id_resume)
+        return HttpResponse(status=204)

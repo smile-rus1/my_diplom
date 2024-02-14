@@ -222,6 +222,12 @@ select:focus {
             <p>{% if item.location %}{{ item.location }}{% endif %}</p>
             <p>Профессия: {{ item.profession }}</p>
             <p class="key-skills">Ключевые навыки: {{ item.key_skills }}</p>
+            <form id="likeForm_{{ item.id }}" method="post" action="{% url 'add_favorite_resume' item.id %}">
+                {% csrf_token %}
+                <button style="background: none; border: none; padding: 0; float: right" type="button" onclick="likeResume('{{ item.id }}')">
+                    <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                </button>
+            </form>
         </div>
     </div>
 {% endfor %}
@@ -241,4 +247,26 @@ select:focus {
         {% endif %}
     </span>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeResume(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Вакансия добавлена в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+{% block js %}
+
 {% endblock %}

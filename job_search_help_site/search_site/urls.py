@@ -56,6 +56,9 @@ urlpatterns = [
     path("employer/raising/<int:vacancy_id>", views.raising_vacancy, name="raising_vacancy"),
     path("employer/info_applicant/<int:resume_id>", views.show_info_about_applicant_resume, name="show_info_about_applicant_resume"),
     path("employer/send_invitation/<int:resume_id>", views.send_invitation_from_the_company, name="send_invitation_from_the_company"),
+    path("favorite_resume", views.LikeResumeUserView.as_view(), name="favorite_resume"),
+    path("add_favorite_resume/<int:id_resume>", views.LikeResumeUserView.as_view(), name="add_favorite_resume"),
+    path("delete_favorite_resume/<int:id_resume>", views.LikeResumeUserView.as_view(), name="delete_favorite_resume"),
 
     # url для admin
     path('admin_redirect/', views.admin_redirect, name='admin')

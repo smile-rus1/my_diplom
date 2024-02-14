@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -8,6 +9,10 @@ from django.utils import timezone
 from search_site import models
 from . import validators
 from .home_page import get_applicant
+
+
+def get_resume_by_id(id_resume: int) -> models.Resume | None:
+    return get_object_or_404(models.Resume, id=id_resume)
 
 
 def get_resume(user: models.CustomUser, resume_id: int):
@@ -127,3 +132,41 @@ def _check_and_get_resume(user: models.CustomUser, id_resume: int) -> models.Res
         return None
     return resume
 
+
+def create_like_resume_user(user: models.CustomUser, id_resume: int) -> bool | None:
+    """
+    Create record a fovorite resume by user.
+    """
+
+    try:
+        with transaction.atomic():
+            resume = get_resume_by_id(id_resume=id_resume)
+            models.LikeResumeUser.objects.create(user=user, resume=resume)
+            return True
+
+    except Exception as e:
+        return None
+
+
+def get_all_favorite_resumes(user: models.CustomUser) -> list[models.LikeResumeUser]:
+    return models.LikeResumeUser.objects.filter(user=user).prefetch_related("resume").all()
+
+
+def delete_favorite_resume(user: models.CustomUser, id_resume: int) -> None:
+    """
+    Delete favorite resume.
+    """
+    try:
+        with transaction.atomic():
+            favorite_resume = models.LikeResumeUser.objects.filter(
+                user=user,
+                id=id_resume
+            ).first()
+
+            if favorite_resume.user != user:
+                return None
+
+            favorite_resume.delete()
+
+    except models.LikeResumeUser.DoesNotExist as ex:
+        return None

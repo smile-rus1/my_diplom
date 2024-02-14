@@ -62,9 +62,15 @@ textarea:focus {
 {% block content %}
 <div class="container">
     <div class="left-container">
+        <div style="display: flex; align-items: center;">
         <h2>Кандидат {{info_applicant.applicant.second_name}} {{info_applicant.applicant.first_name}}</h2>
-        <br>
-
+            <form id="likeForm_{{ info_applicant.id }}" method="post" action="{% url 'add_favorite_resume' info_applicant.id %}">
+                {% csrf_token %}
+                <button style="background: none; border: none; padding: 0; float: right" type="button" onclick="likeResume('{{ info_applicant.id }}')">
+                    <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                </button>
+            </form>
+        </div>
         <h3>{{ info_applicant.profession }}</h3>
 
         {% if info_applicant.salary %}
@@ -124,4 +130,22 @@ textarea:focus {
     {% endif %}
       </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeResume(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Резюме добавлено в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
 {% endblock %}

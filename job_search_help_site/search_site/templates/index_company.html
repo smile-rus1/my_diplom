@@ -69,9 +69,17 @@
             {% else %}
             <img src="{% static 'photo/user_no_photo.png' %}" title="Потвердите достоверность компании, чтобы видеть фото кандидатов">
             {% endif %}
-            <h2 class="resume-title">
-                <a href="{% url 'show_info_about_applicant_resume' resume.id  %}" class="card-link">{{ resume.name_of_resume }}</a>
-            </h2>
+            <div style="display: flex; align-items: center;">
+                <h2 class="resume-title">
+                    <a href="{% url 'show_info_about_applicant_resume' resume.id  %}" class="card-link">{{ resume.name_of_resume }}</a>
+                </h2>
+                <form id="likeForm_{{ resume.id }}" method="post" action="{% url 'add_favorite_resume' resume.id %}">
+                    {% csrf_token %}
+                    <button style="background: none; border: none; padding: 0; float: right" type="button" onclick="likeResume('{{ resume.id }}')">
+                        <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Добавить в понравившиеся">
+                    </button>
+                </form>
+            </div>
             <p class="resume-experience">Опыт работы: {% if resume.experience %}{{ resume.key_skills }}{% else %}Нет опыта{% endif %}</p>
             <p>{% if resume.salary %}{{resume.salary}}{% endif %}</p>
             {% if resume.profession != "Нет профессии"  %}
@@ -132,4 +140,22 @@
              </div>
         </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function likeResume(itemId) {
+        var formId = '#likeForm_' + itemId;
+        $.ajax({
+            type: 'POST',
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            success: function(data) {
+                alert('Вакансия добавлена в избранное!');
+            },
+            error: function() {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        });
+    }
+</script>
 {% endblock %}

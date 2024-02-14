@@ -181,15 +181,16 @@ class LikeVacancyUser(models.Model):
         unique_together = ('user', 'vacancy')
 
 
-# class LikeResumeUser(models.Model):
-#     """
-#
-#     """
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name_plural = ""
+class LikeResumeUser(models.Model):
+    """
+    Модель резюме, понравившимся пользователям.
+    """
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Понравившиеся резюме пользователей"
+        unique_together = ('user', 'resume')
 
 
 class RequestToVerificationUser(models.Model):
