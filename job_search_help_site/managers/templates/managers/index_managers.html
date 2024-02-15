@@ -17,6 +17,8 @@
                 <th>Email</th>
                 <th>Имя и фамилия</th>
                 <th>Номер телефона</th>
+                <th>Дата запроса</th>
+                <th>Дата потверждения</th>
                 <th>Статус</th>
                 <th>Поменять статус</th>
             </tr>
@@ -70,11 +72,14 @@ function displayVerificationUserData() {
                 tbody.empty();
 
                 data.forEach(item => {
+                    console.log(item);
                     var row = $('<tr>');
                     row.append(`<td>${item.id}</td>`);
                     row.append(`<td>${item.request_verification.user.email}</td>`);
                     row.append(`<td>${item.second_name} ${item.first_name}</td>`);
                     row.append(`<td>${item.phone_number}</td>`);
+                    row.append(`<td>${prepareDate(item.date_created)}</td>`);
+                    row.append(`<td>${prepareDate(item.date_confirm)}</td>`);
 
                     // Создаем новый <td> для статуса и добавляем его в строку
                     var statusTd = $(`<td style="color: ${item.confirm ? 'green' : 'red'}">${item.confirm ? 'Проверка пройдена' : 'Проверка не пройдена'}</td>`);
@@ -160,5 +165,26 @@ function getAllUrlParams(url) {
     }
     return params;
 }
+</script>
+
+<script>
+    function addZero(num) {
+        return (num < 10 ? '0' : '') + num;
+    }
+
+    function prepareDate(date){
+        var date = new Date(date);
+        var hours = addZero(date.getHours());
+        var minutes = addZero(date.getMinutes());
+
+        var day = addZero(date.getDate());
+        var monthNames = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня",
+                          "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+        var month = monthNames[date.getMonth()];
+        var year = date.getFullYear();
+
+        var formattedDate = hours + ":" + minutes + ", " + day + " " + month + " " + year + " года";
+        return formattedDate;
+    }
 </script>
 {% endblock %}

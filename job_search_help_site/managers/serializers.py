@@ -34,6 +34,7 @@ class VerificationUserRoleSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(read_only=True)
     first_name = serializers.CharField(read_only=True)
     second_name = serializers.CharField(read_only=True)
+    date_created = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = models.VerificationUserRole

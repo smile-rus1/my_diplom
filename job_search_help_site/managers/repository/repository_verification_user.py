@@ -43,7 +43,10 @@ class RepositoryVerificationUserRole(BaseRepository):
                          then='request_verification__user__company__second_name_user'),
                     default=Value(''),
                     output_field=CharField()
-                )
+                ),
+                date_confirm_request=F("date_confirm"),
+                date_created=F("request_verification__date_created")
+
             )
             return verification_user_role_queryset.filter(manager=manager).all()
 
