@@ -12,7 +12,7 @@
 
 {% block divexit %}
 <div class="flex items-center space-x-4">
-    <a href="{% url 'exit_from_room_chat' room.id %}" class="px-5 py-3 rounded-xl text-white bg-teal-900 hover:bg-teal-200 block" onclick="return confirm('Вы действительно хотите выйти из чата?')">
+    <a href="{% url 'chat:exit_from_room_chat' room.id %}" class="px-5 py-3 rounded-xl text-white bg-teal-900 hover:bg-teal-200 block" onclick="return confirm('Вы действительно хотите выйти из чата?')">
         Выход из чата
     </a>
 </div>

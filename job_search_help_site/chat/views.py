@@ -10,7 +10,7 @@ def index(request):
 
     return render(
         request,
-        "chat/all_company.html",
+        "chat/index.html",
         {
             "rooms": rooms
         }
@@ -21,7 +21,7 @@ def index(request):
 def room(request, room_id: int):
     room_ = services.get_room_by_id(request.user, room_id)
     if room_ is None:
-        return redirect("index_chat")
+        return redirect("chat:index_chat")
 
     messages = services.get_messages(room_)
 
@@ -40,4 +40,4 @@ def exit_from_room_chat(request, room_id: int):
     Выход из комнаты чата.
     """
     services.exit_from_room_chat(request.user, room_id)
-    return redirect("index_chat")
+    return redirect("chat:index_chat")
