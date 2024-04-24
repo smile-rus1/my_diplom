@@ -4,6 +4,8 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
 
+from search_site import tasks
+from tools import UsersTools
 from .models import Room, Message, User
 
 
@@ -46,6 +48,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         user = await self.get_user_by_email(sender)
         user_data = await self.prepare_user_data(user)
+
+        remaining_user = await self.get_remaining_users(room, user)
+        role = UsersTools.check_user_role(user)
+
+        if role == "applicant":
+            role_ = "кандидата"
+        elif role == "company":
+            role_ = "работадателя"
+
+        data_message = {
+            "subject": f"У вас новое сообщение от {role_}",
+            "message": f"У вас новое сообщение от {role_} {user_data[0]} {user_data[1]} ({user})\n"
+                       f"{message}!\n\n\n"
+                       f"«Это письмо было отправлено с сервера, просьба не отвечать на его!»",
+            "email_recipient": remaining_user.email
+        }
+
+        tasks.send_message_on_email.apply_async(args=(data_message,), countdown=900)
 
         # save in db message
         await self.save_message(
@@ -114,6 +134,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """
         user = User.objects.filter(email=email).first()
         return user
+
+    @sync_to_async
+    def get_remaining_users(self, room, user):
+        all_users_in_room = room.allowed_users.all()
+        remaining_users = all_users_in_room.exclude(id=user.pk).first()
+        return remaining_users
 
     @sync_to_async
     def prepare_user_data(self, user: User):
