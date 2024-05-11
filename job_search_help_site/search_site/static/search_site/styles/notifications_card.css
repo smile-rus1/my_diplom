@@ -1,0 +1,221 @@
+.container-notifications {
+    flex: 1;
+    padding: 10px;
+    margin: 10px;
+}
+
+.notification-card {
+
+}
+
+.cont-notif {
+    display: flex;
+}
+
+.cont-content{
+    padding: 10px;
+    margin: 10px;
+}
+
+.notification-content {
+    flex: 4;
+}
+
+.button-subscribe {
+    background-color: #007bff; /* Цвет кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    padding: 10px 60px; /* Отступы внутри кнопки */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Указатель при наведении на кнопку */
+}
+
+.button-info{
+    border: none;
+    cursor: pointer;
+}
+
+.button-subscribe:hover {
+    background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+
+.subscription-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-arrow {
+    font-size: 30px;
+    color: #117ccf;
+}
+
+.header-m {
+    padding: 0px 10px;
+}
+
+.cont-notif {
+    display: flex;
+    align-items: center; /* Центрирование элементов по вертикали */
+}
+
+.container-img {
+    flex-shrink: 0; /* Запрещаем сжатие блока .container-img */
+    margin-right: 10px; /* Добавляем небольшой отступ справа для разделения блоков */
+}
+
+.cont-content {
+    flex-grow: 1; /* Растягиваем блок .cont-content, чтобы он занимал всю доступную ширину */
+}
+
+.subscription-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* Добавляем небольшой отступ снизу, чтобы создать пространство между заголовком и остальным содержимым */
+}
+
+.toggle-arrow {
+    font-size: 20px; /* Уменьшаем размер стрелки, чтобы она лучше сочеталась с контентом */
+    color: #117ccf;
+}
+
+.additional-info {
+    margin-top: 10px; /* Добавляем отступ сверху для разделения блоков */
+}
+
+.text-par{
+    margin-bottom: 20px;
+}
+
+.link-subscr {
+    text-decoration: none;
+    color: #373837;
+    padding: 0px 10px;
+}
+
+.link-subscr:hover {
+    color: #0f87f7;
+}
+
+.notif-crd {
+    padding: 0px 10px;
+    margin-top: 20px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  width: 60%;
+  box-sizing: border-box;
+}
+
+.checkbox-styled {
+  appearance: none; /* Убираем стандартный внешний вид */
+  -webkit-appearance: none; /* Для Safari */
+  -moz-appearance: none; /* Для Firefox */
+  width: 20px; /* Ширина */
+  height: 20px; /* Высота */
+  border: 1px solid #ccc; /* Граница */
+  border-radius: 3px; /* Скругление углов */
+  cursor: pointer; /* Изменение вида курсора при наведении */
+  outline: none; /* Убираем контур фокуса */
+}
+
+/* Стили для состояния "наведение" */
+.checkbox-styled:hover {
+  border-color: #999; /* Цвет границы при наведении */
+}
+
+/* Стили для состояния "фокус" */
+.checkbox-styled:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Тень при фокусе */
+}
+
+/* Стили для галочки при отмеченном состоянии */
+.checkbox-styled:checked {
+  background-color: #007bff; /* Фоновый цвет */
+}
+
+/* Стили для галочки внутри чекбокса */
+.checkbox-styled:checked::before {
+  content: "\2713";
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  display: block;
+}
+
+.date {
+  float: right;
+  font-size: 0.8em;
+}
+
+.service-info {
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.head-name {
+    font-size: 1.5em;
+}
+
+.notif-crd input[type="checkbox"],
+.notif-crd h3 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.notif-crd button{
+    margin-right: 10px;
+}
+
+.btn-sub {
+    margin-right: 20px; /* Отступ между кнопками */
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 12px 40px; /* Внутренний отступ, увеличенный */
+    background-color: #007bff; /* Цвет фона (синий) */
+    color: #fff; /* Цвет текста (белый) */
+    cursor: pointer; /* Изменение вида курсора */
+    transition: background-color 0.3s; /* Плавное изменение цвета фона */
+    display: inline-block; /* Размещение в строку */
+}
+
+.btn-sub:hover {
+    background-color: #0056b3; /* Цвет фона при наведении (темно-синий) */
+}
+
+.btn-unsub {
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 12px 40px; /* Внутренний отступ, увеличенный */
+    background-color: #C0C0C0;
+    color: #000000;
+    cursor: pointer; /* Изменение вида курсора */
+    transition: background-color 0.3s; /* Плавное изменение цвета фона */
+    display: inline-block;
+}
+
+.btn-delete{
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 12px 40px; /* Внутренний отступ, увеличенный */
+    background-color: #B22222;
+    color: #000000;
+    cursor: pointer; /* Изменение вида курсора */
+    transition: background-color 0.3s; /* Плавное изменение цвета фона */
+    display: inline-block;
+}
+
+.notif {
+    color: #000000;
+    font-size: 1.2em;
+}
+
+.link-subscr.active-l {
+    color: #0f87f7;
+    pointer-events: none;
+}

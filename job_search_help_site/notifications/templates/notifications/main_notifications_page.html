@@ -1,0 +1,203 @@
+{% extends template %}
+
+{% load static %}
+{% block title %} Подписки на рассылки {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/notifications_card.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .container-img {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-notif {
+        max-width: 100%;
+        height: auto;
+    }
+    select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            background-color: #fff;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        /* Стилизация опций списка при наведении */
+        select option:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Стилизация выбранных опций */
+        select option:checked {
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+
+    .phone-num {
+        width: 180px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+        background-color: #fff;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-notifications">
+    <h1 class="header-m">Уведомления в мессенджеры</h1>
+    <a href="{% url 'notifications:subscribe_notifications' %}" class="link-subscr active-l" id="all_subscribe">Доступные подписки</a>
+    <a href="{% url 'notifications:all_user_subscribes' %}" class="link-subscr" id="your_subscribes">Ваши подписки на уведомления</a>
+
+    {% if messages %}
+        {% for message in messages %}
+                {% if message.tags != "success" %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="color: #0cb309; font-size: 24px; margin-bottom: 16px;">
+                        {{ message }}
+                    </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="notification-card">
+        <div class="cont-notif">
+            <div class="container-img">
+                <img src="{% static 'photo/email-photo.png' %}" class="image-notif">
+            </div>
+            <div class="notification-content">
+                <div class="cont-content">
+                    <div class="subscription-toggle">
+                        <h4>Подписаться на рассылку на электронную почту</h4>
+                        <button class="button-info"><span class="toggle-arrow">▼</span></button>
+                    </div>
+                    <p class="text-par">
+                        Каждый день вы будете получать на вашу электронную почту по нужному для вас графику
+                        {% if request.user.company %}
+                        резюме
+                        {% elif request.user.applicant %}
+                        вакансии
+                        {% endif %}
+                    </p>
+                    <div class="additional-info" style="display: none;">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="type_notifications" value="email">
+                            <label for="days">Выберите дни в которые вам будут приходить уведомления(можно несколько)</label><br>
+                            <select multiple name="days" id="days" required>
+                                {% for day in days %}
+                                    <option value="{{ day.pk }}">{{ day.days }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <label for="days">Выберите время удобное вам для уведомлений</label><br>
+                            <select name="time" id="time" required>
+                                {% for t in time %}
+                                    <option value="{{ t.pk }}">{{ t.start_time_send }}-{{ t.end_start_send }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <button class="button-subscribe" type="submit">Подписаться</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification-card">
+        <div class="cont-notif">
+            <div class="container-img">
+                <img src="{% static 'photo/telegram-photo.png' %}" class="image-notif">
+            </div>
+            <div class="notification-content">
+                <div class="cont-content">
+                    <div class="subscription-toggle">
+                        <h4>Подписаться на рассылку в telegram</h4>
+                        <button class="button-info"><span class="toggle-arrow">▼</span></button>
+                    </div>
+                    <p class="text-par">
+                        Наш telegram-бот будет присылать по нужному для вас графику новые
+                        {% if request.user.company %}
+                        резюме
+                        {% elif request.user.applicant %}
+                        вакансии
+                        {% endif %}
+                    </p>
+                    <div class="additional-info" style="display: none;">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="type_notifications" value="telegram">
+                            <label for="days">Выберите дни в которые вам будут приходить уведомления(можно несколько)</label><br>
+                            <select multiple name="days" id="days" required>
+                                {% for day in days %}
+                                    <option value="{{ day.pk }}">{{ day.days }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <label for="days">Выберите время удобное вам для уведомлений</label><br>
+                            <select name="time" id="time" required>
+                                {% for t in time %}
+                                    <option value="{{ t.pk }}">{{ t.start_time_send }}-{{ t.end_start_send }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <label for="notification_recipient-telegram">Напишите телефон для отправки уведомлений</label><br>
+                            <input name="notification_recipient" class="phone-num" type="tel" id="notification_recipient-telegram"><br>
+                            <button class="button-subscribe" type="submit">Подписаться</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(".button-info").click(function(){
+            var additionalInfo = $(this).closest('.cont-content').find('.additional-info');
+            additionalInfo.slideToggle();
+        });
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var phoneInput = document.getElementById("notification_recipient-telegram");
+
+    phoneInput.addEventListener("input", function(event) {
+        var phoneNumber = event.target.value;
+        var phoneRegex = /^\+[0-9]{10,14}$/;
+
+        if (!phoneRegex.test(phoneNumber)) {
+            event.target.setCustomValidity("Введите действительный номер телефона, начиная с символа '+'");
+        } else {
+            event.target.setCustomValidity("");
+        }
+    });
+});
+</script>
+
+{% endblock %}

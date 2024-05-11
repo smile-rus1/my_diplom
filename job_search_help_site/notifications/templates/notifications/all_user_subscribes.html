@@ -1,0 +1,241 @@
+{% extends template %}
+
+{% load static %}
+{% block title %} Подписки на рассылки {% endblock %}
+
+{% block css %}
+<link type="text/css" href="{% static 'search_site/styles/main_applicant.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/notifications_card.css' %}" rel="stylesheet"/>
+<link type="text/css" href="{% static 'search_site/styles/messages.css' %}" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .container-img {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-notif {
+        max-width: 100%;
+        height: auto;
+    }
+    select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            background-color: #fff;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        /* Стилизация опций списка при наведении */
+        select option:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Стилизация выбранных опций */
+        select option:checked {
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+
+    .phone-num {
+        width: 180px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+        background-color: #fff;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-notifications">
+    <h1 class="header-m">Ваши подписки на уведомления</h1>
+    <a href="{% url 'notifications:subscribe_notifications' %}" class="link-subscr" id="all_subscribe">Доступные подписки</a>
+    <a href="{% url 'notifications:all_user_subscribes' %}" class="link-subscr active-l" id="your_subscribes">Ваши подписки на уведомления</a>
+
+    {% if messages %}
+        {% for message in messages %}
+                {% if message.tags != "success" %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="color: #0cb309; font-size: 24px; margin-bottom: 16px;">
+                        {{ message }}
+                    </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="notification-card">
+        <div class="notif-crd">
+            <input type="checkbox" class="checkbox-styled" name="main-check">
+            <button class="btn-sub">Подписаться</button>
+            <button class="btn-unsub">Отписаться</button>
+            <button class="btn-delete">Удалить</button>
+            {% for subscribe in all_subscribes %}
+            <div class="card">
+                <span class="date">{{ subscribe.date_subscribe|date:"d F Y" }}</span>
+                <input type="checkbox" class="checkbox-styled">
+                <input type="hidden" class="subscribe-id" value="{{ subscribe.id }}">
+                <h3 class="head-name">
+                    {% if request.user.applicant %}
+                    {% for applicant in subscribe.notificationsapplicant_set.all  %}
+                    Поиск по резюме {{ applicant.resume.name_of_resume }}
+                    {% endfor %}
+                    {% elif request.user.company %}
+                    {% for employer in subscribe.notificationsemployer_set.all %}
+                    Поиск по вакансии {{ employer.vacancy.title_vacancy }}
+                    {% endfor %}
+                    {% endif %}
+                    <span style="cursor: help;" title="{% if subscribe.is_subscribe %}Подписан на рассылку{% else %}Отписан от рассылки{%endif%}">{% if subscribe.is_subscribe %}&#x2713;{% else %}&#x2717;{% endif %}</span>
+                </h3>
+                <p class="service-info">
+                    Дни по которым будут приходить уведомления:
+                    {% for day in subscribe.days_notifications.all %}
+                    <span class="notif">{{ day.days }}</span>
+                    {% endfor %}
+                    <br>
+                    Время уведомления: <span class="notif">{{ subscribe.time_notifications }}</span>
+                    <br>
+                    Место куда будет приходить уведомление:
+                    <span class="notif">
+                        {% for type in subscribe.type_notifications.all %}
+                        {{ type.type_notification }}
+                        {% endfor %}
+                    </span>
+                    <br>
+                    Куда будет приходить: <span class="notif">{{ subscribe.notification_recipient }}</span>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const mainCheck = document.querySelector('input[name="main-check"]');
+    const allCheckboxes = document.querySelectorAll('.notif-crd input[type="checkbox"]');
+
+    mainCheck.addEventListener('change', function() {
+        allCheckboxes.forEach(function(checkbox) {
+            checkbox.checked = mainCheck.checked;
+        });
+    });
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.btn-unsub').click(function() {
+            var subscribeIds = [];
+            $('.card input[type="checkbox"]:checked').each(function() {
+                var subscribeId = $(this).closest('.card').find('.subscribe-id').val();
+                subscribeIds.push(subscribeId);
+            });
+
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: 'POST',
+                url: '/notifications/unsubscribe/',
+                data: {'subscribe_ids': subscribeIds},
+                headers: {'X-CSRFToken': csrftoken},
+                success: function(data) {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Обработка ошибки AJAX-запроса
+                }
+            });
+        });
+
+        $('.btn-sub').click(function() {
+            var subscribeIds = [];
+            $('.card input[type="checkbox"]:checked').each(function() {
+                var subscribeId = $(this).closest('.card').find('.subscribe-id').val();
+                subscribeIds.push(subscribeId);
+            });
+
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: 'POST',
+                url: '/notifications/subscribe/',
+                data: {'subscribe_ids': subscribeIds},
+                headers: {'X-CSRFToken': csrftoken},
+                success: function(data) {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Обработка ошибки AJAX-запроса
+                }
+            });
+        });
+
+        $('.btn-delete').click(function() {
+            var subscribeIds = [];
+            $('.card input[type="checkbox"]:checked').each(function() {
+                var subscribeId = $(this).closest('.card').find('.subscribe-id').val();
+                subscribeIds.push(subscribeId);
+            });
+
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: 'POST',
+                url: '/notifications/delete_subscribe/',
+                data: {'subscribe_ids': subscribeIds},
+                headers: {'X-CSRFToken': csrftoken},
+                success: function(data) {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Обработка ошибки AJAX-запроса
+                }
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}
