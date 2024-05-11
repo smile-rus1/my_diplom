@@ -220,7 +220,7 @@ select:focus {
         </div>
         <div class="vacancy-content">
             <a href="{% if request.user.is_authenticated %}{% url 'vacancy' item.id %}{% else %}{% url 'vacancy_company' item.id %}{%endif%}" class="card-link"><h1>{{ item.title_vacancy }}</h1></a>
-            <h2>{{ item.salary }}</h2>
+            <h2>{% if item.salary %} {{ item.salary }}{% else %} З/П не указана {% endif %}</h2>
             <p style="margin-bottom: 20px; padding: 0px">{{ item.company.title_company }}</p>
             <p>{% if item.experience %}{{ item.experience }}{% else %}Можно без опыта{% endif %}</p>
             <p>Специализация: {{ item.specialization }}</p>

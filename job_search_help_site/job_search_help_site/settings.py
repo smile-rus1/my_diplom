@@ -23,6 +23,11 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
+# Настройка для использования SSL
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
 # DB
 AUTH_USER_MODEL = 'search_site.CustomUser'
 
@@ -46,9 +51,12 @@ INSTALLED_APPS = [
     "rest_framework",
     'debug_toolbar',
 
+    # "sslserver",
+
     "search_site",
     "chat",
     "managers",
+    "notifications"
 ]
 
 MIDDLEWARE = [

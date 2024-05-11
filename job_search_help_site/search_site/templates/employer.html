@@ -41,18 +41,17 @@
             <li class="right">
                 <div class="img-main">
                     <span>
-                        <a href="{% url 'index_chat' %}"> <img src="{% static 'photo/chat.png' %}" class="navbar-image" title="Чаты"></a>
+                        <a href="{% url 'chat:index_chat' %}"> <img src="{% static 'photo/chat.png' %}" class="navbar-image" title="Чаты"></a>
                     </span>
                     <span>
                         <a href="{% url 'favorite_resume' %}"> <img src="{% static 'photo/like_vacancy.png' %}" class="navbar-image" title="Понравившиеся резюме"></a>
                     </span>
                     <span>
-                        <a href="#"> <img src="{% static 'photo/notification.png' %}" class="navbar-image" title="Уведомления"></a>
+                        <a href="{% url 'notifications:subscribe_notifications' %}"> <img src="{% static 'photo/notification.png' %}" class="navbar-image" title="Уведомления"></a>
                     </span>
                     <span>
                         <a href="{% url 'company_home_page' %}"> <img src="{% static 'photo/user.png' %}" class="navbar-image" title="Профиль"></a>
-                    </span>&#8194;&#8194;&#8194;
-                    <span><a href="{% url 'logout_user' %}" class="link-exit">Выход</a></span>
+                    </span>
                 </div>
             </li>
             <li><a href="{% url 'vacancy_company' %}" class="link-applicant">Мои вакансии</a></li>

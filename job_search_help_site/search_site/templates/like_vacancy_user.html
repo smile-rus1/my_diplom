@@ -19,7 +19,7 @@
     <div class="vacancy-content">
         <a href="{% url 'vacancy' favorite.vacancy.id %}" class="card-link"><h1>{{ favorite.vacancy.title_vacancy }}</h1></a>
         <h2>{{ favorite.company.title_company }}</h2>
-        <h4>{{ favorite.vacancy.salary }}</h4>
+        <h4>{% if favorite.vacancy.salary %} {{ favorite.vacancy.salary }} {% else %} З/П не указана {% endif %}</h4>
         <p>Опыт работы: {% if favorite.vacancy.experience %}{{ favorite.vacancy.experience }}{% else %}Можно без опыта{% endif %}</p>
         <p class="key-skills">Ключевые навыки: {{ favorite.vacancy.key_skills }}</p>
         <div class="vacancy-buttons" style="display: flex;">

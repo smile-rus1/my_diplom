@@ -248,7 +248,8 @@ def search_vacancy(request):
     Ищет вакансии по введенному значению от кандидата.
     """
     if [param for param in enums.RequestSearchVacancyParameters if request.GET.get(param.value)]:
-        vacancies = algorithm_for_search_vacancy.get_vacancies_by_parameters(request)
+        query_param = {key: par for key, par in request.GET.items()}
+        vacancies = algorithm_for_search_vacancy.get_vacancies_by_parameters(query_param)
     else:
         vacancies = algorithm_for_search_vacancy.get_all_vacancy_by_criterion(request.GET.get("vacancy"))
     paginator = pagination_for_pages.create_pagination_for_search(vacancies)
@@ -258,7 +259,7 @@ def search_vacancy(request):
         {
             "template": get_templates.get_base_template(request),
             "page": paginator.get_page(request.GET.get("page")),
-            "selector": {  # в будующем мб вынести в dict-compr т.к. это бизнес-логика c помощью Enums
+            "selector": {
                 "time_employment": request.GET.get("time_employment", ""),
                 "specialization": request.GET.get("specialization", ""),
                 "experience": request.GET.get("experience", ""),

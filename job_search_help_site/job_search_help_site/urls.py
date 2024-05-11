@@ -23,11 +23,11 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
+    path("", include("search_site.urls")),
     path('admin/', admin.site.urls),
     path("managers/", include("managers.urls")),
-    path("", include("search_site.urls")),
     path("chat/", include("chat.urls")),
-
+    path("notifications/", include("notifications.urls"))
 ]
 
 if settings.DEBUG:

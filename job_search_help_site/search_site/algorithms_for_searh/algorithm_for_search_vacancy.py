@@ -28,36 +28,36 @@ def _get_vacancy_by_criteria(criteria: str) -> Q:
     return q
 
 
-def get_vacancies_by_parameters(request) -> models.Vacancy:
+def get_vacancies_by_parameters(query_param: dict) -> list[models.Vacancy] | None:
     """
     Возвращает вакансии, по параметрам переданным в
     URL заголовках/параметров.
     """
     combined_vacancies = None
 
-    if request.GET.get("time_employment"):
-        query = search_vacancy.get_vacancies_by_time_employment(request.GET.get("time_employment"))
+    if query_param.get("time_employment"):
+        query = search_vacancy.get_vacancies_by_time_employment(query_param.get("time_employment"))
         if combined_vacancies is None:
             combined_vacancies = query
         else:
             combined_vacancies = [vacancy for vacancy in combined_vacancies if vacancy in query]
 
-    if request.GET.get("specialization"):
-        query = search_vacancy.get_vacancies_by_specialization(request.GET.get("specialization"))
+    if query_param.get("specialization"):
+        query = search_vacancy.get_vacancies_by_specialization(query_param.get("specialization"))
         if combined_vacancies is None:
             combined_vacancies = query
         else:
             combined_vacancies = [vacancy for vacancy in combined_vacancies if vacancy in query]
 
-    if request.GET.get("experience"):
-        query = search_vacancy.get_vacancies_by_experience(request.GET.get("experience"))
+    if query_param.get("experience"):
+        query = search_vacancy.get_vacancies_by_experience(query_param.get("experience"))
         if combined_vacancies is None:
             combined_vacancies = query
         else:
             combined_vacancies = [vacancy for vacancy in combined_vacancies if vacancy in query]
 
-    if request.GET.get("date_publication"):
-        query = search_vacancy.get_vacancies_by_publication_time(request.GET.get("date_publication"))
+    if query_param.get("date_publication"):
+        query = search_vacancy.get_vacancies_by_publication_time(query_param.get("date_publication"))
         if combined_vacancies is None:
             combined_vacancies = query
         else:
